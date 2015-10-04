@@ -12,8 +12,6 @@
 		570DD05A1BC10BE0004D5596 /* SwiftGraphics.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 570DD0581BC10BE0004D5596 /* SwiftGraphics.framework.dSYM */; };
 		570DD05B1BC10BE0004D5596 /* SwiftUtilities.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 570DD0591BC10BE0004D5596 /* SwiftUtilities.framework.dSYM */; };
 		579013A31BC1083400ADAE3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579013A21BC1083400ADAE3E /* AppDelegate.swift */; };
-		579013A51BC1083400ADAE3E /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 579013A41BC1083400ADAE3E /* Shader.fsh */; };
-		579013A71BC1083400ADAE3E /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 579013A61BC1083400ADAE3E /* Shader.vsh */; };
 		579013A91BC1083400ADAE3E /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579013A81BC1083400ADAE3E /* GameViewController.swift */; };
 		579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 579013AA1BC1083400ADAE3E /* Main.storyboard */; };
 		579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 579013AD1BC1083400ADAE3E /* Assets.xcassets */; };
@@ -46,8 +44,6 @@
 		570DD0591BC10BE0004D5596 /* SwiftUtilities.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftUtilities.framework.dSYM; path = Carthage/Build/iOS/SwiftUtilities.framework.dSYM; sourceTree = "<group>"; };
 		5790139F1BC1083400ADAE3E /* Mesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mesh.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		579013A21BC1083400ADAE3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		579013A41BC1083400ADAE3E /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
-		579013A61BC1083400ADAE3E /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
 		579013A81BC1083400ADAE3E /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		579013AB1BC1083400ADAE3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		579013AD1BC1083400ADAE3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -101,8 +97,6 @@
 			isa = PBXGroup;
 			children = (
 				579013A21BC1083400ADAE3E /* AppDelegate.swift */,
-				579013A41BC1083400ADAE3E /* Shader.fsh */,
-				579013A61BC1083400ADAE3E /* Shader.vsh */,
 				579013A81BC1083400ADAE3E /* GameViewController.swift */,
 				579013AA1BC1083400ADAE3E /* Main.storyboard */,
 				579013AD1BC1083400ADAE3E /* Assets.xcassets */,
@@ -196,10 +190,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */,
-				579013A71BC1083400ADAE3E /* Shader.vsh in Resources */,
 				579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */,
 				579013B11BC1083400ADAE3E /* LaunchScreen.storyboard in Resources */,
-				579013A51BC1083400ADAE3E /* Shader.fsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
