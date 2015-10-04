@@ -1,11 +1,44 @@
 import GLKit
 import OpenGLES
 
-var vertices: [GLfloat] = [
-    -0.5, -0.5, 0.0,
-    -0.5,  0.5, 0.0,
-     0.5, -0.5, 0.0,
-     0.5,  0.5, 0.0,
+func BUFFER_OFFSET(i: Int) -> UnsafePointer<Void> {
+    let p: UnsafePointer<Void> = nil
+    return p.advancedBy(i)
+}
+
+protocol GLfloatValueContainer {
+    var values: [GLfloat] { get }
+}
+
+struct Vertex: GLfloatValueContainer {
+    let position: GLKVector3
+    let color: GLKVector4
+
+    static var size: GLint {
+        return GLint(sizeof(GLKVector3) + sizeof(GLKVector4))
+    }
+
+    var values: [GLfloat] {
+        return [
+            position.x, position.y, position.z,
+            color.r, color.g, color.b, color.a,
+        ]
+    }
+}
+
+extension CollectionType where Generator.Element: GLfloatValueContainer {
+    func GLfloatValues() -> [GLfloat] {
+        return self.flatMap { $0.values }
+    }
+}
+
+var vertices: [Vertex] = [
+    Vertex(position: GLKVector3Make(-0.5, -0.5, 0.0), color: GLKVector4Make(1.0, 0.0, 0.0, 1.0)),
+    Vertex(position: GLKVector3Make(-0.5,  0.48, 0.0), color: GLKVector4Make(1.0, 0.0, 0.0, 1.0)),
+    Vertex(position: GLKVector3Make(0.48, -0.5, 0.0), color: GLKVector4Make(1.0, 0.0, 0.0, 1.0)),
+    Vertex(position: GLKVector3Make(0.5,  0.5, 0.0), color: GLKVector4Make(0.0, 0.0, 1.0, 1.0)),
+    Vertex(position: GLKVector3Make(0.5, -0.48, 0.0), color: GLKVector4Make(0.0, 0.0, 1.0, 1.0)),
+    Vertex(position: GLKVector3Make(-0.48, 0.5, 0.0), color: GLKVector4Make(0.0, 0.0, 1.0, 1.0)),
 ]
 
 class GameViewController: GLKViewController {
@@ -44,15 +77,6 @@ class GameViewController: GLKViewController {
         self.effect = effect
 
         glClearColor(0.0, 0.0, 0.0, 1.0)
-
-        glGenBuffers(1, &vertexBufferID)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferID)
-
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(sizeof(GLfloat) * vertices.count), &vertices, GLenum(GL_STATIC_DRAW))
-
-        let attrib = GLuint(GLKVertexAttrib.Position.rawValue)
-        glEnableVertexAttribArray(attrib)
-        glVertexAttribPointer(attrib, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(sizeof(GLfloat) * 3), nil)
     }
 
     // MARK: - GLKViewDelegate methods
@@ -62,6 +86,22 @@ class GameViewController: GLKViewController {
 
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT))
 
-        glDrawArrays(GLenum(GL_TRIANGLE_STRIP), 0, GLsizei(sizeof(GLfloat) * vertices.count))
+        var triangles = vertices.GLfloatValues()
+
+        glGenBuffers(1, &vertexBufferID)
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferID)
+
+        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(sizeof(GLfloat) * triangles.count), &triangles, GLenum(GL_STATIC_DRAW))
+
+        let positionAttrib = GLuint(GLKVertexAttrib.Position.rawValue)
+        let colorAttrib = GLuint(GLKVertexAttrib.Color.rawValue)
+
+        glEnableVertexAttribArray(positionAttrib)
+        glEnableVertexAttribArray(colorAttrib)
+
+        glVertexAttribPointer(positionAttrib, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(Vertex.size), BUFFER_OFFSET(0))
+        glVertexAttribPointer(colorAttrib, 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(Vertex.size), BUFFER_OFFSET(sizeof(GLKVector3)))
+
+        glDrawArrays(GLenum(GL_TRIANGLES), 0, GLsizei(vertices.count))
     }
 }
