@@ -43,4 +43,8 @@ xcuserdata
 DerivedData
 *.xcuserstate
 
+###
 
+Pods
+Carthage/Checkouts
+Carthage/Build
