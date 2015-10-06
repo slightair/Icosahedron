@@ -32,21 +32,16 @@ extension CollectionType where Generator.Element: GLfloatValueContainer {
     }
 }
 
-let red = GLKVector4Make(1.0, 0.0, 0.0, 1.0)
-let blue = GLKVector4Make(0.0, 0.0, 1.0, 1.0)
-
 var vertices: [Vertex] = [
-    Vertex(position: GLKVector3Make(-0.5, -0.5, 0.0), color: red),
-    Vertex(position: GLKVector3Make(-0.5,  0.5, 0.0), color: red),
-    Vertex(position: GLKVector3Make( 0.5, -0.5, 0.0), color: red),
-    Vertex(position: GLKVector3Make( 0.5, -0.5, 0.0), color: blue),
-    Vertex(position: GLKVector3Make( 0.5,  0.5, 0.0), color: blue),
-    Vertex(position: GLKVector3Make(-0.5,  0.5, 0.0), color: blue),
+    Vertex(position: GLKVector3Make( 0.5, -0.5, 0.0), color: GLKVector4Make(0.0, 0.0, 1.0, 1.0)),
+    Vertex(position: GLKVector3Make(-0.5, -0.5, 0.0), color: GLKVector4Make(1.0, 0.0, 0.0, 1.0)),
+    Vertex(position: GLKVector3Make(-0.5,  0.5, 0.0), color: GLKVector4Make(0.0, 1.0, 0.0, 1.0)),
+    Vertex(position: GLKVector3Make( 0.5,  0.5, 0.0), color: GLKVector4Make(1.0, 1.0, 0.0, 1.0)),
 ]
 
 var indices: [GLubyte] = [
     0, 1, 2,
-    3, 4, 5,
+    0, 3, 2,
 ]
 
 class GameViewController: GLKViewController {
@@ -118,6 +113,6 @@ class GameViewController: GLKViewController {
         glVertexAttribPointer(positionAttrib, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(Vertex.size), BUFFER_OFFSET(0))
         glVertexAttribPointer(colorAttrib, 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(Vertex.size), BUFFER_OFFSET(sizeof(GLKVector3)))
 
-        glDrawElements(GLenum(GL_TRIANGLES), GLsizei(indices.count), GLenum(GL_UNSIGNED_BYTE), nil)
+        glDrawElements(GLenum(GL_LINE_LOOP), GLsizei(indices.count), GLenum(GL_UNSIGNED_BYTE), nil)
     }
 }
