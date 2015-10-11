@@ -67,11 +67,6 @@ const NSInteger NUM_SPLIT = 24;
     vertices[0] = 0.0; vertices[1] = 0.0; vertices[2] = 0.0;
     vertices[3] = 1.0; vertices[4] = 1.0; vertices[5] = 1.0; vertices[6] = 1.0;
 
-    for (int i = 1; i <= NUM_SPLIT; i++) {
-        indices[indicesCount++] = 0;
-        indices[indicesCount++] = i;
-    }
-
     for (int i = 1; i < NUM_VERTICES; i++) {
         int base;
         double theta = 2 * M_PI / NUM_SPLIT * i;
@@ -96,7 +91,7 @@ const NSInteger NUM_SPLIT = 24;
         }
 
         if (i + NUM_SPLIT < NUM_VERTICES) {
-            indices[indicesCount++] = i;
+            indices[indicesCount++] = i + 1;
             indices[indicesCount++] = i + NUM_SPLIT;
         }
     }
@@ -125,7 +120,7 @@ const NSInteger NUM_SPLIT = 24;
     glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(0));
     glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(GLfloat) * 3));
 
-    glDrawElements(GL_LINE_STRIP, indicesCount, GL_UNSIGNED_BYTE, NULL);
+    glDrawElements(GL_TRIANGLE_STRIP, indicesCount, GL_UNSIGNED_BYTE, NULL);
 }
 
 @end
