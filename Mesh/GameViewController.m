@@ -4,8 +4,7 @@
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
-const NSInteger NUM_VERTICES = 128;
-const NSInteger NUM_SPLIT = 24;
+const NSInteger NUM_VERTICES = 19;
 
 @interface GameViewController ()
 
@@ -21,6 +20,8 @@ const NSInteger NUM_SPLIT = 24;
     GLfloat *vertices;
     GLubyte *indices;
     int indicesCount;
+    int verticesCount;
+    NSInteger *sequence;
 }
 
 - (void)dealloc
@@ -36,6 +37,7 @@ const NSInteger NUM_SPLIT = 24;
 
     free(vertices);
     free(indices);
+    free(sequence);
 }
 
 - (void)viewDidLoad
@@ -60,39 +62,52 @@ const NSInteger NUM_SPLIT = 24;
 
 - (void)createVertices
 {
-    vertices = malloc(sizeof(GLfloat) * 7 * NUM_VERTICES);
-    indices = malloc(sizeof(GLubyte) * (NUM_SPLIT * 2 + NUM_VERTICES * 4));
+    vertices = malloc(sizeof(GLfloat) * 7 * NUM_VERTICES * 3);
+    indices = malloc(sizeof(GLubyte) * NUM_VERTICES * 3);
+    verticesCount = 0;
     indicesCount = 0;
+    sequence = malloc(sizeof(NSInteger) * NUM_VERTICES);
 
-    vertices[0] = 0.0; vertices[1] = 0.0; vertices[2] = 0.0;
-    vertices[3] = 1.0; vertices[4] = 1.0; vertices[5] = 1.0; vertices[6] = 1.0;
+    for (int i = 0; i < NUM_VERTICES; i++) {
+        if (i < 3) {
+            sequence[i] = 1;
+        } else {
+            sequence[i] = sequence[i-2] + sequence[i-3];
+        }
 
-    for (int i = 1; i < NUM_VERTICES; i++) {
-        int base;
-        double theta = 2 * M_PI / NUM_SPLIT * i;
-        double radius = 0.05 * theta;
-
-        base = i * 7;
-        vertices[base + 0] = radius * cos(theta);
-        vertices[base + 1] = radius * sin(theta);
-        vertices[base + 2] = 0.0;
-
+        GLfloat radius = sequence[i] * 0.05;
+        double theta = 2 * M_PI / 6 * i;
         UIColor *color = [UIColor colorWithHue:fmod(theta, (2 * M_PI)) / (2 * M_PI) saturation:0.5 brightness:1.0 alpha:1.0];
         CGFloat red, green, blue;
         [color getRed:&red green:&green blue:&blue alpha:NULL];
-        vertices[base + 3] = (GLfloat)red;
-        vertices[base + 4] = (GLfloat)green;
-        vertices[base + 5] = (GLfloat)blue;
-        vertices[base + 6] = 1.0;
 
-        if (i + 1 < NUM_VERTICES) {
-            indices[indicesCount++] = i;
-            indices[indicesCount++] = i + 1;
+        GLfloat baseX, baseY;
+        if (i == 0) {
+            baseX = 0.0;
+            baseY = 0.0;
+        } else {
+            int offset = (i - 1) * 7 * 3 + 7;
+            baseX = vertices[offset + 0];
+            baseY = vertices[offset + 1];
         }
 
-        if (i + NUM_SPLIT < NUM_VERTICES) {
-            indices[indicesCount++] = i + 1;
-            indices[indicesCount++] = i + NUM_SPLIT;
+        for (int v = 0; v < 3; v++) {
+            if (v == 0) {
+                vertices[verticesCount++] = baseX;
+                vertices[verticesCount++] = baseY;
+            } else {
+                double alpha = -(theta + 2 * M_PI / 6 * v);
+                vertices[verticesCount++] = baseX + radius * cos(alpha);
+                vertices[verticesCount++] = baseY + radius * sin(alpha);
+            }
+            vertices[verticesCount++] = 0.0;
+
+            vertices[verticesCount++] = (GLfloat)red;
+            vertices[verticesCount++] = (GLfloat)green;
+            vertices[verticesCount++] = (GLfloat)blue;
+            vertices[verticesCount++] = 1.0;
+
+            indices[indicesCount++] = indicesCount;
         }
     }
 }
@@ -107,7 +122,7 @@ const NSInteger NUM_SPLIT = 24;
 
     glGenBuffers(1, &vertexBufferID);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 7 * NUM_VERTICES, vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * verticesCount, vertices, GL_STATIC_DRAW);
 
     glGenBuffers(1, &indexBufferID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
@@ -120,7 +135,7 @@ const NSInteger NUM_SPLIT = 24;
     glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(0));
     glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(GLfloat) * 3));
 
-    glDrawElements(GL_TRIANGLE_STRIP, indicesCount, GL_UNSIGNED_BYTE, NULL);
+    glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_BYTE, NULL);
 }
 
 @end
