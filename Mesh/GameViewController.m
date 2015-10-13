@@ -2,9 +2,11 @@
 @import OpenGLES;
 @import UIKit;
 
-#define BUFFER_OFFSET(i) ((char *)NULL + (i))
-
-const NSInteger NUM_VERTICES = 19;
+typedef struct {
+    GLKVector3 position;
+    GLKVector3 normal;
+    GLKVector4 color;
+} Vertex;
 
 @interface GameViewController ()
 
@@ -16,12 +18,7 @@ const NSInteger NUM_VERTICES = 19;
 @implementation GameViewController
 {
     GLuint vertexBufferID;
-    GLuint indexBufferID;
-    GLfloat *vertices;
-    GLubyte *indices;
-    int indicesCount;
-    int verticesCount;
-    NSInteger *sequence;
+    Vertex *vertices;
 }
 
 - (void)dealloc
@@ -29,15 +26,12 @@ const NSInteger NUM_VERTICES = 19;
     [EAGLContext setCurrentContext:self.context];
 
     glDeleteBuffers(1, &vertexBufferID);
-    glDeleteBuffers(1, &indexBufferID);
 
     self.context = nil;
 
     [EAGLContext setCurrentContext:nil];
 
     free(vertices);
-    free(indices);
-    free(sequence);
 }
 
 - (void)viewDidLoad
@@ -48,94 +42,170 @@ const NSInteger NUM_VERTICES = 19;
 
     GLKView *glkView = (GLKView *)self.view;
     glkView.context = self.context;
+    glkView.drawableDepthFormat = GLKViewDrawableDepthFormat24;
 
     [EAGLContext setCurrentContext:self.context];
 
     self.effect = [GLKBaseEffect new];
-    self.effect.useConstantColor = GL_TRUE;
-    self.effect.constantColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0);
+    self.effect.light0.enabled = GL_TRUE;
+    self.effect.light0.diffuseColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0);
 
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glEnable(GL_DEPTH_TEST);
 
     [self createVertices];
 }
 
 - (void)createVertices
 {
-    vertices = malloc(sizeof(GLfloat) * 7 * NUM_VERTICES * 3);
-    indices = malloc(sizeof(GLubyte) * NUM_VERTICES * 3);
-    verticesCount = 0;
-    indicesCount = 0;
-    sequence = malloc(sizeof(NSInteger) * NUM_VERTICES);
+    float scale = 0.5;
+    float x = (1 + sqrt(5)) / 2;
 
-    for (int i = 0; i < NUM_VERTICES; i++) {
-        if (i < 3) {
-            sequence[i] = 1;
-        } else {
-            sequence[i] = sequence[i-2] + sequence[i-3];
-        }
+    GLKVector3 g = GLKVector3MultiplyScalar(GLKVector3Make( x,  0,  1), scale);
+    GLKVector3 e = GLKVector3MultiplyScalar(GLKVector3Make( x,  0, -1), scale);
+    GLKVector3 h = GLKVector3MultiplyScalar(GLKVector3Make(-x,  0,  1), scale);
+    GLKVector3 d = GLKVector3MultiplyScalar(GLKVector3Make(-x,  0, -1), scale);
 
-        GLfloat radius = sequence[i] * 0.05;
-        double theta = 2 * M_PI / 6 * i;
-        UIColor *color = [UIColor colorWithHue:fmod(theta, (2 * M_PI)) / (2 * M_PI) saturation:0.5 brightness:1.0 alpha:1.0];
-        CGFloat red, green, blue;
-        [color getRed:&red green:&green blue:&blue alpha:NULL];
+    GLKVector3 a = GLKVector3MultiplyScalar(GLKVector3Make( 1,  x,  0), scale);
+    GLKVector3 b = GLKVector3MultiplyScalar(GLKVector3Make(-1,  x,  0), scale);
+    GLKVector3 k = GLKVector3MultiplyScalar(GLKVector3Make( 1, -x,  0), scale);
+    GLKVector3 j = GLKVector3MultiplyScalar(GLKVector3Make(-1, -x,  0), scale);
 
-        GLfloat baseX, baseY;
-        if (i == 0) {
-            baseX = 0.0;
-            baseY = 0.0;
-        } else {
-            int offset = (i - 1) * 7 * 3 + 7;
-            baseX = vertices[offset + 0];
-            baseY = vertices[offset + 1];
-        }
+    GLKVector3 f = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1,  x), scale);
+    GLKVector3 l = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1,  x), scale);
+    GLKVector3 c = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1, -x), scale);
+    GLKVector3 i = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1, -x), scale);
 
-        for (int v = 0; v < 3; v++) {
-            if (v == 0) {
-                vertices[verticesCount++] = baseX;
-                vertices[verticesCount++] = baseY;
-            } else {
-                double alpha = -(theta + 2 * M_PI / 6 * v);
-                vertices[verticesCount++] = baseX + radius * cos(alpha);
-                vertices[verticesCount++] = baseY + radius * sin(alpha);
-            }
-            vertices[verticesCount++] = 0.0;
+    GLKVector4 color = GLKVector4Make(1, 1, 1, 1);
 
-            vertices[verticesCount++] = (GLfloat)red;
-            vertices[verticesCount++] = (GLfloat)green;
-            vertices[verticesCount++] = (GLfloat)blue;
-            vertices[verticesCount++] = 1.0;
+    GLKVector3 normalABC = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, b), GLKVector3Subtract(b, c)));
+    GLKVector3 normalAEG = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, e), GLKVector3Subtract(e, g)));
+    GLKVector3 normalAFG = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, f), GLKVector3Subtract(f, g)));
+    GLKVector3 normalABF = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, b), GLKVector3Subtract(b, f)));
+    GLKVector3 normalACE = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, c), GLKVector3Subtract(c, e)));
+    GLKVector3 normalBCD = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(b, c), GLKVector3Subtract(c, d)));
+    GLKVector3 normalBDH = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(b, d), GLKVector3Subtract(d, h)));
+    GLKVector3 normalBFH = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(b, f), GLKVector3Subtract(f, h)));
+    GLKVector3 normalCEI = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(c, e), GLKVector3Subtract(e, i)));
+    GLKVector3 normalCDI = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(c, d), GLKVector3Subtract(d, i)));
+    GLKVector3 normalDJI = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(d, j), GLKVector3Subtract(j, i)));
+    GLKVector3 normalDHJ = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(d, h), GLKVector3Subtract(h, j)));
+    GLKVector3 normalEKG = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(e, k), GLKVector3Subtract(k, g)));
+    GLKVector3 normalEKI = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(e, k), GLKVector3Subtract(k, i)));
+    GLKVector3 normalFHL = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(f, h), GLKVector3Subtract(h, l)));
+    GLKVector3 normalFLG = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(f, l), GLKVector3Subtract(l, g)));
+    GLKVector3 normalGLK = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(g, l), GLKVector3Subtract(l, k)));
+    GLKVector3 normalHLJ = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(h, l), GLKVector3Subtract(l, j)));
+    GLKVector3 normalIKJ = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(i, k), GLKVector3Subtract(k, j)));
+    GLKVector3 normalJKL = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(j, k), GLKVector3Subtract(k, l)));
 
-            indices[indicesCount++] = indicesCount;
-        }
-    }
+    Vertex icosahedron[] = {
+        {a, normalABC, color},
+        {b, normalABC, color},
+        {c, normalABC, color},
+
+        {a, normalAEG, color},
+        {e, normalAEG, color},
+        {g, normalAEG, color},
+
+        {a, normalAFG, color},
+        {f, normalAFG, color},
+        {g, normalAFG, color},
+
+        {a, normalABF, color},
+        {b, normalABF, color},
+        {f, normalABF, color},
+
+        {a, normalACE, color},
+        {c, normalACE, color},
+        {e, normalACE, color},
+
+        {b, normalBCD, color},
+        {c, normalBCD, color},
+        {d, normalBCD, color},
+
+        {b, normalBDH, color},
+        {d, normalBDH, color},
+        {h, normalBDH, color},
+
+        {b, normalBFH, color},
+        {f, normalBFH, color},
+        {h, normalBFH, color},
+
+        {c, normalCEI, color},
+        {e, normalCEI, color},
+        {i, normalCEI, color},
+
+        {c, normalCDI, color},
+        {d, normalCDI, color},
+        {i, normalCDI, color},
+
+        {d, normalDJI, color},
+        {j, normalDJI, color},
+        {i, normalDJI, color},
+
+        {d, normalDHJ, color},
+        {h, normalDHJ, color},
+        {j, normalDHJ, color},
+
+        {e, normalEKG, color},
+        {k, normalEKG, color},
+        {g, normalEKG, color},
+
+        {e, normalEKI, color},
+        {k, normalEKI, color},
+        {i, normalEKI, color},
+
+        {f, normalFHL, color},
+        {h, normalFHL, color},
+        {l, normalFHL, color},
+
+        {f, normalFLG, color},
+        {l, normalFLG, color},
+        {g, normalFLG, color},
+
+        {g, normalGLK, color},
+        {l, normalGLK, color},
+        {k, normalGLK, color},
+
+        {h, normalHLJ, color},
+        {l, normalHLJ, color},
+        {j, normalHLJ, color},
+
+        {i, normalIKJ, color},
+        {k, normalIKJ, color},
+        {j, normalIKJ, color},
+
+        {j, normalJKL, color},
+        {k, normalJKL, color},
+        {l, normalJKL, color},
+    };
+
+    vertices = malloc(sizeof(icosahedron));
+    memcpy(vertices, icosahedron, sizeof(icosahedron));
 }
 
 #pragma mark - GLKViewDelegate methods
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
-    [self.effect prepareToDraw];
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.6, 0.6, 0.6, 1.0);
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    [self.effect prepareToDraw];
 
     glGenBuffers(1, &vertexBufferID);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * verticesCount, vertices, GL_STATIC_DRAW);
-
-    glGenBuffers(1, &indexBufferID);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * indicesCount, indices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 3 * 20, vertices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(GLKVertexAttribPosition);
+    glEnableVertexAttribArray(GLKVertexAttribNormal);
     glEnableVertexAttribArray(GLKVertexAttribColor);
 
-    GLsizei stride = sizeof(GLfloat) * 7;
-    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(0));
-    glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(GLfloat) * 3));
+    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, position));
+    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, normal));
+    glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, color));
 
-    glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_BYTE, NULL);
+    glDrawArrays(GL_TRIANGLES, 0, 3 * 20);
 }
 
 @end
