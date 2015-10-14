@@ -19,6 +19,9 @@ typedef struct {
 {
     GLuint vertexBufferID;
     Vertex *vertices;
+
+    GLKMatrix4 modelViewMatrix;
+    float rotation;
 }
 
 - (void)dealloc
@@ -77,111 +80,69 @@ typedef struct {
 
     GLKVector4 color = GLKVector4Make(1, 1, 1, 1);
 
-    GLKVector3 normalABC = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, b), GLKVector3Subtract(b, c)));
-    GLKVector3 normalAEG = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, e), GLKVector3Subtract(e, g)));
+    GLKVector3 normalACB = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, c), GLKVector3Subtract(c, b)));
+    GLKVector3 normalAGE = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, g), GLKVector3Subtract(g, e)));
     GLKVector3 normalAFG = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, f), GLKVector3Subtract(f, g)));
     GLKVector3 normalABF = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, b), GLKVector3Subtract(b, f)));
-    GLKVector3 normalACE = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, c), GLKVector3Subtract(c, e)));
+    GLKVector3 normalAEC = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, e), GLKVector3Subtract(e, c)));
     GLKVector3 normalBCD = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(b, c), GLKVector3Subtract(c, d)));
     GLKVector3 normalBDH = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(b, d), GLKVector3Subtract(d, h)));
-    GLKVector3 normalBFH = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(b, f), GLKVector3Subtract(f, h)));
+    GLKVector3 normalBHF = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(b, h), GLKVector3Subtract(h, f)));
     GLKVector3 normalCEI = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(c, e), GLKVector3Subtract(e, i)));
-    GLKVector3 normalCDI = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(c, d), GLKVector3Subtract(d, i)));
-    GLKVector3 normalDJI = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(d, j), GLKVector3Subtract(j, i)));
-    GLKVector3 normalDHJ = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(d, h), GLKVector3Subtract(h, j)));
-    GLKVector3 normalEKG = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(e, k), GLKVector3Subtract(k, g)));
+    GLKVector3 normalCID = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(c, i), GLKVector3Subtract(i, d)));
+    GLKVector3 normalDIJ = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(d, i), GLKVector3Subtract(i, j)));
+    GLKVector3 normalDJH = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(d, j), GLKVector3Subtract(j, h)));
+    GLKVector3 normalEGK = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(e, g), GLKVector3Subtract(g, k)));
     GLKVector3 normalEKI = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(e, k), GLKVector3Subtract(k, i)));
     GLKVector3 normalFHL = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(f, h), GLKVector3Subtract(h, l)));
     GLKVector3 normalFLG = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(f, l), GLKVector3Subtract(l, g)));
     GLKVector3 normalGLK = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(g, l), GLKVector3Subtract(l, k)));
-    GLKVector3 normalHLJ = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(h, l), GLKVector3Subtract(l, j)));
+    GLKVector3 normalHJL = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(h, j), GLKVector3Subtract(j, l)));
     GLKVector3 normalIKJ = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(i, k), GLKVector3Subtract(k, j)));
     GLKVector3 normalJKL = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(j, k), GLKVector3Subtract(k, l)));
 
     Vertex icosahedron[] = {
-        {a, normalABC, color},
-        {b, normalABC, color},
-        {c, normalABC, color},
-
-        {a, normalAEG, color},
-        {e, normalAEG, color},
-        {g, normalAEG, color},
-
-        {a, normalAFG, color},
-        {f, normalAFG, color},
-        {g, normalAFG, color},
-
-        {a, normalABF, color},
-        {b, normalABF, color},
-        {f, normalABF, color},
-
-        {a, normalACE, color},
-        {c, normalACE, color},
-        {e, normalACE, color},
-
-        {b, normalBCD, color},
-        {c, normalBCD, color},
-        {d, normalBCD, color},
-
-        {b, normalBDH, color},
-        {d, normalBDH, color},
-        {h, normalBDH, color},
-
-        {b, normalBFH, color},
-        {f, normalBFH, color},
-        {h, normalBFH, color},
-
-        {c, normalCEI, color},
-        {e, normalCEI, color},
-        {i, normalCEI, color},
-
-        {c, normalCDI, color},
-        {d, normalCDI, color},
-        {i, normalCDI, color},
-
-        {d, normalDJI, color},
-        {j, normalDJI, color},
-        {i, normalDJI, color},
-
-        {d, normalDHJ, color},
-        {h, normalDHJ, color},
-        {j, normalDHJ, color},
-
-        {e, normalEKG, color},
-        {k, normalEKG, color},
-        {g, normalEKG, color},
-
-        {e, normalEKI, color},
-        {k, normalEKI, color},
-        {i, normalEKI, color},
-
-        {f, normalFHL, color},
-        {h, normalFHL, color},
-        {l, normalFHL, color},
-
-        {f, normalFLG, color},
-        {l, normalFLG, color},
-        {g, normalFLG, color},
-
-        {g, normalGLK, color},
-        {l, normalGLK, color},
-        {k, normalGLK, color},
-
-        {h, normalHLJ, color},
-        {l, normalHLJ, color},
-        {j, normalHLJ, color},
-
-        {i, normalIKJ, color},
-        {k, normalIKJ, color},
-        {j, normalIKJ, color},
-
-        {j, normalJKL, color},
-        {k, normalJKL, color},
-        {l, normalJKL, color},
+        {a, normalACB, color}, {c, normalACB, color}, {b, normalACB, color},
+        {a, normalAGE, color}, {g, normalAGE, color}, {e, normalAGE, color},
+        {a, normalAFG, color}, {f, normalAFG, color}, {g, normalAFG, color},
+        {a, normalABF, color}, {b, normalABF, color}, {f, normalABF, color},
+        {a, normalAEC, color}, {e, normalAEC, color}, {c, normalAEC, color},
+        {b, normalBCD, color}, {c, normalBCD, color}, {d, normalBCD, color},
+        {b, normalBDH, color}, {d, normalBDH, color}, {h, normalBDH, color},
+        {b, normalBHF, color}, {h, normalBHF, color}, {f, normalBHF, color},
+        {c, normalCEI, color}, {e, normalCEI, color}, {i, normalCEI, color},
+        {c, normalCID, color}, {i, normalCID, color}, {d, normalCID, color},
+        {d, normalDIJ, color}, {i, normalDIJ, color}, {j, normalDIJ, color},
+        {d, normalDJH, color}, {j, normalDJH, color}, {h, normalDJH, color},
+        {e, normalEGK, color}, {g, normalEGK, color}, {k, normalEGK, color},
+        {e, normalEKI, color}, {k, normalEKI, color}, {i, normalEKI, color},
+        {f, normalFHL, color}, {h, normalFHL, color}, {l, normalFHL, color},
+        {f, normalFLG, color}, {l, normalFLG, color}, {g, normalFLG, color},
+        {g, normalGLK, color}, {l, normalGLK, color}, {k, normalGLK, color},
+        {h, normalHJL, color}, {j, normalHJL, color}, {l, normalHJL, color},
+        {i, normalIKJ, color}, {k, normalIKJ, color}, {j, normalIKJ, color},
+        {j, normalJKL, color}, {k, normalJKL, color}, {l, normalJKL, color},
     };
 
     vertices = malloc(sizeof(icosahedron));
     memcpy(vertices, icosahedron, sizeof(icosahedron));
+}
+
+- (void)update
+{
+    float aspect = fabs(self.view.bounds.size.width / self.view.bounds.size.height);
+    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 100.0f);
+
+    self.effect.transform.projectionMatrix = projectionMatrix;
+
+    GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -8.0f);
+    baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, rotation, 0.0f, 1.0f, 0.0f);
+
+    modelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -1.5f);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation, 1.0f, 1.0f, 1.0f);
+    modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
+
+    rotation += self.timeSinceLastUpdate * 2;
 }
 
 #pragma mark - GLKViewDelegate methods
@@ -189,8 +150,9 @@ typedef struct {
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0.6, 0.6, 0.6, 1.0);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
 
+    self.effect.transform.modelviewMatrix = modelViewMatrix;
     [self.effect prepareToDraw];
 
     glGenBuffers(1, &vertexBufferID);
