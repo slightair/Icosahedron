@@ -52,6 +52,7 @@ typedef struct {
     self.effect = [GLKBaseEffect new];
     self.effect.light0.enabled = GL_TRUE;
     self.effect.light0.diffuseColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0);
+    self.effect.colorMaterialEnabled = GL_TRUE;
 
     glEnable(GL_DEPTH_TEST);
 
@@ -78,7 +79,15 @@ typedef struct {
     GLKVector3 c = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1, -x), scale);
     GLKVector3 i = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1, -x), scale);
 
-    GLKVector4 color = GLKVector4Make(1, 1, 1, 1);
+    int numColors = 20;
+    GLKVector4 *colors = malloc(sizeof(GLKVector4) * numColors);
+    for(int i = 0; i < numColors; i++) {
+        double theta = 1.0 / numColors * i;
+        UIColor *color = [UIColor colorWithHue:theta saturation:0.5 brightness:1.0 alpha:1.0];
+        CGFloat red, green, blue, alpha;
+        [color getRed:&red green:&green blue:&blue alpha:&alpha];
+        colors[i] = GLKVector4Make(red, green, blue, alpha);
+    }
 
     GLKVector3 normalACB = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, c), GLKVector3Subtract(c, b)));
     GLKVector3 normalAGE = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, g), GLKVector3Subtract(g, e)));
@@ -102,26 +111,26 @@ typedef struct {
     GLKVector3 normalJKL = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(j, k), GLKVector3Subtract(k, l)));
 
     Vertex icosahedron[] = {
-        {a, normalACB, color}, {c, normalACB, color}, {b, normalACB, color},
-        {a, normalAGE, color}, {g, normalAGE, color}, {e, normalAGE, color},
-        {a, normalAFG, color}, {f, normalAFG, color}, {g, normalAFG, color},
-        {a, normalABF, color}, {b, normalABF, color}, {f, normalABF, color},
-        {a, normalAEC, color}, {e, normalAEC, color}, {c, normalAEC, color},
-        {b, normalBCD, color}, {c, normalBCD, color}, {d, normalBCD, color},
-        {b, normalBDH, color}, {d, normalBDH, color}, {h, normalBDH, color},
-        {b, normalBHF, color}, {h, normalBHF, color}, {f, normalBHF, color},
-        {c, normalCEI, color}, {e, normalCEI, color}, {i, normalCEI, color},
-        {c, normalCID, color}, {i, normalCID, color}, {d, normalCID, color},
-        {d, normalDIJ, color}, {i, normalDIJ, color}, {j, normalDIJ, color},
-        {d, normalDJH, color}, {j, normalDJH, color}, {h, normalDJH, color},
-        {e, normalEGK, color}, {g, normalEGK, color}, {k, normalEGK, color},
-        {e, normalEKI, color}, {k, normalEKI, color}, {i, normalEKI, color},
-        {f, normalFHL, color}, {h, normalFHL, color}, {l, normalFHL, color},
-        {f, normalFLG, color}, {l, normalFLG, color}, {g, normalFLG, color},
-        {g, normalGLK, color}, {l, normalGLK, color}, {k, normalGLK, color},
-        {h, normalHJL, color}, {j, normalHJL, color}, {l, normalHJL, color},
-        {i, normalIKJ, color}, {k, normalIKJ, color}, {j, normalIKJ, color},
-        {j, normalJKL, color}, {k, normalJKL, color}, {l, normalJKL, color},
+        {a, normalABF, colors[0]}, {b, normalABF, colors[0]}, {f, normalABF, colors[0]},
+        {b, normalBHF, colors[1]}, {h, normalBHF, colors[1]}, {f, normalBHF, colors[1]},
+        {f, normalFHL, colors[2]}, {h, normalFHL, colors[2]}, {l, normalFHL, colors[2]},
+        {f, normalFLG, colors[3]}, {l, normalFLG, colors[3]}, {g, normalFLG, colors[3]},
+        {a, normalAFG, colors[4]}, {f, normalAFG, colors[4]}, {g, normalAFG, colors[4]},
+        {a, normalACB, colors[5]}, {c, normalACB, colors[5]}, {b, normalACB, colors[5]},
+        {b, normalBCD, colors[6]}, {c, normalBCD, colors[6]}, {d, normalBCD, colors[6]},
+        {b, normalBDH, colors[7]}, {d, normalBDH, colors[7]}, {h, normalBDH, colors[7]},
+        {d, normalDJH, colors[8]}, {j, normalDJH, colors[8]}, {h, normalDJH, colors[8]},
+        {h, normalHJL, colors[9]}, {j, normalHJL, colors[9]}, {l, normalHJL, colors[9]},
+        {j, normalJKL, colors[10]}, {k, normalJKL, colors[10]}, {l, normalJKL, colors[10]},
+        {g, normalGLK, colors[11]}, {l, normalGLK, colors[11]}, {k, normalGLK, colors[11]},
+        {e, normalEGK, colors[12]}, {g, normalEGK, colors[12]}, {k, normalEGK, colors[12]},
+        {a, normalAGE, colors[13]}, {g, normalAGE, colors[13]}, {e, normalAGE, colors[13]},
+        {a, normalAEC, colors[14]}, {e, normalAEC, colors[14]}, {c, normalAEC, colors[14]},
+        {c, normalCID, colors[15]}, {i, normalCID, colors[15]}, {d, normalCID, colors[15]},
+        {d, normalDIJ, colors[16]}, {i, normalDIJ, colors[16]}, {j, normalDIJ, colors[16]},
+        {i, normalIKJ, colors[17]}, {k, normalIKJ, colors[17]}, {j, normalIKJ, colors[17]},
+        {e, normalEKI, colors[18]}, {k, normalEKI, colors[18]}, {i, normalEKI, colors[18]},
+        {c, normalCEI, colors[19]}, {e, normalCEI, colors[19]}, {i, normalCEI, colors[19]},
     };
 
     vertices = malloc(sizeof(icosahedron));
