@@ -19,9 +19,7 @@ typedef struct {
 {
     GLuint vertexBufferID;
     Vertex *vertices;
-
     GLKMatrix4 modelViewMatrix;
-    float rotation;
 }
 
 - (void)dealloc
@@ -54,6 +52,11 @@ typedef struct {
     self.effect.light0.diffuseColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0);
     self.effect.colorMaterialEnabled = GL_TRUE;
 
+    float aspect = fabs(self.view.bounds.size.width / self.view.bounds.size.height);
+    float width = 1.0;
+    float height = width / aspect;
+    self.effect.transform.projectionMatrix = GLKMatrix4MakeOrtho(-width / 2, width / 2, -height / 2, height / 2, 0.1, 100);
+
     glEnable(GL_DEPTH_TEST);
 
     [self createVertices];
@@ -61,7 +64,7 @@ typedef struct {
 
 - (void)createVertices
 {
-    float scale = 1.0;
+    float scale = 0.1;
     float x = (1 + sqrt(5)) / 2;
 
     GLKVector3 g = GLKVector3MultiplyScalar(GLKVector3Make( x,  0,  1), scale);
@@ -139,19 +142,11 @@ typedef struct {
 
 - (void)update
 {
-    float aspect = fabs(self.view.bounds.size.width / self.view.bounds.size.height);
-    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0), aspect, 0.1, 100.0);
-
-    self.effect.transform.projectionMatrix = projectionMatrix;
-
-    GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -8.0);
-    baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, rotation, 0.0, 1.0, 0.0);
+    GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -5.0);
+    baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, GLKMathDegreesToRadians(-20), 0.0, 1.0, 0.0);
 
     modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, rotation, 0.0, 1.0, 0.0);
     modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
-
-    rotation += self.timeSinceLastUpdate;
 }
 
 #pragma mark - GLKViewDelegate methods
