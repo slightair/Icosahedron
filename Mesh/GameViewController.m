@@ -25,6 +25,8 @@ typedef struct {
     NSInteger selectedPointIndex;
     GLKVector3 prevPoint;
     GLKVector3 currentPoint;
+    GLKQuaternion prevQuaternion;
+    GLKQuaternion currentQuaternion;
     float animationProgress;
 }
 
@@ -89,16 +91,6 @@ typedef struct {
     GLKVector3 c = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1, -x), scale);
     GLKVector3 i = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1, -x), scale);
 
-    int numColors = 20;
-    GLKVector4 *colors = malloc(sizeof(GLKVector4) * numColors);
-    for(int i = 0; i < numColors; i++) {
-        double theta = 1.0 / numColors * i;
-        UIColor *color = [UIColor colorWithHue:theta saturation:0.5 brightness:1.0 alpha:1.0];
-        CGFloat red, green, blue, alpha;
-        [color getRed:&red green:&green blue:&blue alpha:&alpha];
-        colors[i] = GLKVector4Make(red, green, blue, alpha);
-    }
-
     GLKVector3 normalACB = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, c), GLKVector3Subtract(c, b)));
     GLKVector3 normalAGE = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, g), GLKVector3Subtract(g, e)));
     GLKVector3 normalAFG = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, f), GLKVector3Subtract(f, g)));
@@ -120,61 +112,83 @@ typedef struct {
     GLKVector3 normalIKJ = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(i, k), GLKVector3Subtract(k, j)));
     GLKVector3 normalJKL = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(j, k), GLKVector3Subtract(k, l)));
 
+    GLKVector4 color = GLKVector4Make(1.0, 1.0, 1.0, 1.0);
+
     Vertex vertices[] = {
-        {a, normalABF, colors[0]}, {b, normalABF, colors[0]}, {f, normalABF, colors[0]},
-        {b, normalBHF, colors[1]}, {h, normalBHF, colors[1]}, {f, normalBHF, colors[1]},
-        {f, normalFHL, colors[2]}, {h, normalFHL, colors[2]}, {l, normalFHL, colors[2]},
-        {f, normalFLG, colors[3]}, {l, normalFLG, colors[3]}, {g, normalFLG, colors[3]},
-        {a, normalAFG, colors[4]}, {f, normalAFG, colors[4]}, {g, normalAFG, colors[4]},
-        {a, normalACB, colors[5]}, {c, normalACB, colors[5]}, {b, normalACB, colors[5]},
-        {b, normalBCD, colors[6]}, {c, normalBCD, colors[6]}, {d, normalBCD, colors[6]},
-        {b, normalBDH, colors[7]}, {d, normalBDH, colors[7]}, {h, normalBDH, colors[7]},
-        {d, normalDJH, colors[8]}, {j, normalDJH, colors[8]}, {h, normalDJH, colors[8]},
-        {h, normalHJL, colors[9]}, {j, normalHJL, colors[9]}, {l, normalHJL, colors[9]},
-        {j, normalJKL, colors[10]}, {k, normalJKL, colors[10]}, {l, normalJKL, colors[10]},
-        {g, normalGLK, colors[11]}, {l, normalGLK, colors[11]}, {k, normalGLK, colors[11]},
-        {e, normalEGK, colors[12]}, {g, normalEGK, colors[12]}, {k, normalEGK, colors[12]},
-        {a, normalAGE, colors[13]}, {g, normalAGE, colors[13]}, {e, normalAGE, colors[13]},
-        {a, normalAEC, colors[14]}, {e, normalAEC, colors[14]}, {c, normalAEC, colors[14]},
-        {c, normalCID, colors[15]}, {i, normalCID, colors[15]}, {d, normalCID, colors[15]},
-        {d, normalDIJ, colors[16]}, {i, normalDIJ, colors[16]}, {j, normalDIJ, colors[16]},
-        {i, normalIKJ, colors[17]}, {k, normalIKJ, colors[17]}, {j, normalIKJ, colors[17]},
-        {e, normalEKI, colors[18]}, {k, normalEKI, colors[18]}, {i, normalEKI, colors[18]},
-        {c, normalCEI, colors[19]}, {e, normalCEI, colors[19]}, {i, normalCEI, colors[19]},
+        {a, normalABF, color}, {b, normalABF, color}, {f, normalABF, color},
+        {b, normalBHF, color}, {h, normalBHF, color}, {f, normalBHF, color},
+        {f, normalFHL, color}, {h, normalFHL, color}, {l, normalFHL, color},
+        {f, normalFLG, color}, {l, normalFLG, color}, {g, normalFLG, color},
+        {a, normalAFG, color}, {f, normalAFG, color}, {g, normalAFG, color},
+
+//        {a, normalACB, color}, {c, normalACB, color}, {b, normalACB, color},
+        {a, normalACB, GLKVector4Make(1.0, 0.0, 0.0, 1.0)},
+        {c, normalACB, GLKVector4Make(0.0, 1.0, 0.0, 1.0)},
+        {b, normalACB, GLKVector4Make(0.0, 0.0, 1.0, 1.0)},
+
+        {b, normalBCD, color}, {c, normalBCD, color}, {d, normalBCD, color},
+        {b, normalBDH, color}, {d, normalBDH, color}, {h, normalBDH, color},
+        {d, normalDJH, color}, {j, normalDJH, color}, {h, normalDJH, color},
+        {h, normalHJL, color}, {j, normalHJL, color}, {l, normalHJL, color},
+        {j, normalJKL, color}, {k, normalJKL, color}, {l, normalJKL, color},
+        {g, normalGLK, color}, {l, normalGLK, color}, {k, normalGLK, color},
+        {e, normalEGK, color}, {g, normalEGK, color}, {k, normalEGK, color},
+        {a, normalAGE, color}, {g, normalAGE, color}, {e, normalAGE, color},
+        {a, normalAEC, color}, {e, normalAEC, color}, {c, normalAEC, color},
+        {c, normalCID, color}, {i, normalCID, color}, {d, normalCID, color},
+        {d, normalDIJ, color}, {i, normalDIJ, color}, {j, normalDIJ, color},
+        {i, normalIKJ, color}, {k, normalIKJ, color}, {j, normalIKJ, color},
+        {e, normalEKI, color}, {k, normalEKI, color}, {i, normalEKI, color},
+        {c, normalCEI, color}, {e, normalCEI, color}, {i, normalCEI, color},
     };
 
     modelVertices = malloc(sizeof(vertices));
     memcpy(modelVertices, vertices, sizeof(vertices));
 
-    GLKVector3 points[] = {e, a, b, c, d, i, j, k, l, g, f, h};
+    GLKVector3 points[] = {a, c, b};
 
     icosahedronPoints = malloc(sizeof(points));
     memcpy(icosahedronPoints, points, sizeof(points));
 
-    prevPoint = points[11];
+    prevPoint = points[2];
     currentPoint = points[0];
     selectedPointIndex = 0;
     animationProgress = 1.0;
+
+    prevQuaternion = GLKQuaternionIdentity;
+    currentQuaternion = [self quaternionForRotateFrom:points[0] to:points[1]];
 }
 
 - (void)update
 {
     GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -5.0);
-    baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, GLKMathDegreesToRadians(-60), 0.0, 1.0, 0.0);
-
-    modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0);
-    modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
 
     if (animationProgress < 1.0) {
-        animationProgress += self.timeSinceLastUpdate * 2;
+        animationProgress += self.timeSinceLastUpdate;
         animationProgress = MIN(1.0, animationProgress);
     }
 
-    GLKQuaternion startQuaternion = GLKQuaternionMakeWithVector3(GLKVector3Normalize(prevPoint), 1.0);
-    GLKQuaternion endQuaternion = GLKQuaternionMakeWithVector3(GLKVector3Normalize(currentPoint), 1.0);
-    GLKQuaternion modelQuaternion = GLKQuaternionInvert(GLKQuaternionSlerp(startQuaternion, endQuaternion, animationProgress));
+    GLKQuaternion modelQuaternion = GLKQuaternionSlerp(prevQuaternion, currentQuaternion, animationProgress);
 
+    modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(180), 0.0, 0.0, 1.0);
+    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0);
     modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, GLKMatrix4MakeWithQuaternion(modelQuaternion));
+    modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
+}
+
+- (GLKQuaternion)quaternionForRotateFrom:(GLKVector3)from to:(GLKVector3)to
+{
+    GLKVector3 normalizedFrom = GLKVector3Normalize(from);
+    GLKVector3 normalizedTo = GLKVector3Normalize(to);
+
+    float cosTheta = GLKVector3DotProduct(normalizedFrom, normalizedTo);
+    GLKVector3 rotationAxis = GLKVector3CrossProduct(normalizedFrom, normalizedTo);
+
+    float s = sqrtf((1 + cosTheta) * 2);
+    float inverse = 1 / s;
+
+    return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5);
 }
 
 - (IBAction)didTapGameView:(id)sender
@@ -184,13 +198,17 @@ typedef struct {
 
 - (void)moveNextVertex
 {
-    selectedPointIndex++;
-    selectedPointIndex = selectedPointIndex % 12;
+    int numIcosahedronPoints = 3;
 
-    GLKVector3 nextVertex = icosahedronPoints[selectedPointIndex];
+    selectedPointIndex++;
+    selectedPointIndex = selectedPointIndex % numIcosahedronPoints;
+
     prevPoint = currentPoint;
-    currentPoint = nextVertex;
+    currentPoint = icosahedronPoints[selectedPointIndex];
     animationProgress = 0.0;
+
+    prevQuaternion = currentQuaternion;
+    currentQuaternion = GLKQuaternionMultiply(currentQuaternion, [self quaternionForRotateFrom:currentPoint to:prevPoint]);
 }
 
 #pragma mark - GLKViewDelegate methods
