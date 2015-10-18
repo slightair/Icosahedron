@@ -18,8 +18,14 @@ typedef struct {
 @implementation GameViewController
 {
     GLuint vertexBufferID;
-    Vertex *vertices;
+    Vertex *modelVertices;
     GLKMatrix4 modelViewMatrix;
+
+    GLKVector3 *icosahedronPoints;
+    NSInteger selectedPointIndex;
+    GLKVector3 prevPoint;
+    GLKVector3 currentPoint;
+    float animationProgress;
 }
 
 - (void)dealloc
@@ -32,7 +38,8 @@ typedef struct {
 
     [EAGLContext setCurrentContext:nil];
 
-    free(vertices);
+    free(modelVertices);
+    free(icosahedronPoints);
 }
 
 - (void)viewDidLoad
@@ -113,7 +120,7 @@ typedef struct {
     GLKVector3 normalIKJ = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(i, k), GLKVector3Subtract(k, j)));
     GLKVector3 normalJKL = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(j, k), GLKVector3Subtract(k, l)));
 
-    Vertex icosahedron[] = {
+    Vertex vertices[] = {
         {a, normalABF, colors[0]}, {b, normalABF, colors[0]}, {f, normalABF, colors[0]},
         {b, normalBHF, colors[1]}, {h, normalBHF, colors[1]}, {f, normalBHF, colors[1]},
         {f, normalFHL, colors[2]}, {h, normalFHL, colors[2]}, {l, normalFHL, colors[2]},
@@ -136,17 +143,54 @@ typedef struct {
         {c, normalCEI, colors[19]}, {e, normalCEI, colors[19]}, {i, normalCEI, colors[19]},
     };
 
-    vertices = malloc(sizeof(icosahedron));
-    memcpy(vertices, icosahedron, sizeof(icosahedron));
+    modelVertices = malloc(sizeof(vertices));
+    memcpy(modelVertices, vertices, sizeof(vertices));
+
+    GLKVector3 points[] = {e, a, b, c, d, i, j, k, l, g, f, h};
+
+    icosahedronPoints = malloc(sizeof(points));
+    memcpy(icosahedronPoints, points, sizeof(points));
+
+    prevPoint = points[11];
+    currentPoint = points[0];
+    selectedPointIndex = 0;
+    animationProgress = 1.0;
 }
 
 - (void)update
 {
     GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -5.0);
-    baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, GLKMathDegreesToRadians(-20), 0.0, 1.0, 0.0);
+    baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, GLKMathDegreesToRadians(-60), 0.0, 1.0, 0.0);
 
     modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0);
     modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
+
+    if (animationProgress < 1.0) {
+        animationProgress += self.timeSinceLastUpdate * 2;
+        animationProgress = MIN(1.0, animationProgress);
+    }
+
+    GLKQuaternion startQuaternion = GLKQuaternionMakeWithVector3(GLKVector3Normalize(prevPoint), 1.0);
+    GLKQuaternion endQuaternion = GLKQuaternionMakeWithVector3(GLKVector3Normalize(currentPoint), 1.0);
+    GLKQuaternion modelQuaternion = GLKQuaternionInvert(GLKQuaternionSlerp(startQuaternion, endQuaternion, animationProgress));
+
+    modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, GLKMatrix4MakeWithQuaternion(modelQuaternion));
+}
+
+- (IBAction)didTapGameView:(id)sender
+{
+    [self moveNextVertex];
+}
+
+- (void)moveNextVertex
+{
+    selectedPointIndex++;
+    selectedPointIndex = selectedPointIndex % 12;
+
+    GLKVector3 nextVertex = icosahedronPoints[selectedPointIndex];
+    prevPoint = currentPoint;
+    currentPoint = nextVertex;
+    animationProgress = 0.0;
 }
 
 #pragma mark - GLKViewDelegate methods
@@ -161,7 +205,7 @@ typedef struct {
 
     glGenBuffers(1, &vertexBufferID);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 3 * 20, vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 3 * 20, modelVertices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glEnableVertexAttribArray(GLKVertexAttribNormal);
