@@ -8,6 +8,14 @@ typedef struct {
     GLKVector4 color;
 } Vertex;
 
+typedef struct {
+    GLKVector3 point0;
+    GLKVector3 point1;
+    GLKVector3 point2;
+    GLKVector3 point3;
+    GLKVector3 point4;
+} Link;
+
 @interface GameViewController ()
 
 @property (nonatomic) EAGLContext *context;
@@ -21,8 +29,8 @@ typedef struct {
     Vertex *modelVertices;
     GLKMatrix4 modelViewMatrix;
 
-    GLKVector3 *icosahedronPoints;
-    NSInteger selectedPointIndex;
+    Link *icosahedronLinks;
+    NSInteger selectedLinkIndex;
     GLKVector3 prevPoint;
     GLKVector3 currentPoint;
     GLKQuaternion prevQuaternion;
@@ -41,7 +49,7 @@ typedef struct {
     [EAGLContext setCurrentContext:nil];
 
     free(modelVertices);
-    free(icosahedronPoints);
+    free(icosahedronLinks);
 }
 
 - (void)viewDidLoad
@@ -145,18 +153,30 @@ typedef struct {
     modelVertices = malloc(sizeof(vertices));
     memcpy(modelVertices, vertices, sizeof(vertices));
 
-    GLKVector3 points[] = {a, c, b};
+    Link links[] = {
+        {b, a, e, i, d},
+        {a, c, d, h, f},
+        {e, c, b, f, g},
+        {g, k, i, c, a},
+        {l, k, e, a, f},
+        {f, h, j, k, g},
+        {h, l, g, a, b},
+        {j, l, f, b, d},
+        {k, l, h, d, i},
+        {i, e, g, l, j},
+        {d, c, e, k, j},
+        {c, i, j, h, b},
+    };
 
-    icosahedronPoints = malloc(sizeof(points));
-    memcpy(icosahedronPoints, points, sizeof(points));
+    icosahedronLinks = malloc(sizeof(links));
+    memcpy(icosahedronLinks, links, sizeof(links));
 
-    prevPoint = points[2];
-    currentPoint = points[0];
-    selectedPointIndex = 0;
+    currentPoint = c;
+    selectedLinkIndex = -1;
     animationProgress = 1.0;
 
     prevQuaternion = GLKQuaternionIdentity;
-    currentQuaternion = [self quaternionForRotateFrom:points[0] to:points[1]];
+    currentQuaternion = GLKQuaternionIdentity;
 }
 
 - (void)update
@@ -198,13 +218,11 @@ typedef struct {
 
 - (void)moveNextVertex
 {
-    int numIcosahedronPoints = 3;
-
-    selectedPointIndex++;
-    selectedPointIndex = selectedPointIndex % numIcosahedronPoints;
+    selectedLinkIndex++;
+    selectedLinkIndex = selectedLinkIndex % 12;
 
     prevPoint = currentPoint;
-    currentPoint = icosahedronPoints[selectedPointIndex];
+    currentPoint = icosahedronLinks[selectedLinkIndex].point0;
     animationProgress = 0.0;
 
     prevQuaternion = currentQuaternion;
