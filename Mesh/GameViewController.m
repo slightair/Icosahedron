@@ -81,7 +81,7 @@ typedef struct {
 
 - (void)createVertices
 {
-    float scale = 0.1;
+    float scale = 0.15;
     float x = (1 + sqrt(5)) / 2;
 
     GLKVector3 g = GLKVector3MultiplyScalar(GLKVector3Make( x,  0,  1), scale);
