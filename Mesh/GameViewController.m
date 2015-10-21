@@ -1,6 +1,6 @@
 #import "GameViewController.h"
 @import OpenGLES;
-@import UIKit;
+@import SpriteKit;
 
 typedef struct {
     GLKVector3 position;
@@ -18,8 +18,12 @@ typedef struct {
 
 @interface GameViewController ()
 
+@property (weak, nonatomic) IBOutlet SKView *infoView;
+
 @property (nonatomic) EAGLContext *context;
 @property (nonatomic) GLKBaseEffect *effect;
+@property (nonatomic) SKScene *infoDisplayScene;
+@property (nonatomic) SKLabelNode *currentPointLabelNode;
 
 @end
 
@@ -76,7 +80,32 @@ typedef struct {
 
     glEnable(GL_DEPTH_TEST);
 
+    [self setUpInfoDisplay];
+
     [self createVertices];
+}
+
+- (void)setUpInfoDisplay
+{
+    self.infoView.showsFPS = YES;
+    self.infoView.allowsTransparency = YES;
+
+    self.infoDisplayScene = [SKScene sceneWithSize:self.view.bounds.size];
+    self.infoDisplayScene.backgroundColor = [UIColor clearColor];
+
+    self.currentPointLabelNode = [SKLabelNode labelNodeWithFontNamed:@"Helvetica"];
+    self.currentPointLabelNode.position = CGPointMake(4, 4);
+    self.currentPointLabelNode.fontSize = 16;
+    self.currentPointLabelNode.verticalAlignmentMode = SKLabelVerticalAlignmentModeBottom;
+    self.currentPointLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeLeft;
+    [self.infoDisplayScene addChild:self.currentPointLabelNode];
+
+    [self.infoView presentScene:self.infoDisplayScene];
+}
+
+- (void)updateInfoDisplay
+{
+    self.currentPointLabelNode.text = [NSString stringWithFormat:@"Current: %ld %@", (long)selectedLinkIndex, NSStringFromGLKVector3(currentPoint)];
 }
 
 - (void)createVertices
@@ -172,11 +201,14 @@ typedef struct {
     memcpy(icosahedronLinks, links, sizeof(links));
 
     currentPoint = c;
-    selectedLinkIndex = -1;
     animationProgress = 1.0;
 
     prevQuaternion = GLKQuaternionIdentity;
     currentQuaternion = GLKQuaternionIdentity;
+
+    selectedLinkIndex = 0;
+
+    [self updateInfoDisplay];
 }
 
 - (void)update
@@ -218,15 +250,17 @@ typedef struct {
 
 - (void)moveNextVertex
 {
-    selectedLinkIndex++;
-    selectedLinkIndex = selectedLinkIndex % 12;
-
     prevPoint = currentPoint;
     currentPoint = icosahedronLinks[selectedLinkIndex].point0;
     animationProgress = 0.0;
 
     prevQuaternion = currentQuaternion;
     currentQuaternion = GLKQuaternionMultiply(currentQuaternion, [self quaternionForRotateFrom:currentPoint to:prevPoint]);
+
+    selectedLinkIndex++;
+    selectedLinkIndex = selectedLinkIndex % 12;
+
+    [self updateInfoDisplay];
 }
 
 #pragma mark - GLKViewDelegate methods

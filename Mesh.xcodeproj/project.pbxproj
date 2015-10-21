@@ -16,6 +16,8 @@
 		579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 579013AA1BC1083400ADAE3E /* Main.storyboard */; };
 		579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 579013AD1BC1083400ADAE3E /* Assets.xcassets */; };
 		579013B11BC1083400ADAE3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 579013AF1BC1083400ADAE3E /* LaunchScreen.storyboard */; };
+		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
+		57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC9511BD7D180009423EA /* SpriteKit.framework */; };
 		98811DB37D5721A1862FEB21 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2418BDBEB5F57607DCBC1690 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -50,6 +52,8 @@
 		579013AD1BC1083400ADAE3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		579013B01BC1083400ADAE3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		579013B21BC1083400ADAE3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		57DDC94F1BD7D173009423EA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		57DDC9511BD7D180009423EA /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +61,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */,
+				57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */,
 				98811DB37D5721A1862FEB21 /* Pods.framework in Frameworks */,
 				570DD0551BC10AE6004D5596 /* SwiftUtilities.framework in Frameworks */,
 				570DD0541BC10AE6004D5596 /* SwiftGraphics.framework in Frameworks */,
@@ -121,6 +127,8 @@
 		F753C31B6DC8F86ABE5A2331 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				57DDC9511BD7D180009423EA /* SpriteKit.framework */,
+				57DDC94F1BD7D173009423EA /* GLKit.framework */,
 				2418BDBEB5F57607DCBC1690 /* Pods.framework */,
 				570DD0521BC10AE6004D5596 /* SwiftGraphics.framework */,
 				570DD0531BC10AE6004D5596 /* SwiftUtilities.framework */,
