@@ -27,20 +27,12 @@
                             <constraint firstAttribute="trailing" secondItem="kf5-x5-RPB" secondAttribute="trailing" id="lUK-1k-Jwg"/>
                             <constraint firstAttribute="bottom" secondItem="kf5-x5-RPB" secondAttribute="bottom" id="qYx-rF-bJ1"/>
                         </constraints>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="BUB-bf-qKM" appends="YES" id="U0v-o2-gis"/>
-                        </connections>
                     </view>
                     <connections>
                         <outlet property="infoView" destination="kf5-x5-RPB" id="n8l-WD-e3V"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="BUB-bf-qKM">
-                    <connections>
-                        <action selector="didTapGameView:" destination="BV1-FR-VrT" id="5od-rf-2D4"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
         </scene>
     </scenes>

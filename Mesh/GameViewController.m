@@ -243,15 +243,35 @@ typedef struct {
     return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5);
 }
 
-- (IBAction)didTapGameView:(id)sender
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    [self moveNextVertex];
+    UITouch *touch = [touches anyObject];
+    CGPoint location = [touch locationInView:self.view];
+    location.x -= CGRectGetMidX(self.view.bounds);
+    location.y -= CGRectGetMidY(self.view.bounds);
+
+    float radian = atan2f(-location.y, location.x);
+    radian = radian > 0 ? radian : radian + 2 * M_PI;
+
+    [self moveNextVertex:radian];
 }
 
-- (void)moveNextVertex
+- (void)moveNextVertex:(float)theta
 {
     prevPoint = currentPoint;
-    currentPoint = icosahedronLinks[selectedLinkIndex].point0;
+
+    float unit = 2 * M_PI / 5;
+    if (0 < theta && theta <= unit) {
+        currentPoint = icosahedronLinks[selectedLinkIndex].point0;
+    } else if (unit < theta && theta <= unit * 2) {
+        currentPoint = icosahedronLinks[selectedLinkIndex].point1;
+    } else if (unit * 2 < theta && theta <= unit * 3) {
+        currentPoint = icosahedronLinks[selectedLinkIndex].point2;
+    } else if (unit * 3 < theta && theta <= unit * 4) {
+        currentPoint = icosahedronLinks[selectedLinkIndex].point3;
+    } else {
+        currentPoint = icosahedronLinks[selectedLinkIndex].point4;
+    }
     animationProgress = 0.0;
 
     prevQuaternion = currentQuaternion;
