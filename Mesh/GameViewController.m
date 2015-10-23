@@ -24,6 +24,9 @@ typedef struct {
 @property (nonatomic) GLKBaseEffect *effect;
 @property (nonatomic) SKScene *infoDisplayScene;
 @property (nonatomic) SKLabelNode *currentPointLabelNode;
+@property (nonatomic) SKNode *circleNode;
+@property (nonatomic) NSArray<SKLabelNode *>* pointLabels;
+@property (nonatomic) NSInteger moveCount;
 
 @end
 
@@ -100,12 +103,54 @@ typedef struct {
     self.currentPointLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeLeft;
     [self.infoDisplayScene addChild:self.currentPointLabelNode];
 
+    self.circleNode = [SKNode node];
+    self.circleNode.position = self.view.center;
+    [self.infoDisplayScene addChild:self.circleNode];
+
+    NSMutableArray *pointLabels = [NSMutableArray new];
+    CGFloat radius = CGRectGetMidY(self.view.bounds) * 0.9;
+    CGFloat unit = 2 * M_PI / 5;
+    for (int i = 0; i < 5; i++) {
+        CGFloat theta = unit * i + unit / 2;
+        UIBezierPath *arcPath = [UIBezierPath bezierPathWithArcCenter:CGPointZero
+                                                               radius:radius
+                                                           startAngle:theta
+                                                             endAngle:theta + unit
+                                                            clockwise:YES];
+        SKShapeNode *arcNode = [SKShapeNode shapeNodeWithPath:[arcPath CGPath]];
+        arcNode.strokeColor = [UIColor colorWithHue:(theta / (2 * M_PI)) saturation:0.5 brightness:1.0 alpha:0.75];
+        arcNode.lineWidth = 24;
+
+        [self.circleNode addChild:arcNode];
+
+        SKLabelNode *pointLabel = [SKLabelNode labelNodeWithFontNamed:@"Helvetica"];
+        pointLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+        pointLabel.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
+        [self.infoDisplayScene addChild:pointLabel];
+
+        [pointLabels addObject:pointLabel];
+    }
+    self.pointLabels = pointLabels;
+
+    [self.circleNode runAction:[SKAction rotateByAngle:M_PI_2 duration:0.0]];
+
     [self.infoView presentScene:self.infoDisplayScene];
 }
 
 - (void)updateInfoDisplay
 {
     self.currentPointLabelNode.text = [NSString stringWithFormat:@"Current: %ld %@", (long)selectedLinkIndex, NSStringFromGLKVector3(currentPoint)];
+    [self.circleNode runAction:[SKAction rotateByAngle:M_PI / 5 duration:0.0]];
+
+    CGFloat radius = CGRectGetMidY(self.view.bounds) * 0.9;
+    CGFloat unit = 2 * M_PI / 5;
+    for (int i = 0; i < self.pointLabels.count; i++) {
+        CGFloat theta = unit * i + M_PI_2 + unit / 2 + self.moveCount * (M_PI / 5);
+        SKLabelNode *pointLabel = self.pointLabels[i];
+        pointLabel.text = [@(i + 1) stringValue];
+        pointLabel.position = CGPointMake(CGRectGetMidX(self.view.bounds) + radius * cos(theta),
+                                          CGRectGetMidY(self.view.bounds) + radius * sin(theta));
+    }
 }
 
 - (void)createVertices
@@ -280,6 +325,7 @@ typedef struct {
     selectedLinkIndex++;
     selectedLinkIndex = selectedLinkIndex % 12;
 
+    self.moveCount++;
     [self updateInfoDisplay];
 }
 
