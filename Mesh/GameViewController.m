@@ -1,48 +1,28 @@
 #import "GameViewController.h"
+#import "IcosahedronModel.h"
+#import "Mesh-Swift.h"
 @import OpenGLES;
 @import SpriteKit;
-
-typedef struct {
-    GLKVector3 position;
-    GLKVector3 normal;
-    GLKVector4 color;
-} Vertex;
-
-typedef struct {
-    GLKVector3 point0;
-    GLKVector3 point1;
-    GLKVector3 point2;
-    GLKVector3 point3;
-    GLKVector3 point4;
-} Link;
 
 @interface GameViewController ()
 
 @property (weak, nonatomic) IBOutlet SKView *infoView;
-
+@property (nonatomic) GameScene *gameScene;
 @property (nonatomic) EAGLContext *context;
 @property (nonatomic) GLKBaseEffect *effect;
-@property (nonatomic) SKScene *infoDisplayScene;
-@property (nonatomic) SKLabelNode *currentPointLabelNode;
-@property (nonatomic) SKNode *circleNode;
-@property (nonatomic) NSArray<SKLabelNode *>* pointLabels;
-@property (nonatomic) NSInteger moveCount;
+@property (nonatomic) IcosahedronModel *icosahedronModel;
+@property (nonatomic) IcosahedronVertex *prevVertex;
+@property (nonatomic) IcosahedronVertex *currentVertex;
+@property (nonatomic) GLKQuaternion prevQuaternion;
+@property (nonatomic) GLKQuaternion currentQuaternion;
+@property (nonatomic) float animationProgress;
 
 @end
 
 @implementation GameViewController
 {
     GLuint vertexBufferID;
-    Vertex *modelVertices;
     GLKMatrix4 modelViewMatrix;
-
-    Link *icosahedronLinks;
-    NSInteger selectedLinkIndex;
-    GLKVector3 prevPoint;
-    GLKVector3 currentPoint;
-    GLKQuaternion prevQuaternion;
-    GLKQuaternion currentQuaternion;
-    float animationProgress;
 }
 
 - (void)dealloc
@@ -54,9 +34,6 @@ typedef struct {
     self.context = nil;
 
     [EAGLContext setCurrentContext:nil];
-
-    free(modelVertices);
-    free(icosahedronLinks);
 }
 
 - (void)viewDidLoad
@@ -69,6 +46,22 @@ typedef struct {
     glkView.context = self.context;
     glkView.drawableDepthFormat = GLKViewDrawableDepthFormat24;
 
+    [self setUpOpenGL];
+
+    self.icosahedronModel = [IcosahedronModel new];
+
+    self.currentVertex = self.icosahedronModel.vertexDict[@"C"];
+    self.animationProgress = 1.0;
+    self.prevQuaternion = GLKQuaternionIdentity;
+    self.currentQuaternion = GLKQuaternionIdentity;
+
+    [self setUpInfoView];
+
+    [self.gameScene updateInfo:self.currentVertex];
+}
+
+- (void)setUpOpenGL
+{
     [EAGLContext setCurrentContext:self.context];
 
     self.effect = [GLKBaseEffect new];
@@ -82,190 +75,24 @@ typedef struct {
     self.effect.transform.projectionMatrix = GLKMatrix4MakeOrtho(-width / 2, width / 2, -height / 2, height / 2, 0.1, 100);
 
     glEnable(GL_DEPTH_TEST);
-
-    [self setUpInfoDisplay];
-
-    [self createVertices];
 }
 
-- (void)setUpInfoDisplay
+- (void)setUpInfoView
 {
-    self.infoView.showsFPS = YES;
-    self.infoView.allowsTransparency = YES;
-
-    self.infoDisplayScene = [SKScene sceneWithSize:self.view.bounds.size];
-    self.infoDisplayScene.backgroundColor = [UIColor clearColor];
-
-    self.currentPointLabelNode = [SKLabelNode labelNodeWithFontNamed:@"Helvetica"];
-    self.currentPointLabelNode.position = CGPointMake(4, 4);
-    self.currentPointLabelNode.fontSize = 16;
-    self.currentPointLabelNode.verticalAlignmentMode = SKLabelVerticalAlignmentModeBottom;
-    self.currentPointLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeLeft;
-    [self.infoDisplayScene addChild:self.currentPointLabelNode];
-
-    self.circleNode = [SKNode node];
-    self.circleNode.position = self.view.center;
-    [self.infoDisplayScene addChild:self.circleNode];
-
-    NSMutableArray *pointLabels = [NSMutableArray new];
-    CGFloat radius = CGRectGetMidY(self.view.bounds) * 0.9;
-    CGFloat unit = 2 * M_PI / 5;
-    for (int i = 0; i < 5; i++) {
-        CGFloat theta = unit * i + unit / 2;
-        UIBezierPath *arcPath = [UIBezierPath bezierPathWithArcCenter:CGPointZero
-                                                               radius:radius
-                                                           startAngle:theta
-                                                             endAngle:theta + unit
-                                                            clockwise:YES];
-        SKShapeNode *arcNode = [SKShapeNode shapeNodeWithPath:[arcPath CGPath]];
-        arcNode.strokeColor = [UIColor colorWithHue:(theta / (2 * M_PI)) saturation:0.5 brightness:1.0 alpha:0.75];
-        arcNode.lineWidth = 24;
-
-        [self.circleNode addChild:arcNode];
-
-        SKLabelNode *pointLabel = [SKLabelNode labelNodeWithFontNamed:@"Helvetica"];
-        pointLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
-        pointLabel.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
-        [self.infoDisplayScene addChild:pointLabel];
-
-        [pointLabels addObject:pointLabel];
-    }
-    self.pointLabels = pointLabels;
-
-    [self.circleNode runAction:[SKAction rotateByAngle:M_PI_2 duration:0.0]];
-
-    [self.infoView presentScene:self.infoDisplayScene];
-}
-
-- (void)updateInfoDisplay
-{
-    self.currentPointLabelNode.text = [NSString stringWithFormat:@"Current: %ld %@", (long)selectedLinkIndex, NSStringFromGLKVector3(currentPoint)];
-    [self.circleNode runAction:[SKAction rotateByAngle:M_PI / 5 duration:0.0]];
-
-    CGFloat radius = CGRectGetMidY(self.view.bounds) * 0.9;
-    CGFloat unit = 2 * M_PI / 5;
-    for (int i = 0; i < self.pointLabels.count; i++) {
-        CGFloat theta = unit * i + M_PI_2 + unit / 2 + self.moveCount * (M_PI / 5);
-        SKLabelNode *pointLabel = self.pointLabels[i];
-        pointLabel.text = [@(i + 1) stringValue];
-        pointLabel.position = CGPointMake(CGRectGetMidX(self.view.bounds) + radius * cos(theta),
-                                          CGRectGetMidY(self.view.bounds) + radius * sin(theta));
-    }
-}
-
-- (void)createVertices
-{
-    float scale = 0.15;
-    float x = (1 + sqrt(5)) / 2;
-
-    GLKVector3 g = GLKVector3MultiplyScalar(GLKVector3Make( x,  0,  1), scale);
-    GLKVector3 e = GLKVector3MultiplyScalar(GLKVector3Make( x,  0, -1), scale);
-    GLKVector3 h = GLKVector3MultiplyScalar(GLKVector3Make(-x,  0,  1), scale);
-    GLKVector3 d = GLKVector3MultiplyScalar(GLKVector3Make(-x,  0, -1), scale);
-
-    GLKVector3 a = GLKVector3MultiplyScalar(GLKVector3Make( 1,  x,  0), scale);
-    GLKVector3 b = GLKVector3MultiplyScalar(GLKVector3Make(-1,  x,  0), scale);
-    GLKVector3 k = GLKVector3MultiplyScalar(GLKVector3Make( 1, -x,  0), scale);
-    GLKVector3 j = GLKVector3MultiplyScalar(GLKVector3Make(-1, -x,  0), scale);
-
-    GLKVector3 f = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1,  x), scale);
-    GLKVector3 l = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1,  x), scale);
-    GLKVector3 c = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1, -x), scale);
-    GLKVector3 i = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1, -x), scale);
-
-    GLKVector3 normalACB = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, c), GLKVector3Subtract(c, b)));
-    GLKVector3 normalAGE = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, g), GLKVector3Subtract(g, e)));
-    GLKVector3 normalAFG = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, f), GLKVector3Subtract(f, g)));
-    GLKVector3 normalABF = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, b), GLKVector3Subtract(b, f)));
-    GLKVector3 normalAEC = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(a, e), GLKVector3Subtract(e, c)));
-    GLKVector3 normalBCD = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(b, c), GLKVector3Subtract(c, d)));
-    GLKVector3 normalBDH = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(b, d), GLKVector3Subtract(d, h)));
-    GLKVector3 normalBHF = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(b, h), GLKVector3Subtract(h, f)));
-    GLKVector3 normalCEI = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(c, e), GLKVector3Subtract(e, i)));
-    GLKVector3 normalCID = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(c, i), GLKVector3Subtract(i, d)));
-    GLKVector3 normalDIJ = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(d, i), GLKVector3Subtract(i, j)));
-    GLKVector3 normalDJH = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(d, j), GLKVector3Subtract(j, h)));
-    GLKVector3 normalEGK = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(e, g), GLKVector3Subtract(g, k)));
-    GLKVector3 normalEKI = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(e, k), GLKVector3Subtract(k, i)));
-    GLKVector3 normalFHL = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(f, h), GLKVector3Subtract(h, l)));
-    GLKVector3 normalFLG = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(f, l), GLKVector3Subtract(l, g)));
-    GLKVector3 normalGLK = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(g, l), GLKVector3Subtract(l, k)));
-    GLKVector3 normalHJL = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(h, j), GLKVector3Subtract(j, l)));
-    GLKVector3 normalIKJ = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(i, k), GLKVector3Subtract(k, j)));
-    GLKVector3 normalJKL = GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(j, k), GLKVector3Subtract(k, l)));
-
-    GLKVector4 color = GLKVector4Make(1.0, 1.0, 1.0, 1.0);
-
-    Vertex vertices[] = {
-        {a, normalABF, color}, {b, normalABF, color}, {f, normalABF, color},
-        {b, normalBHF, color}, {h, normalBHF, color}, {f, normalBHF, color},
-        {f, normalFHL, color}, {h, normalFHL, color}, {l, normalFHL, color},
-        {f, normalFLG, color}, {l, normalFLG, color}, {g, normalFLG, color},
-        {a, normalAFG, color}, {f, normalAFG, color}, {g, normalAFG, color},
-
-//        {a, normalACB, color}, {c, normalACB, color}, {b, normalACB, color},
-        {a, normalACB, GLKVector4Make(1.0, 0.0, 0.0, 1.0)},
-        {c, normalACB, GLKVector4Make(0.0, 1.0, 0.0, 1.0)},
-        {b, normalACB, GLKVector4Make(0.0, 0.0, 1.0, 1.0)},
-
-        {b, normalBCD, color}, {c, normalBCD, color}, {d, normalBCD, color},
-        {b, normalBDH, color}, {d, normalBDH, color}, {h, normalBDH, color},
-        {d, normalDJH, color}, {j, normalDJH, color}, {h, normalDJH, color},
-        {h, normalHJL, color}, {j, normalHJL, color}, {l, normalHJL, color},
-        {j, normalJKL, color}, {k, normalJKL, color}, {l, normalJKL, color},
-        {g, normalGLK, color}, {l, normalGLK, color}, {k, normalGLK, color},
-        {e, normalEGK, color}, {g, normalEGK, color}, {k, normalEGK, color},
-        {a, normalAGE, color}, {g, normalAGE, color}, {e, normalAGE, color},
-        {a, normalAEC, color}, {e, normalAEC, color}, {c, normalAEC, color},
-        {c, normalCID, color}, {i, normalCID, color}, {d, normalCID, color},
-        {d, normalDIJ, color}, {i, normalDIJ, color}, {j, normalDIJ, color},
-        {i, normalIKJ, color}, {k, normalIKJ, color}, {j, normalIKJ, color},
-        {e, normalEKI, color}, {k, normalEKI, color}, {i, normalEKI, color},
-        {c, normalCEI, color}, {e, normalCEI, color}, {i, normalCEI, color},
-    };
-
-    modelVertices = malloc(sizeof(vertices));
-    memcpy(modelVertices, vertices, sizeof(vertices));
-
-    Link links[] = {
-        {b, a, e, i, d},
-        {a, c, d, h, f},
-        {e, c, b, f, g},
-        {g, k, i, c, a},
-        {l, k, e, a, f},
-        {f, h, j, k, g},
-        {h, l, g, a, b},
-        {j, l, f, b, d},
-        {k, l, h, d, i},
-        {i, e, g, l, j},
-        {d, c, e, k, j},
-        {c, i, j, h, b},
-    };
-
-    icosahedronLinks = malloc(sizeof(links));
-    memcpy(icosahedronLinks, links, sizeof(links));
-
-    currentPoint = c;
-    animationProgress = 1.0;
-
-    prevQuaternion = GLKQuaternionIdentity;
-    currentQuaternion = GLKQuaternionIdentity;
-
-    selectedLinkIndex = 0;
-
-    [self updateInfoDisplay];
+    self.gameScene = [GameScene sceneWithSize:self.view.bounds.size];
+    [self.infoView presentScene:self.gameScene];
 }
 
 - (void)update
 {
     GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -5.0);
 
-    if (animationProgress < 1.0) {
-        animationProgress += self.timeSinceLastUpdate;
-        animationProgress = MIN(1.0, animationProgress);
+    if (self.animationProgress < 1.0) {
+        self.animationProgress += self.timeSinceLastUpdate;
+        self.animationProgress = MIN(1.0, self.animationProgress);
     }
 
-    GLKQuaternion modelQuaternion = GLKQuaternionSlerp(prevQuaternion, currentQuaternion, animationProgress);
+    GLKQuaternion modelQuaternion = GLKQuaternionSlerp(self.prevQuaternion, self.currentQuaternion, self.animationProgress);
 
     modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0);
     modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(180), 0.0, 0.0, 1.0);
@@ -303,30 +130,27 @@ typedef struct {
 
 - (void)moveNextVertex:(float)theta
 {
-    prevPoint = currentPoint;
+    self.prevVertex = self.currentVertex;
 
     float unit = 2 * M_PI / 5;
     if (0 < theta && theta <= unit) {
-        currentPoint = icosahedronLinks[selectedLinkIndex].point0;
+        self.currentVertex = self.prevVertex.head;
     } else if (unit < theta && theta <= unit * 2) {
-        currentPoint = icosahedronLinks[selectedLinkIndex].point1;
+        self.currentVertex = self.prevVertex.leftHand;
     } else if (unit * 2 < theta && theta <= unit * 3) {
-        currentPoint = icosahedronLinks[selectedLinkIndex].point2;
+        self.currentVertex = self.prevVertex.leftFoot;
     } else if (unit * 3 < theta && theta <= unit * 4) {
-        currentPoint = icosahedronLinks[selectedLinkIndex].point3;
+        self.currentVertex = self.prevVertex.rightFoot;
     } else {
-        currentPoint = icosahedronLinks[selectedLinkIndex].point4;
+        self.currentVertex = self.prevVertex.rightHand;
     }
-    animationProgress = 0.0;
+    self.animationProgress = 0.0;
 
-    prevQuaternion = currentQuaternion;
-    currentQuaternion = GLKQuaternionMultiply(currentQuaternion, [self quaternionForRotateFrom:currentPoint to:prevPoint]);
+    self.prevQuaternion = self.currentQuaternion;
+    GLKQuaternion relativeQuaternion = [self quaternionForRotateFrom:self.currentVertex.coordinate to:self.prevVertex.coordinate];
+    self.currentQuaternion = GLKQuaternionMultiply(self.currentQuaternion, relativeQuaternion);
 
-    selectedLinkIndex++;
-    selectedLinkIndex = selectedLinkIndex % 12;
-
-    self.moveCount++;
-    [self updateInfoDisplay];
+    [self.gameScene updateInfo:self.currentVertex];
 }
 
 #pragma mark - GLKViewDelegate methods
@@ -341,7 +165,7 @@ typedef struct {
 
     glGenBuffers(1, &vertexBufferID);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 3 * 20, modelVertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * IcosahedronModelNumberOfFaceVertices, self.icosahedronModel.vertices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glEnableVertexAttribArray(GLKVertexAttribNormal);
@@ -351,7 +175,7 @@ typedef struct {
     glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, normal));
     glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, color));
 
-    glDrawArrays(GL_TRIANGLES, 0, 3 * 20);
+    glDrawArrays(GL_TRIANGLES, 0, IcosahedronModelNumberOfFaceVertices);
 }
 
 @end

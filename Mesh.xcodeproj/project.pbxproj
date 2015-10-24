@@ -18,6 +18,9 @@
 		579013B11BC1083400ADAE3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 579013AF1BC1083400ADAE3E /* LaunchScreen.storyboard */; };
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
 		57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC9511BD7D180009423EA /* SpriteKit.framework */; };
+		57DDC9581BDB326B009423EA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC9571BDB326B009423EA /* GameScene.swift */; settings = {ASSET_TAGS = (); }; };
+		57DDC95C1BDB338B009423EA /* IcosahedronVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC95B1BDB338B009423EA /* IcosahedronVertex.swift */; settings = {ASSET_TAGS = (); }; };
+		57DDC9611BDB340A009423EA /* IcosahedronModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC9601BDB340A009423EA /* IcosahedronModel.m */; settings = {ASSET_TAGS = (); }; };
 		98811DB37D5721A1862FEB21 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2418BDBEB5F57607DCBC1690 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -54,6 +57,10 @@
 		579013B21BC1083400ADAE3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57DDC94F1BD7D173009423EA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		57DDC9511BD7D180009423EA /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
+		57DDC9571BDB326B009423EA /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		57DDC95B1BDB338B009423EA /* IcosahedronVertex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IcosahedronVertex.swift; sourceTree = "<group>"; };
+		57DDC9601BDB340A009423EA /* IcosahedronModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IcosahedronModel.m; sourceTree = "<group>"; };
+		57DDC9621BDB3425009423EA /* IcosahedronModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IcosahedronModel.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +110,8 @@
 		579013A11BC1083400ADAE3E /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
+				57DDC9561BDB320F009423EA /* Scene */,
+				57DDC9531BDB2E70009423EA /* Entity */,
 				579013A21BC1083400ADAE3E /* AppDelegate.swift */,
 				579013AA1BC1083400ADAE3E /* Main.storyboard */,
 				579013AD1BC1083400ADAE3E /* Assets.xcassets */,
@@ -113,6 +122,24 @@
 				570DD05E1BC8BDAD004D5596 /* GameViewController.m */,
 			);
 			path = Mesh;
+			sourceTree = "<group>";
+		};
+		57DDC9531BDB2E70009423EA /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				57DDC95B1BDB338B009423EA /* IcosahedronVertex.swift */,
+				57DDC9601BDB340A009423EA /* IcosahedronModel.m */,
+				57DDC9621BDB3425009423EA /* IcosahedronModel.h */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		57DDC9561BDB320F009423EA /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				57DDC9571BDB326B009423EA /* GameScene.swift */,
+			);
+			path = Scene;
 			sourceTree = "<group>";
 		};
 		CF23D3D0BEEF2BA621C93C49 /* Pods */ = {
@@ -277,6 +304,9 @@
 			files = (
 				570DD05F1BC8BDAD004D5596 /* GameViewController.m in Sources */,
 				579013A31BC1083400ADAE3E /* AppDelegate.swift in Sources */,
+				57DDC9611BDB340A009423EA /* IcosahedronModel.m in Sources */,
+				57DDC95C1BDB338B009423EA /* IcosahedronVertex.swift in Sources */,
+				57DDC9581BDB326B009423EA /* GameScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
