@@ -7,20 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		570DD0541BC10AE6004D5596 /* SwiftGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570DD0521BC10AE6004D5596 /* SwiftGraphics.framework */; settings = {ASSET_TAGS = (); }; };
-		570DD0551BC10AE6004D5596 /* SwiftUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570DD0531BC10AE6004D5596 /* SwiftUtilities.framework */; settings = {ASSET_TAGS = (); }; };
+		570DD0541BC10AE6004D5596 /* SwiftGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570DD0521BC10AE6004D5596 /* SwiftGraphics.framework */; };
+		570DD0551BC10AE6004D5596 /* SwiftUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570DD0531BC10AE6004D5596 /* SwiftUtilities.framework */; };
 		570DD05A1BC10BE0004D5596 /* SwiftGraphics.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 570DD0581BC10BE0004D5596 /* SwiftGraphics.framework.dSYM */; };
 		570DD05B1BC10BE0004D5596 /* SwiftUtilities.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 570DD0591BC10BE0004D5596 /* SwiftUtilities.framework.dSYM */; };
-		570DD05F1BC8BDAD004D5596 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 570DD05E1BC8BDAD004D5596 /* GameViewController.m */; settings = {ASSET_TAGS = (); }; };
+		570DD05F1BC8BDAD004D5596 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 570DD05E1BC8BDAD004D5596 /* GameViewController.m */; };
+		573132351BDCBF5200824EA5 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132331BDCBF5200824EA5 /* Shader.fsh */; };
+		573132361BDCBF5200824EA5 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132341BDCBF5200824EA5 /* Shader.vsh */; };
 		579013A31BC1083400ADAE3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579013A21BC1083400ADAE3E /* AppDelegate.swift */; };
 		579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 579013AA1BC1083400ADAE3E /* Main.storyboard */; };
 		579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 579013AD1BC1083400ADAE3E /* Assets.xcassets */; };
 		579013B11BC1083400ADAE3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 579013AF1BC1083400ADAE3E /* LaunchScreen.storyboard */; };
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
 		57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC9511BD7D180009423EA /* SpriteKit.framework */; };
-		57DDC9581BDB326B009423EA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC9571BDB326B009423EA /* GameScene.swift */; settings = {ASSET_TAGS = (); }; };
-		57DDC95C1BDB338B009423EA /* IcosahedronVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC95B1BDB338B009423EA /* IcosahedronVertex.swift */; settings = {ASSET_TAGS = (); }; };
-		57DDC9611BDB340A009423EA /* IcosahedronModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC9601BDB340A009423EA /* IcosahedronModel.m */; settings = {ASSET_TAGS = (); }; };
+		57DDC9581BDB326B009423EA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC9571BDB326B009423EA /* GameScene.swift */; };
+		57DDC95C1BDB338B009423EA /* IcosahedronVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC95B1BDB338B009423EA /* IcosahedronVertex.swift */; };
+		57DDC9611BDB340A009423EA /* IcosahedronModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC9601BDB340A009423EA /* IcosahedronModel.m */; };
 		98811DB37D5721A1862FEB21 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2418BDBEB5F57607DCBC1690 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -49,6 +51,8 @@
 		570DD0591BC10BE0004D5596 /* SwiftUtilities.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftUtilities.framework.dSYM; path = Carthage/Build/iOS/SwiftUtilities.framework.dSYM; sourceTree = "<group>"; };
 		570DD05D1BC8BDAD004D5596 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		570DD05E1BC8BDAD004D5596 /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		573132331BDCBF5200824EA5 /* Shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
+		573132341BDCBF5200824EA5 /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		5790139F1BC1083400ADAE3E /* Mesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mesh.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		579013A21BC1083400ADAE3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		579013AB1BC1083400ADAE3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -88,6 +92,15 @@
 			name = dSYM;
 			sourceTree = "<group>";
 		};
+		573132321BDCBF3200824EA5 /* Shader */ = {
+			isa = PBXGroup;
+			children = (
+				573132331BDCBF5200824EA5 /* Shader.fsh */,
+				573132341BDCBF5200824EA5 /* Shader.vsh */,
+			);
+			path = Shader;
+			sourceTree = "<group>";
+		};
 		579013961BC1083400ADAE3E = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +123,7 @@
 		579013A11BC1083400ADAE3E /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
+				573132321BDCBF3200824EA5 /* Shader */,
 				57DDC9561BDB320F009423EA /* Scene */,
 				57DDC9531BDB2E70009423EA /* Entity */,
 				579013A21BC1083400ADAE3E /* AppDelegate.swift */,
@@ -226,9 +240,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				573132351BDCBF5200824EA5 /* Shader.fsh in Resources */,
 				579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */,
 				579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */,
 				579013B11BC1083400ADAE3E /* LaunchScreen.storyboard in Resources */,
+				573132361BDCBF5200824EA5 /* Shader.vsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
