@@ -21,19 +21,14 @@
 
 @implementation GameViewController
 {
-    GLuint vertexBufferID;
-    GLKMatrix4 modelViewMatrix;
+    GLuint _program;
+    GLuint _vertexBufferID;
+    GLKMatrix4 _modelViewMatrix;
 }
 
 - (void)dealloc
 {
-    [EAGLContext setCurrentContext:self.context];
-
-    glDeleteBuffers(1, &vertexBufferID);
-
-    self.context = nil;
-
-    [EAGLContext setCurrentContext:nil];
+    [self tearDownGL];
 }
 
 - (void)viewDidLoad
@@ -46,7 +41,7 @@
     glkView.context = self.context;
     glkView.drawableDepthFormat = GLKViewDrawableDepthFormat24;
 
-    [self setUpOpenGL];
+    [self setUpGL];
 
     self.icosahedronModel = [IcosahedronModel new];
 
@@ -60,7 +55,7 @@
     [self.gameScene updateInfo:self.currentVertex];
 }
 
-- (void)setUpOpenGL
+- (void)setUpGL
 {
     [EAGLContext setCurrentContext:self.context];
 
@@ -75,6 +70,19 @@
     self.effect.transform.projectionMatrix = GLKMatrix4MakeOrtho(-width / 2, width / 2, -height / 2, height / 2, 0.1, 100);
 
     glEnable(GL_DEPTH_TEST);
+}
+
+- (void)tearDownGL
+{
+    [EAGLContext setCurrentContext:self.context];
+
+    glDeleteBuffers(1, &_vertexBufferID);
+
+    glDeleteProgram(_program);
+    _program = 0;
+
+    self.context = nil;
+    [EAGLContext setCurrentContext:nil];
 }
 
 - (void)setUpInfoView
@@ -94,11 +102,11 @@
 
     GLKQuaternion modelQuaternion = GLKQuaternionSlerp(self.prevQuaternion, self.currentQuaternion, self.animationProgress);
 
-    modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(180), 0.0, 0.0, 1.0);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0);
-    modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, GLKMatrix4MakeWithQuaternion(modelQuaternion));
-    modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
+    _modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0);
+    _modelViewMatrix = GLKMatrix4Rotate(_modelViewMatrix, GLKMathDegreesToRadians(180), 0.0, 0.0, 1.0);
+    _modelViewMatrix = GLKMatrix4Rotate(_modelViewMatrix, GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0);
+    _modelViewMatrix = GLKMatrix4Multiply(_modelViewMatrix, GLKMatrix4MakeWithQuaternion(modelQuaternion));
+    _modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, _modelViewMatrix);
 }
 
 - (GLKQuaternion)quaternionForRotateFrom:(GLKVector3)from to:(GLKVector3)to
@@ -160,11 +168,11 @@
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
-    self.effect.transform.modelviewMatrix = modelViewMatrix;
+    self.effect.transform.modelviewMatrix = _modelViewMatrix;
     [self.effect prepareToDraw];
 
-    glGenBuffers(1, &vertexBufferID);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
+    glGenBuffers(1, &_vertexBufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * IcosahedronModelNumberOfFaceVertices, self.icosahedronModel.vertices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(GLKVertexAttribPosition);
