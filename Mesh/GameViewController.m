@@ -7,6 +7,7 @@
 enum
 {
     UNIFORM_MODELVIEWPROJECTION_MATRIX,
+    UNIFORM_NORMAL_MATRIX,
     NUM_UNIFORMS,
 };
 GLint uniforms[NUM_UNIFORMS];
@@ -30,6 +31,7 @@ GLint uniforms[NUM_UNIFORMS];
     GLuint _program;
 
     GLKMatrix4 _modelViewProjectionMatrix;
+    GLKMatrix3 _normalMatrix;
 
     GLuint _vertexArray;
     GLuint _vertexBuffer;
@@ -186,6 +188,7 @@ GLint uniforms[NUM_UNIFORMS];
     modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, GLKMatrix4MakeWithQuaternion(modelQuaternion));
     modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
 
+    _normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelViewMatrix), NULL);
     _modelViewProjectionMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
 }
 
@@ -199,6 +202,7 @@ GLint uniforms[NUM_UNIFORMS];
     glUseProgram(_program);
 
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix.m);
+    glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
 
     glDrawArrays(GL_TRIANGLES, 0, IcosahedronModelNumberOfFaceVertices);
 }
@@ -249,6 +253,7 @@ GLint uniforms[NUM_UNIFORMS];
     }
 
     uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "modelViewProjectionMatrix");
+    uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(_program, "normalMatrix");
 
     if (vertShader) {
         glDetachShader(_program, vertShader);
