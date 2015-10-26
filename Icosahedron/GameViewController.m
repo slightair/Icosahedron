@@ -1,6 +1,6 @@
 #import "GameViewController.h"
 #import "IcosahedronModel.h"
-#import "Mesh-Swift.h"
+#import "Icosahedron-Swift.h"
 @import OpenGLES;
 @import SpriteKit;
 

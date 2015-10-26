@@ -1,5 +1,5 @@
 @import GLKit;
-#import "Mesh-Swift.h"
+#import "Icosahedron-Swift.h"
 
 typedef struct {
     GLKVector3 position;
