@@ -133,28 +133,30 @@ GLint uniforms[NUM_UNIFORMS];
     location.x -= CGRectGetMidX(self.view.bounds);
     location.y -= CGRectGetMidY(self.view.bounds);
 
-    float radian = atan2f(-location.y, location.x);
-    radian = radian > 0 ? radian : radian + 2 * M_PI;
+    NSArray *candidates = self.currentVertex.nextVertices;
 
-    [self moveNextVertex:radian];
+    GLKVector3 locationVector = GLKVector3Normalize(GLKVector3Make(location.x, location.y, 0));
+
+    float nearestDistance = FLT_MAX;
+    IcosahedronVertex *nearestVertex = nil;
+    for (IcosahedronVertex *v in candidates) {
+        float distance = GLKVector3Distance(locationVector, v.coordinate);
+        if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestVertex = v;
+        }
+        NSLog(@"%@ %f %@", v.name, distance, NSStringFromGLKVector3(v.coordinate));
+    }
+
+    NSLog(@">> %@ <<", nearestVertex.name);
+
+    [self moveToVertex:nearestVertex];
 }
 
-- (void)moveNextVertex:(float)theta
+- (void)moveToVertex:(IcosahedronVertex *)vertex
 {
     self.prevVertex = self.currentVertex;
-
-    float unit = 2 * M_PI / 5;
-    if (0 < theta && theta <= unit) {
-        self.currentVertex = self.prevVertex.head;
-    } else if (unit < theta && theta <= unit * 2) {
-        self.currentVertex = self.prevVertex.leftHand;
-    } else if (unit * 2 < theta && theta <= unit * 3) {
-        self.currentVertex = self.prevVertex.leftFoot;
-    } else if (unit * 3 < theta && theta <= unit * 4) {
-        self.currentVertex = self.prevVertex.rightFoot;
-    } else {
-        self.currentVertex = self.prevVertex.rightHand;
-    }
+    self.currentVertex = vertex;
     self.animationProgress = 0.0;
 
     self.prevQuaternion = self.currentQuaternion;
@@ -183,7 +185,6 @@ GLint uniforms[NUM_UNIFORMS];
     GLKQuaternion modelQuaternion = GLKQuaternionSlerp(self.prevQuaternion, self.currentQuaternion, self.animationProgress);
 
     GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(180), 0.0, 0.0, 1.0);
     modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0);
     modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, GLKMatrix4MakeWithQuaternion(modelQuaternion));
     modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);

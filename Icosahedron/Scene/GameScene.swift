@@ -31,7 +31,7 @@ class GameScene: SKScene {
         self.addChild(self.circleNode)
 
         for var i = 0; i < 5; i++ {
-            let theta = self.unit * CGFloat(i) + self.unit / 2
+            let theta = self.unit * CGFloat(i)
             let arcPath = UIBezierPath(arcCenter: CGPointZero,
                 radius: self.radius,
                 startAngle: theta,
@@ -58,7 +58,7 @@ class GameScene: SKScene {
         self.circleNode.runAction(SKAction.rotateByAngle(CGFloat(M_PI) / 5, duration: 0))
 
         for (i, label) in self.vertexLabels.enumerate() {
-            let theta = self.unit * CGFloat(i) + CGFloat(M_PI_2) + self.unit / 2 + CGFloat(self.updateCount) * (CGFloat(M_PI) / 5)
+            let theta = self.unit * CGFloat(i) + CGFloat(M_PI_2) + CGFloat(self.updateCount) * (CGFloat(M_PI) / 5)
             label.text = currentVertex.nextVertexNames[i]
             label.position = CGPointMake(
                 self.size.width / 2 + self.radius * cos(theta),

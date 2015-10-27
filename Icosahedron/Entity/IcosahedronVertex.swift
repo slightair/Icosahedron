@@ -11,14 +11,18 @@ class IcosahedronVertex : NSObject {
     var leftFoot: IcosahedronVertex!
     var rightFoot: IcosahedronVertex!
 
-    var nextVertexNames: [String] {
+    var nextVertices: [IcosahedronVertex] {
         return [
-            head.name,
-            leftHand.name,
-            leftFoot.name,
-            rightFoot.name,
-            rightHand.name,
+            head,
+            leftHand,
+            leftFoot,
+            rightFoot,
+            rightHand,
         ]
+    }
+
+    var nextVertexNames: [String] {
+        return nextVertices.map { $0.name }
     }
 
     override var description: String {
