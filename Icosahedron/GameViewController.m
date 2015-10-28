@@ -133,9 +133,13 @@ GLint uniforms[NUM_UNIFORMS];
     location.x -= CGRectGetMidX(self.view.bounds);
     location.y -= CGRectGetMidY(self.view.bounds);
 
-    NSArray *candidates = self.currentVertex.nextVertices;
+    NSArray<IcosahedronVertex *> *candidates = self.currentVertex.nextVertices;
 
-    GLKVector3 locationVector = GLKVector3Normalize(GLKVector3Make(location.x, location.y, 0));
+    CGFloat longSide = MAX(CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds));
+    GLKVector3 locationVector = GLKVector3Make(location.x * 2 / longSide, location.y * 2 / longSide, 0);
+
+    GLKQuaternion quaternion = [self quaternionForRotateFrom:GLKVector3Make(0, 0, -1) to:self.currentVertex.coordinate];
+    locationVector = GLKQuaternionRotateVector3(quaternion, locationVector);
 
     float nearestDistance = FLT_MAX;
     IcosahedronVertex *nearestVertex = nil;
