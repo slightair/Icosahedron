@@ -4,6 +4,8 @@
 @import OpenGLES;
 @import SpriteKit;
 
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
 enum
 {
     UNIFORM_MODELVIEWPROJECTION_MATRIX,
@@ -35,6 +37,11 @@ GLint uniforms[NUM_UNIFORMS];
 
     GLuint _vertexArray;
     GLuint _vertexBuffer;
+
+    GLuint _planeArray;
+    GLuint _planeBuffer;
+    float *_plane;
+    GLKMatrix4 _planeMatrix;
 }
 
 - (void)dealloc
@@ -195,6 +202,54 @@ GLint uniforms[NUM_UNIFORMS];
 
     _normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelViewMatrix), NULL);
     _modelViewProjectionMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
+
+
+    // debug
+    float s = 0.25;
+    GLKVector3 leftBottom = GLKVector3Make(-s, -s, 0);
+    GLKVector3 leftTop = GLKVector3Make(-s, s, 0);
+    GLKVector3 rightBottom = GLKVector3Make(s, -s, 0);
+    GLKVector3 rightTop = GLKVector3Make(s, s, 0);
+
+    _planeMatrix = GLKMatrix4Identity;
+
+    float x1 = GLKMatrix4MultiplyVector3(_planeMatrix, leftBottom).x;
+    float y1 = GLKMatrix4MultiplyVector3(_planeMatrix, leftBottom).y;
+    float z1 = GLKMatrix4MultiplyVector3(_planeMatrix, leftBottom).z;
+    float x2 = GLKMatrix4MultiplyVector3(_planeMatrix, leftTop).x;
+    float y2 = GLKMatrix4MultiplyVector3(_planeMatrix, leftTop).y;
+    float z2 = GLKMatrix4MultiplyVector3(_planeMatrix, leftTop).z;
+    float x3 = GLKMatrix4MultiplyVector3(_planeMatrix, rightBottom).x;
+    float y3 = GLKMatrix4MultiplyVector3(_planeMatrix, rightBottom).y;
+    float z3 = GLKMatrix4MultiplyVector3(_planeMatrix, rightBottom).z;
+    float x4 = GLKMatrix4MultiplyVector3(_planeMatrix, rightTop).x;
+    float y4 = GLKMatrix4MultiplyVector3(_planeMatrix, rightTop).y;
+    float z4 = GLKMatrix4MultiplyVector3(_planeMatrix, rightTop).z;
+
+    float plane[] = {
+        x1, y1, z1,    0, 0, 1,   1, 1, 1, 1,
+        x2, y2, z2,    0, 0, 1,   0, 1, 1, 1,
+        x3, y3, z3,    0, 0, 1,   0, 1, 1, 1,
+        x4, y4, z4,    0, 0, 1,   1, 1, 1, 1,
+    };
+    _plane = malloc(sizeof(plane));
+    memcpy(_plane, plane, sizeof(plane));
+
+    glGenVertexArraysOES(2, &_planeArray);
+    glBindVertexArrayOES(_planeArray);
+
+    glGenBuffers(2, &_planeBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, _planeBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(plane), _plane, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(GLKVertexAttribPosition);
+    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 10, BUFFER_OFFSET(0));
+
+    glEnableVertexAttribArray(GLKVertexAttribNormal);
+    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 10, BUFFER_OFFSET(sizeof(float) * 3));
+
+    glEnableVertexAttribArray(GLKVertexAttribColor);
+    glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 10, BUFFER_OFFSET(sizeof(float) * 6));
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -202,14 +257,16 @@ GLint uniforms[NUM_UNIFORMS];
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glBindVertexArrayOES(_vertexArray);
-
     glUseProgram(_program);
 
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix.m);
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
 
+    glBindVertexArrayOES(_vertexArray);
     glDrawArrays(GL_TRIANGLES, 0, IcosahedronModelNumberOfFaceVertices);
+
+    glBindVertexArrayOES(_planeArray);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 #pragma mark - OpenGL ES 2 shader compilation
