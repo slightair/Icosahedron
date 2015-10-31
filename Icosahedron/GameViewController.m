@@ -40,7 +40,6 @@ GLint uniforms[NUM_UNIFORMS];
 
     GLuint _planeArray;
     GLuint _planeBuffer;
-    float *_plane;
     GLKMatrix4 _planeMatrix;
 }
 
@@ -142,11 +141,11 @@ GLint uniforms[NUM_UNIFORMS];
 
     NSArray<IcosahedronVertex *> *candidates = self.currentVertex.nextVertices;
 
-    CGFloat longSide = MAX(CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds));
-    GLKVector3 locationVector = GLKVector3Make(location.x * 2 / longSide, location.y * 2 / longSide, 0);
-
-    GLKQuaternion quaternion = [self quaternionForRotateFrom:GLKVector3Make(0, 0, -1) to:self.currentVertex.coordinate];
-    locationVector = GLKQuaternionRotateVector3(quaternion, locationVector);
+    GLKVector3 locationVector = GLKVector3Make(location.x / CGRectGetWidth(self.view.bounds),
+                                               location.y / CGRectGetHeight(self.view.bounds),
+                                               0);
+    NSLog(@"%@", NSStringFromGLKVector3(locationVector));
+    locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(_modelViewProjectionMatrix, NULL), locationVector);
 
     float nearestDistance = FLT_MAX;
     IcosahedronVertex *nearestVertex = nil;
@@ -203,15 +202,14 @@ GLint uniforms[NUM_UNIFORMS];
     _normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelViewMatrix), NULL);
     _modelViewProjectionMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
 
-
     // debug
-    float s = 0.25;
+    float s = 0.5;
     GLKVector3 leftBottom = GLKVector3Make(-s, -s, 0);
     GLKVector3 leftTop = GLKVector3Make(-s, s, 0);
     GLKVector3 rightBottom = GLKVector3Make(s, -s, 0);
     GLKVector3 rightTop = GLKVector3Make(s, s, 0);
 
-    _planeMatrix = GLKMatrix4Identity;
+    _planeMatrix = GLKMatrix4Invert(_modelViewProjectionMatrix, NULL);
 
     float x1 = GLKMatrix4MultiplyVector3(_planeMatrix, leftBottom).x;
     float y1 = GLKMatrix4MultiplyVector3(_planeMatrix, leftBottom).y;
@@ -232,15 +230,13 @@ GLint uniforms[NUM_UNIFORMS];
         x3, y3, z3,    0, 0, 1,   0, 1, 1, 1,
         x4, y4, z4,    0, 0, 1,   1, 1, 1, 1,
     };
-    _plane = malloc(sizeof(plane));
-    memcpy(_plane, plane, sizeof(plane));
 
     glGenVertexArraysOES(2, &_planeArray);
     glBindVertexArrayOES(_planeArray);
 
     glGenBuffers(2, &_planeBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _planeBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(plane), _plane, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(plane), plane, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 10, BUFFER_OFFSET(0));
