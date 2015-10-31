@@ -224,11 +224,22 @@ GLint uniforms[NUM_UNIFORMS];
     float y4 = GLKMatrix4MultiplyVector3(_planeMatrix, rightTop).y;
     float z4 = GLKMatrix4MultiplyVector3(_planeMatrix, rightTop).z;
 
+    GLKVector3 v1 = GLKVector3Make(x1, y1, z1);
+    GLKVector3 v2 = GLKVector3Make(x2, y2, z2);
+    GLKVector3 v3 = GLKVector3Make(x3, y3, z3);
+    GLKVector3 plainNormal = GLKVector3Normalize(GLKVector3CrossProduct(
+                                                                        GLKVector3Subtract(v1, v2),
+                                                                        GLKVector3Subtract(v3, v2)
+                                                                        ));
+    float n1 = plainNormal.x;
+    float n2 = plainNormal.y;
+    float n3 = plainNormal.z;
+
     float plane[] = {
-        x1, y1, z1,    0, 0, 1,   1, 1, 1, 1,
-        x2, y2, z2,    0, 0, 1,   0, 1, 1, 1,
-        x3, y3, z3,    0, 0, 1,   0, 1, 1, 1,
-        x4, y4, z4,    0, 0, 1,   1, 1, 1, 1,
+        x1, y1, z1,    n1, n2, n3,   1, 1, 1, 1,
+        x2, y2, z2,    n1, n2, n3,   0, 1, 1, 1,
+        x3, y3, z3,    n1, n2, n3,   0, 1, 1, 1,
+        x4, y4, z4,    n1, n2, n3,   1, 1, 1, 1,
     };
 
     glGenVertexArraysOES(2, &_planeArray);
