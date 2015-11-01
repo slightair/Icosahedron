@@ -124,31 +124,31 @@ GLKVector3 createFaceNormal(GLKVector3 x, GLKVector3 y, GLKVector3 z) {
 
 - (void)createIcosahedronVertices
 {
-    NSArray *verticies = @[
-                           [[IcosahedronVertex alloc] initWithName:@"A" coordinate:coordA],
-                           [[IcosahedronVertex alloc] initWithName:@"B" coordinate:coordB],
-                           [[IcosahedronVertex alloc] initWithName:@"C" coordinate:coordC],
-                           [[IcosahedronVertex alloc] initWithName:@"D" coordinate:coordD],
-                           [[IcosahedronVertex alloc] initWithName:@"E" coordinate:coordE],
-                           [[IcosahedronVertex alloc] initWithName:@"F" coordinate:coordF],
-                           [[IcosahedronVertex alloc] initWithName:@"G" coordinate:coordG],
-                           [[IcosahedronVertex alloc] initWithName:@"H" coordinate:coordH],
-                           [[IcosahedronVertex alloc] initWithName:@"I" coordinate:coordI],
-                           [[IcosahedronVertex alloc] initWithName:@"J" coordinate:coordJ],
-                           [[IcosahedronVertex alloc] initWithName:@"K" coordinate:coordK],
-                           [[IcosahedronVertex alloc] initWithName:@"L" coordinate:coordL],
-                           ];
+    NSArray *vertices = @[
+                          [[IcosahedronVertex alloc] initWithName:@"A" coordinate:coordA],
+                          [[IcosahedronVertex alloc] initWithName:@"B" coordinate:coordB],
+                          [[IcosahedronVertex alloc] initWithName:@"C" coordinate:coordC],
+                          [[IcosahedronVertex alloc] initWithName:@"D" coordinate:coordD],
+                          [[IcosahedronVertex alloc] initWithName:@"E" coordinate:coordE],
+                          [[IcosahedronVertex alloc] initWithName:@"F" coordinate:coordF],
+                          [[IcosahedronVertex alloc] initWithName:@"G" coordinate:coordG],
+                          [[IcosahedronVertex alloc] initWithName:@"H" coordinate:coordH],
+                          [[IcosahedronVertex alloc] initWithName:@"I" coordinate:coordI],
+                          [[IcosahedronVertex alloc] initWithName:@"J" coordinate:coordJ],
+                          [[IcosahedronVertex alloc] initWithName:@"K" coordinate:coordK],
+                          [[IcosahedronVertex alloc] initWithName:@"L" coordinate:coordL],
+                          ];
 
     NSMutableDictionary<NSString *, IcosahedronVertex *> *dict = [NSMutableDictionary new];
-    for (IcosahedronVertex *vertex in verticies) {
+    for (IcosahedronVertex *vertex in vertices) {
         dict[vertex.name] = vertex;
     }
 
-    dict[@"C"].head      = dict[@"B"];
-    dict[@"C"].leftHand  = dict[@"A"];
-    dict[@"C"].leftFoot  = dict[@"E"];
-    dict[@"C"].rightHand = dict[@"I"];
-    dict[@"C"].rightFoot = dict[@"D"];
+    dict[@"C"].head      = dict[@"I"];
+    dict[@"C"].leftHand  = dict[@"D"];
+    dict[@"C"].leftFoot  = dict[@"B"];
+    dict[@"C"].rightHand = dict[@"E"];
+    dict[@"C"].rightFoot = dict[@"A"];
 
     dict[@"B"].head      = dict[@"A"];
     dict[@"B"].leftHand  = dict[@"C"];

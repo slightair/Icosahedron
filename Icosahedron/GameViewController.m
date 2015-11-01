@@ -133,28 +133,30 @@ GLint uniforms[NUM_UNIFORMS];
     location.x -= CGRectGetMidX(self.view.bounds);
     location.y -= CGRectGetMidY(self.view.bounds);
 
-    float radian = atan2f(-location.y, location.x);
-    radian = radian > 0 ? radian : radian + 2 * M_PI;
+    GLKVector3 locationVector = GLKVector3Make(location.x * 2 / CGRectGetWidth(self.view.bounds),
+                                               -location.y * 2 / CGRectGetHeight(self.view.bounds),
+                                               0);
+    locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(_modelViewProjectionMatrix, NULL), locationVector);
 
-    [self moveNextVertex:radian];
+    float nearestDistance = FLT_MAX;
+    IcosahedronVertex *nearestVertex = nil;
+    for (IcosahedronVertex *vertex in self.currentVertex.nextVertices) {
+        float distance = GLKVector3Distance(locationVector, vertex.coordinate);
+        if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestVertex = vertex;
+        }
+        NSLog(@"%@ %f %@", vertex.name, distance, NSStringFromGLKVector3(vertex.coordinate));
+    }
+    NSLog(@">> %@ <<", nearestVertex.name);
+
+    [self moveToVertex:nearestVertex];
 }
 
-- (void)moveNextVertex:(float)theta
+- (void)moveToVertex:(IcosahedronVertex *)vertex
 {
     self.prevVertex = self.currentVertex;
-
-    float unit = 2 * M_PI / 5;
-    if (0 < theta && theta <= unit) {
-        self.currentVertex = self.prevVertex.head;
-    } else if (unit < theta && theta <= unit * 2) {
-        self.currentVertex = self.prevVertex.leftHand;
-    } else if (unit * 2 < theta && theta <= unit * 3) {
-        self.currentVertex = self.prevVertex.leftFoot;
-    } else if (unit * 3 < theta && theta <= unit * 4) {
-        self.currentVertex = self.prevVertex.rightFoot;
-    } else {
-        self.currentVertex = self.prevVertex.rightHand;
-    }
+    self.currentVertex = vertex;
     self.animationProgress = 0.0;
 
     self.prevQuaternion = self.currentQuaternion;
@@ -183,7 +185,6 @@ GLint uniforms[NUM_UNIFORMS];
     GLKQuaternion modelQuaternion = GLKQuaternionSlerp(self.prevQuaternion, self.currentQuaternion, self.animationProgress);
 
     GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(180), 0.0, 0.0, 1.0);
     modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0);
     modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, GLKMatrix4MakeWithQuaternion(modelQuaternion));
     modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
@@ -197,13 +198,12 @@ GLint uniforms[NUM_UNIFORMS];
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glBindVertexArrayOES(_vertexArray);
-
     glUseProgram(_program);
 
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix.m);
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
 
+    glBindVertexArrayOES(_vertexArray);
     glDrawArrays(GL_TRIANGLES, 0, IcosahedronModelNumberOfFaceVertices);
 }
 
