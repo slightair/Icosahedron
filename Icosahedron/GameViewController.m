@@ -38,6 +38,8 @@ GLint uniforms[NUM_UNIFORMS];
     GLuint _vertexArray;
     GLuint _vertexBuffer;
 
+    GLKQuaternion _modelQuaternion;
+
     GLuint _planeArray;
     GLuint _planeBuffer;
     GLKMatrix4 _planeMatrix;
@@ -141,8 +143,8 @@ GLint uniforms[NUM_UNIFORMS];
 
     NSArray<IcosahedronVertex *> *candidates = self.currentVertex.nextVertices;
 
-    GLKVector3 locationVector = GLKVector3Make(location.x / CGRectGetWidth(self.view.bounds),
-                                               location.y / CGRectGetHeight(self.view.bounds),
+    GLKVector3 locationVector = GLKVector3Make(location.x * 2/ CGRectGetWidth(self.view.bounds),
+                                               -location.y * 2/ CGRectGetHeight(self.view.bounds),
                                                0);
     NSLog(@"%@", NSStringFromGLKVector3(locationVector));
     locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(_modelViewProjectionMatrix, NULL), locationVector);
@@ -192,18 +194,18 @@ GLint uniforms[NUM_UNIFORMS];
         self.animationProgress = MIN(1.0, self.animationProgress);
     }
 
-    GLKQuaternion modelQuaternion = GLKQuaternionSlerp(self.prevQuaternion, self.currentQuaternion, self.animationProgress);
+    _modelQuaternion = GLKQuaternionSlerp(self.prevQuaternion, self.currentQuaternion, self.animationProgress);
 
     GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0);
     modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0);
-    modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, GLKMatrix4MakeWithQuaternion(modelQuaternion));
+    modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, GLKMatrix4MakeWithQuaternion(_modelQuaternion));
     modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
 
     _normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelViewMatrix), NULL);
     _modelViewProjectionMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
 
     // debug
-    float s = 0.5;
+    float s = 0.7;
     GLKVector3 leftBottom = GLKVector3Make(-s, -s, 0);
     GLKVector3 leftTop = GLKVector3Make(-s, s, 0);
     GLKVector3 rightBottom = GLKVector3Make(s, -s, 0);
@@ -236,9 +238,9 @@ GLint uniforms[NUM_UNIFORMS];
     float n3 = plainNormal.z;
 
     float plane[] = {
-        x1, y1, z1,    n1, n2, n3,   1, 1, 1, 1,
-        x2, y2, z2,    n1, n2, n3,   0, 1, 1, 1,
-        x3, y3, z3,    n1, n2, n3,   0, 1, 1, 1,
+        x1, y1, z1,    n1, n2, n3,   1, 0, 0, 1,
+        x2, y2, z2,    n1, n2, n3,   0, 1, 0, 1,
+        x3, y3, z3,    n1, n2, n3,   0, 0, 1, 1,
         x4, y4, z4,    n1, n2, n3,   1, 1, 1, 1,
     };
 
