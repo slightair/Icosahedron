@@ -45,6 +45,6 @@ DerivedData
 
 ###
 
-Pods
-Carthage/Checkouts
-Carthage/Build
+**/Pods
+**/Carthage/Checkouts
+**/Carthage/Build
