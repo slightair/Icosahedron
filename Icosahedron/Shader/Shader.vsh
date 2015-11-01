@@ -20,4 +20,5 @@ void main()
     vColor = color;
 
     gl_Position = modelViewProjectionMatrix * position;
+    gl_PointSize = 32.0;
 }

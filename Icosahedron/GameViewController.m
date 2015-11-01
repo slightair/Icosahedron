@@ -4,13 +4,34 @@
 @import OpenGLES;
 @import SpriteKit;
 
-enum
-{
+NS_ENUM(NSUInteger, Uniforms) {
     UNIFORM_MODELVIEWPROJECTION_MATRIX,
     UNIFORM_NORMAL_MATRIX,
     NUM_UNIFORMS,
 };
 GLint uniforms[NUM_UNIFORMS];
+
+NS_ENUM(NSUInteger, VertexArrays) {
+    VERTEX_ARRAY_ICOSAHEDRON_POINTS,
+    VERTEX_ARRAY_ICOSAHEDRON_LINES,
+    NUM_VERTEX_ARRAYS,
+    VERTEX_ARRAY_ICOSAHEDRON_FACES,
+};
+GLuint vertexArrays[NUM_VERTEX_ARRAYS];
+GLuint icosahedronVBOs[NUM_VERTEX_ARRAYS];
+
+GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to) {
+    GLKVector3 normalizedFrom = GLKVector3Normalize(from.coordinate);
+    GLKVector3 normalizedTo = GLKVector3Normalize(to.coordinate);
+
+    float cosTheta = GLKVector3DotProduct(normalizedFrom, normalizedTo);
+    GLKVector3 rotationAxis = GLKVector3CrossProduct(normalizedFrom, normalizedTo);
+
+    float s = sqrtf((1 + cosTheta) * 2);
+    float inverse = 1 / s;
+
+    return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5);
+}
 
 @interface GameViewController ()
 
@@ -32,9 +53,6 @@ GLint uniforms[NUM_UNIFORMS];
 
     GLKMatrix4 _modelViewProjectionMatrix;
     GLKMatrix3 _normalMatrix;
-
-    GLuint _vertexArray;
-    GLuint _vertexBuffer;
 }
 
 - (void)dealloc
@@ -73,12 +91,28 @@ GLint uniforms[NUM_UNIFORMS];
 
     glEnable(GL_DEPTH_TEST);
 
-    glGenVertexArraysOES(1, &_vertexArray);
-    glBindVertexArrayOES(_vertexArray);
+    glGenVertexArraysOES(NUM_VERTEX_ARRAYS, vertexArrays);
 
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * IcosahedronModelNumberOfFaceVertices, self.icosahedronModel.vertices, GL_STATIC_DRAW);
+    // points
+    glBindVertexArrayOES(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
+    glGenBuffers(1, &icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
+    glBindBuffer(GL_ARRAY_BUFFER, icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * IcosahedronModelNumberOfPointVertices, self.icosahedronModel.pointVertices, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(GLKVertexAttribPosition);
+    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, position));
+
+    glEnableVertexAttribArray(GLKVertexAttribNormal);
+    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, normal));
+
+    glEnableVertexAttribArray(GLKVertexAttribColor);
+    glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, color));
+
+    // lines
+    glBindVertexArrayOES(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
+    glGenBuffers(1, &icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
+    glBindBuffer(GL_ARRAY_BUFFER, icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * IcosahedronModelNumberOfLineVertices, self.icosahedronModel.lineVertices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, position));
@@ -96,8 +130,8 @@ GLint uniforms[NUM_UNIFORMS];
 {
     [EAGLContext setCurrentContext:self.context];
 
-    glDeleteBuffers(1, &_vertexBuffer);
-    glDeleteVertexArraysOES(1, &_vertexArray);
+    glDeleteBuffers(NUM_VERTEX_ARRAYS, icosahedronVBOs);
+    glDeleteVertexArraysOES(NUM_VERTEX_ARRAYS, vertexArrays);
 
     glDeleteProgram(_program);
     _program = 0;
@@ -110,20 +144,6 @@ GLint uniforms[NUM_UNIFORMS];
 {
     self.gameScene = [GameScene sceneWithSize:self.view.bounds.size];
     [self.infoView presentScene:self.gameScene];
-}
-
-- (GLKQuaternion)quaternionForRotateFrom:(GLKVector3)from to:(GLKVector3)to
-{
-    GLKVector3 normalizedFrom = GLKVector3Normalize(from);
-    GLKVector3 normalizedTo = GLKVector3Normalize(to);
-
-    float cosTheta = GLKVector3DotProduct(normalizedFrom, normalizedTo);
-    GLKVector3 rotationAxis = GLKVector3CrossProduct(normalizedFrom, normalizedTo);
-
-    float s = sqrtf((1 + cosTheta) * 2);
-    float inverse = 1 / s;
-
-    return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5);
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
@@ -146,9 +166,16 @@ GLint uniforms[NUM_UNIFORMS];
             nearestDistance = distance;
             nearestVertex = vertex;
         }
+
+#if defined(DEBUG)
         NSLog(@"%@ %f %@", vertex.name, distance, NSStringFromGLKVector3(vertex.coordinate));
+#endif
+
     }
+
+#if defined(DEBUG)
     NSLog(@">> %@ <<", nearestVertex.name);
+#endif
 
     [self moveToVertex:nearestVertex];
 }
@@ -160,7 +187,7 @@ GLint uniforms[NUM_UNIFORMS];
     self.animationProgress = 0.0;
 
     self.prevQuaternion = self.currentQuaternion;
-    GLKQuaternion relativeQuaternion = [self quaternionForRotateFrom:self.currentVertex.coordinate to:self.prevVertex.coordinate];
+    GLKQuaternion relativeQuaternion = quaternionForRotate(self.currentVertex, self.prevVertex);
     self.currentQuaternion = GLKQuaternionMultiply(self.currentQuaternion, relativeQuaternion);
 
     [self.gameScene updateInfo:self.currentVertex];
@@ -178,7 +205,7 @@ GLint uniforms[NUM_UNIFORMS];
     GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -5.0);
 
     if (self.animationProgress < 1.0) {
-        self.animationProgress += self.timeSinceLastUpdate;
+        self.animationProgress += self.timeSinceLastUpdate * 2;
         self.animationProgress = MIN(1.0, self.animationProgress);
     }
 
@@ -203,8 +230,16 @@ GLint uniforms[NUM_UNIFORMS];
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix.m);
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
 
-    glBindVertexArrayOES(_vertexArray);
-    glDrawArrays(GL_TRIANGLES, 0, IcosahedronModelNumberOfFaceVertices);
+    glLineWidth(8);
+    glBindVertexArrayOES(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
+    glBindBuffer(GL_ARRAY_BUFFER, icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
+    glDrawArrays(GL_LINES, 0, IcosahedronModelNumberOfLineVertices);
+
+    glBindVertexArrayOES(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
+    glBindBuffer(GL_ARRAY_BUFFER, icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
+    glDrawArrays(GL_POINTS, 0, IcosahedronModelNumberOfPointVertices);
+
+    glBindVertexArrayOES(0);
 }
 
 #pragma mark - OpenGL ES 2 shader compilation

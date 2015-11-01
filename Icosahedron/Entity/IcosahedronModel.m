@@ -1,6 +1,8 @@
 #import "IcosahedronModel.h"
 
-const int IcosahedronModelNumberOfFaceVertices = 3 * 20;
+const int IcosahedronModelNumberOfPointVertices = 12;
+const int IcosahedronModelNumberOfLineVertices = 30 * 2;
+const int IcosahedronModelNumberOfFaceVertices = 20 * 3;
 
 GLKVector3 createFaceNormal(GLKVector3 x, GLKVector3 y, GLKVector3 z) {
     return GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(x, y), GLKVector3Subtract(y, z)));
@@ -8,7 +10,9 @@ GLKVector3 createFaceNormal(GLKVector3 x, GLKVector3 y, GLKVector3 z) {
 
 @interface IcosahedronModel ()
 
-@property (nonatomic) Vertex *vertices;
+@property (nonatomic) Vertex *pointVertices;
+@property (nonatomic) Vertex *lineVertices;
+@property (nonatomic) Vertex *faceVertices;
 @property (nonatomic) NSDictionary<NSString *, IcosahedronVertex *> *vertexDict;
 
 @end
@@ -27,6 +31,19 @@ GLKVector3 createFaceNormal(GLKVector3 x, GLKVector3 y, GLKVector3 z) {
     GLKVector3 coordJ;
     GLKVector3 coordK;
     GLKVector3 coordL;
+
+    GLKVector4 colorA;
+    GLKVector4 colorB;
+    GLKVector4 colorC;
+    GLKVector4 colorD;
+    GLKVector4 colorE;
+    GLKVector4 colorF;
+    GLKVector4 colorG;
+    GLKVector4 colorH;
+    GLKVector4 colorI;
+    GLKVector4 colorJ;
+    GLKVector4 colorK;
+    GLKVector4 colorL;
 }
 
 - (nonnull instancetype)init
@@ -34,15 +51,19 @@ GLKVector3 createFaceNormal(GLKVector3 x, GLKVector3 y, GLKVector3 z) {
     self = [super init];
 
     [self createVertices];
+    [self createPoints];
+    [self createLines];
     [self createFaces];
-    [self createIcosahedronVertices];
+    [self createVertexDict];
 
     return self;
 }
 
 - (void)dealloc
 {
-    free(_vertices);
+    free(_pointVertices);
+    free(_lineVertices);
+    free(_faceVertices);
 }
 
 - (void)createVertices
@@ -64,6 +85,79 @@ GLKVector3 createFaceNormal(GLKVector3 x, GLKVector3 y, GLKVector3 z) {
     coordL = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1,  x), scale);
     coordC = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1, -x), scale);
     coordI = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1, -x), scale);
+
+    colorA = GLKVector4Make(0.902, 0.0,   0.071, 1.0);
+    colorB = GLKVector4Make(0.953, 0.596, 0.0,   1.0);
+    colorC = GLKVector4Make(1.0,   0.945, 0.0,   1.0);
+    colorD = GLKVector4Make(0.561, 0.765, 0.122, 1.0);
+    colorE = GLKVector4Make(0.0,   0.6,   0.267, 1.0);
+    colorF = GLKVector4Make(0.0,   0.62,  0.588, 1.0);
+    colorG = GLKVector4Make(0.0,   0.627, 0.914, 1.0);
+    colorH = GLKVector4Make(0.0,   0.408, 0.718, 1.0);
+    colorI = GLKVector4Make(0.114, 0.125, 0.533, 1.0);
+    colorJ = GLKVector4Make(0.573, 0.027, 0.514, 1.0);
+    colorK = GLKVector4Make(0.894, 0.0,   0.498, 1.0);
+    colorL = GLKVector4Make(0.898, 0.0,   0.31,  1.0);
+}
+
+- (void)createPoints
+{
+    Vertex points[] = {
+        {coordA, coordA, colorA},
+        {coordB, coordB, colorB},
+        {coordC, coordC, colorC},
+        {coordD, coordD, colorD},
+        {coordE, coordE, colorE},
+        {coordF, coordF, colorF},
+        {coordG, coordG, colorG},
+        {coordH, coordH, colorH},
+        {coordI, coordI, colorI},
+        {coordJ, coordJ, colorJ},
+        {coordK, coordK, colorK},
+        {coordL, coordL, colorL},
+    };
+
+    _pointVertices = malloc(sizeof(points));
+    memcpy(_pointVertices, points, sizeof(points));
+}
+
+- (void)createLines
+{
+    Vertex lines[] = {
+        {coordA, coordA, colorA}, {coordB, coordB, colorB},
+        {coordA, coordA, colorA}, {coordC, coordC, colorC},
+        {coordA, coordA, colorA}, {coordE, coordE, colorE},
+        {coordA, coordA, colorA}, {coordF, coordF, colorF},
+        {coordA, coordA, colorA}, {coordG, coordG, colorG},
+        {coordB, coordB, colorB}, {coordC, coordC, colorC},
+        {coordB, coordB, colorB}, {coordD, coordD, colorD},
+        {coordB, coordB, colorB}, {coordF, coordF, colorF},
+        {coordB, coordB, colorB}, {coordH, coordH, colorH},
+        {coordC, coordC, colorC}, {coordD, coordD, colorD},
+        {coordC, coordC, colorC}, {coordE, coordE, colorE},
+        {coordC, coordC, colorC}, {coordI, coordI, colorI},
+        {coordD, coordD, colorD}, {coordH, coordH, colorH},
+        {coordD, coordD, colorD}, {coordI, coordI, colorI},
+        {coordD, coordD, colorD}, {coordJ, coordJ, colorJ},
+        {coordE, coordE, colorE}, {coordG, coordG, colorG},
+        {coordE, coordE, colorE}, {coordI, coordI, colorI},
+        {coordE, coordE, colorE}, {coordK, coordK, colorK},
+        {coordF, coordF, colorF}, {coordG, coordG, colorG},
+        {coordF, coordF, colorF}, {coordH, coordH, colorH},
+        {coordF, coordF, colorF}, {coordL, coordL, colorL},
+        {coordG, coordG, colorG}, {coordK, coordK, colorK},
+        {coordG, coordG, colorG}, {coordL, coordL, colorL},
+        {coordH, coordH, colorH}, {coordJ, coordJ, colorJ},
+        {coordH, coordH, colorH}, {coordL, coordL, colorL},
+        {coordI, coordI, colorI}, {coordJ, coordJ, colorJ},
+        {coordI, coordI, colorI}, {coordK, coordK, colorK},
+        {coordJ, coordJ, colorJ}, {coordK, coordK, colorK},
+        {coordJ, coordJ, colorJ}, {coordL, coordL, colorL},
+        {coordK, coordK, colorK}, {coordL, coordL, colorL},
+    };
+
+    _lineVertices = malloc(sizeof(lines));
+    memcpy(_lineVertices, lines, sizeof(lines));
 }
 
 - (void)createFaces
@@ -118,11 +212,11 @@ GLKVector3 createFaceNormal(GLKVector3 x, GLKVector3 y, GLKVector3 z) {
         {coordJ, faceNormalJKL, color}, {coordK, faceNormalJKL, color}, {coordL, faceNormalJKL, color},
     };
 
-    _vertices = malloc(sizeof(faces));
-    memcpy(_vertices, faces, sizeof(faces));
+    _faceVertices = malloc(sizeof(faces));
+    memcpy(_faceVertices, faces, sizeof(faces));
 }
 
-- (void)createIcosahedronVertices
+- (void)createVertexDict
 {
     NSArray *vertices = @[
                           [[IcosahedronVertex alloc] initWithName:@"A" coordinate:coordA],
