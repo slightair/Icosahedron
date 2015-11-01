@@ -148,7 +148,6 @@ GLint uniforms[NUM_UNIFORMS];
         }
         NSLog(@"%@ %f %@", vertex.name, distance, NSStringFromGLKVector3(vertex.coordinate));
     }
-
     NSLog(@">> %@ <<", nearestVertex.name);
 
     [self moveToVertex:nearestVertex];
