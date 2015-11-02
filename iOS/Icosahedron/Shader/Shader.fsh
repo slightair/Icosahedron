@@ -1,7 +1,11 @@
-varying lowp vec4 colorVarying;
-varying lowp vec4 vColor;
+#version 300 es
+
+in lowp vec4 colorVarying;
+in lowp vec4 vColor;
+
+out mediump vec4 fragColor;
 
 void main()
 {
-    gl_FragColor = colorVarying * vColor;
+    fragColor = colorVarying * vColor;
 }

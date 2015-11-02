@@ -1,9 +1,11 @@
-attribute vec4 position;
-attribute vec3 normal;
-attribute vec4 color;
+#version 300 es
 
-varying lowp vec4 colorVarying;
-varying lowp vec4 vColor;
+layout (location = 0) in vec4 position;
+layout (location = 1) in vec3 normal;
+layout (location = 2) in vec4 color;
+
+out lowp vec4 colorVarying;
+out lowp vec4 vColor;
 
 uniform mat4 modelViewProjectionMatrix;
 uniform mat3 normalMatrix;

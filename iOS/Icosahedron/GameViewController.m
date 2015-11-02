@@ -64,7 +64,7 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
 {
     [super viewDidLoad];
 
-    self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
 
     GLKView *glkView = (GLKView *)self.view;
     glkView.context = self.context;
@@ -91,10 +91,10 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
 
     glEnable(GL_DEPTH_TEST);
 
-    glGenVertexArraysOES(NUM_VERTEX_ARRAYS, vertexArrays);
+    glGenVertexArrays(NUM_VERTEX_ARRAYS, vertexArrays);
 
     // points
-    glBindVertexArrayOES(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
+    glBindVertexArray(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
     glGenBuffers(1, &icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
     glBindBuffer(GL_ARRAY_BUFFER, icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * IcosahedronModelNumberOfPointVertices, self.icosahedronModel.pointVertices, GL_STATIC_DRAW);
@@ -109,7 +109,7 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
     glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, color));
 
     // lines
-    glBindVertexArrayOES(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
+    glBindVertexArray(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
     glGenBuffers(1, &icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
     glBindBuffer(GL_ARRAY_BUFFER, icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * IcosahedronModelNumberOfLineVertices, self.icosahedronModel.lineVertices, GL_STATIC_DRAW);
@@ -123,7 +123,7 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
     glEnableVertexAttribArray(GLKVertexAttribColor);
     glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, color));
 
-    glBindVertexArrayOES(0);
+    glBindVertexArray(0);
 }
 
 - (void)tearDownGL
@@ -131,7 +131,7 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
     [EAGLContext setCurrentContext:self.context];
 
     glDeleteBuffers(NUM_VERTEX_ARRAYS, icosahedronVBOs);
-    glDeleteVertexArraysOES(NUM_VERTEX_ARRAYS, vertexArrays);
+    glDeleteVertexArrays(NUM_VERTEX_ARRAYS, vertexArrays);
 
     glDeleteProgram(_program);
     _program = 0;
@@ -231,15 +231,15 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
 
     glLineWidth(8);
-    glBindVertexArrayOES(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
+    glBindVertexArray(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
     glBindBuffer(GL_ARRAY_BUFFER, icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
     glDrawArrays(GL_LINES, 0, IcosahedronModelNumberOfLineVertices);
 
-    glBindVertexArrayOES(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
+    glBindVertexArray(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
     glBindBuffer(GL_ARRAY_BUFFER, icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
     glDrawArrays(GL_POINTS, 0, IcosahedronModelNumberOfPointVertices);
 
-    glBindVertexArrayOES(0);
+    glBindVertexArray(0);
 }
 
 #pragma mark - OpenGL ES 2 shader compilation
@@ -264,10 +264,6 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
 
     glAttachShader(_program, vertShader);
     glAttachShader(_program, fragShader);
-
-    glBindAttribLocation(_program, GLKVertexAttribPosition, "position");
-    glBindAttribLocation(_program, GLKVertexAttribNormal, "normal");
-    glBindAttribLocation(_program, GLKVertexAttribColor, "color");
 
     if (![self linkProgram:_program]) {
         NSLog(@"Failed to link program: %d", _program);
