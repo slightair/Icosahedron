@@ -8,6 +8,19 @@ GLKVector3 createFaceNormal(GLKVector3 x, GLKVector3 y, GLKVector3 z) {
     return GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(x, y), GLKVector3Subtract(y, z)));
 }
 
+GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to) {
+    GLKVector3 normalizedFrom = GLKVector3Normalize(from.coordinate);
+    GLKVector3 normalizedTo = GLKVector3Normalize(to.coordinate);
+
+    float cosTheta = GLKVector3DotProduct(normalizedFrom, normalizedTo);
+    GLKVector3 rotationAxis = GLKVector3CrossProduct(normalizedFrom, normalizedTo);
+
+    float s = sqrtf((1 + cosTheta) * 2);
+    float inverse = 1 / s;
+
+    return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5);
+}
+
 @interface IcosahedronModel ()
 
 @property (nonatomic) Vertex *pointVertices;

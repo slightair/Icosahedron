@@ -1,4 +1,5 @@
 @import GLKit;
+
 #import "Icosahedron-Swift.h"
 
 typedef struct {
@@ -12,6 +13,8 @@ extern const int IcosahedronModelNumberOfLineVertices;
 extern const int IcosahedronModelNumberOfFaceVertices;
 
 NS_ASSUME_NONNULL_BEGIN
+
+GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to);
 
 @interface IcosahedronModel : NSObject
 

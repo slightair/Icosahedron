@@ -1,8 +1,10 @@
-#import "GameViewController.h"
-#import "IcosahedronModel.h"
-#import "Icosahedron-Swift.h"
 @import OpenGLES;
 @import SpriteKit;
+
+#import "GameViewController.h"
+#import "Icosahedron-Swift.h"
+#import "IcosahedronModel.h"
+#import "RenderUtils.h"
 
 NS_ENUM(NSUInteger, Uniforms) {
     UNIFORM_MODELVIEWPROJECTION_MATRIX,
@@ -19,19 +21,6 @@ NS_ENUM(NSUInteger, VertexArrays) {
 };
 GLuint vertexArrays[NUM_VERTEX_ARRAYS];
 GLuint icosahedronVBOs[NUM_VERTEX_ARRAYS];
-
-GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to) {
-    GLKVector3 normalizedFrom = GLKVector3Normalize(from.coordinate);
-    GLKVector3 normalizedTo = GLKVector3Normalize(to.coordinate);
-
-    float cosTheta = GLKVector3DotProduct(normalizedFrom, normalizedTo);
-    GLKVector3 rotationAxis = GLKVector3CrossProduct(normalizedFrom, normalizedTo);
-
-    float s = sqrtf((1 + cosTheta) * 2);
-    float inverse = 1 / s;
-
-    return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5);
-}
 
 @interface GameViewController ()
 
@@ -87,13 +76,28 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
 {
     [EAGLContext setCurrentContext:self.context];
 
-    [self loadShaders];
+    [self setUpShaders];
 
     glEnable(GL_DEPTH_TEST);
 
     glGenVertexArrays(NUM_VERTEX_ARRAYS, vertexArrays);
 
-    // points
+    [self setUpIcosahedronPoints];
+    [self setUpIcosahedronLines];
+
+    glBindVertexArray(0);
+}
+
+- (void)setUpShaders
+{
+    [RenderUtils loadShaders:&_program path:@"Shader"];
+
+    uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "modelViewProjectionMatrix");
+    uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(_program, "normalMatrix");
+}
+
+- (void)setUpIcosahedronPoints
+{
     glBindVertexArray(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
     glGenBuffers(1, &icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
     glBindBuffer(GL_ARRAY_BUFFER, icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
@@ -107,8 +111,10 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
 
     glEnableVertexAttribArray(GLKVertexAttribColor);
     glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, color));
+}
 
-    // lines
+- (void)setUpIcosahedronLines
+{
     glBindVertexArray(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
     glGenBuffers(1, &icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
     glBindBuffer(GL_ARRAY_BUFFER, icosahedronVBOs[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
@@ -122,8 +128,6 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
 
     glEnableVertexAttribArray(GLKVertexAttribColor);
     glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, color));
-
-    glBindVertexArray(0);
 }
 
 - (void)tearDownGL
@@ -166,16 +170,7 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
             nearestDistance = distance;
             nearestVertex = vertex;
         }
-
-#if defined(DEBUG)
-        NSLog(@"%@ %f %@", vertex.name, distance, NSStringFromGLKVector3(vertex.coordinate));
-#endif
-
     }
-
-#if defined(DEBUG)
-    NSLog(@">> %@ <<", nearestVertex.name);
-#endif
 
     [self moveToVertex:nearestVertex];
 }
@@ -240,142 +235,6 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
     glDrawArrays(GL_POINTS, 0, IcosahedronModelNumberOfPointVertices);
 
     glBindVertexArray(0);
-}
-
-#pragma mark - OpenGL ES 2 shader compilation
-
-- (BOOL)loadShaders
-{
-    _program = glCreateProgram();
-
-    GLuint vertShader;
-    NSString *vertShaderPathName = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
-    if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathName]) {
-        NSLog(@"Failed to compile vertex shader");
-        return NO;
-    }
-
-    GLuint fragShader;
-    NSString *fragShaderPathName = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"fsh"];
-    if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathName]) {
-        NSLog(@"Failed to compile fragment shader");
-        return NO;
-    }
-
-    glAttachShader(_program, vertShader);
-    glAttachShader(_program, fragShader);
-
-    if (![self linkProgram:_program]) {
-        NSLog(@"Failed to link program: %d", _program);
-
-        if (vertShader) {
-            glDeleteShader(vertShader);
-            vertShader = 0;
-        }
-        if (fragShader) {
-            glDeleteShader(fragShader);
-            fragShader = 0;
-        }
-        if (_program) {
-            glDeleteProgram(_program);
-            _program = 0;
-        }
-
-        return NO;
-    }
-
-    uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "modelViewProjectionMatrix");
-    uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(_program, "normalMatrix");
-
-    if (vertShader) {
-        glDetachShader(_program, vertShader);
-        glDeleteShader(vertShader);
-    }
-    if (fragShader) {
-        glDetachShader(_program, fragShader);
-        glDeleteShader(fragShader);
-    }
-
-    return YES;
-}
-
-- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file
-{
-    const GLchar *source = (GLchar *)[[NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:nil] UTF8String];
-    if (!source) {
-        NSLog(@"Failed to load vertex shader");
-        return NO;
-    }
-
-    *shader = glCreateShader(type);
-    glShaderSource(*shader, 1, &source, NULL);
-    glCompileShader(*shader);
-
-#if defined(DEBUG)
-    GLint logLength;
-    glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
-    if (logLength > 0) {
-        GLchar *log = (GLchar *)malloc(logLength);
-        glGetShaderInfoLog(*shader, logLength, &logLength, log);
-        NSLog(@"Shader compile log:\n%s", log);
-        free(log);
-    }
-#endif
-
-    GLint status;
-    glGetShaderiv(*shader, GL_COMPILE_STATUS, &status);
-    if (status == 0) {
-        glDeleteShader(*shader);
-        return NO;
-    }
-
-    return YES;
-}
-
-- (BOOL)linkProgram:(GLuint)prog
-{
-    glLinkProgram(prog);
-
-#if defined(DEBUG)
-    GLint logLength;
-    glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
-    if (logLength > 0) {
-        GLchar *log = (GLchar *)malloc(logLength);
-        glGetProgramInfoLog(prog, logLength, &logLength, log);
-        NSLog(@"Program link log:\n%s", log);
-        free(log);
-    }
-#endif
-
-    GLint status;
-    glGetProgramiv(prog, GL_LINK_STATUS, &status);
-    if (status == 0) {
-        return NO;
-    }
-
-    return YES;
-}
-
-- (BOOL)validateProgram:(GLuint)prog
-{
-    glValidateProgram(prog);
-
-    GLint logLength;
-    glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
-    if (logLength > 0) {
-        GLchar *log = (GLchar *)malloc(logLength);
-        glGetProgramInfoLog(prog, logLength, &logLength, log);
-        NSLog(@"Program validate log:\n%s", log);
-        free(log);
-    }
-
-    GLint status;
-    glGetProgramiv(prog, GL_VALIDATE_STATUS, &status);
-    if (status == 0) {
-        return NO;
-    }
-
-    return YES;
 }
 
 @end
