@@ -5,7 +5,6 @@ layout (location = 1) in vec3 normal;
 layout (location = 2) in vec4 color;
 
 out lowp vec4 colorVarying;
-out lowp vec4 vColor;
 
 uniform mat4 modelViewProjectionMatrix;
 uniform mat3 normalMatrix;
@@ -18,8 +17,7 @@ void main()
 
     float nDotVP = max(0.0, dot(eyeNormal, normalize(lightPosition)));
 
-    colorVarying = diffuseColor * nDotVP;
-    vColor = color;
+    colorVarying = diffuseColor * nDotVP * color;
 
     gl_Position = modelViewProjectionMatrix * position;
     gl_PointSize = 32.0;

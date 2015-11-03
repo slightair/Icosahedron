@@ -1,11 +1,10 @@
 #version 300 es
 
 in lowp vec4 colorVarying;
-in lowp vec4 vColor;
 
-out mediump vec4 fragColor;
+out mediump vec4 outputColor;
 
 void main()
 {
-    fragColor = colorVarying * vColor;
+    outputColor = colorVarying;
 }
