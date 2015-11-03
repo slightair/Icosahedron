@@ -24,6 +24,7 @@ GLint modelShaderUniforms[NUM_MODEL_SHADER_UNIFORMS];
 
 NS_ENUM(NSUInteger, BlurShaderUniforms) {
     BLUR_SHADER_UNIFORM_SOURCE_TEXTURE,
+    BLUR_SHADER_UNIFORM_TEXEL_SIZE,
     BLUR_SHADER_UNIFORM_USE_BLUR,
     NUM_BLUR_SHADER_UNIFORMS,
 };
@@ -60,6 +61,8 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
     GLuint _modelFrameBufferObject;
     GLuint _modelColorTexture;
     GLuint _modelDepthRenderBufferObject;
+
+    GLKVector2 _texelSize;
 }
 
 - (void)dealloc
@@ -108,6 +111,7 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
     CGFloat scale = [UIScreen mainScreen].scale;
     float width = CGRectGetWidth(self.view.bounds) * scale;
     float height = CGRectGetHeight(self.view.bounds) * scale;
+    _texelSize = GLKVector2Make(1.0 / width, 1.0 / height);
 
     glGenTextures(1, &_modelColorTexture);
     glBindTexture(GL_TEXTURE_2D, _modelColorTexture);
@@ -142,6 +146,7 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
 
     [RenderUtils loadShaders:&programs[PROGRAM_BLUR] path:@"BlurShader"];
     blurShaderUniforms[BLUR_SHADER_UNIFORM_SOURCE_TEXTURE] = glGetUniformLocation(programs[PROGRAM_BLUR], "sourceTexture");
+    blurShaderUniforms[BLUR_SHADER_UNIFORM_TEXEL_SIZE] = glGetUniformLocation(programs[PROGRAM_BLUR], "texelSize");
     blurShaderUniforms[BLUR_SHADER_UNIFORM_USE_BLUR] = glGetUniformLocation(programs[PROGRAM_BLUR], "useBlur");
 }
 
@@ -333,6 +338,7 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _modelColorTexture);
     glUniform1i(blurShaderUniforms[BLUR_SHADER_UNIFORM_SOURCE_TEXTURE], 0);
+    glUniform2fv(blurShaderUniforms[BLUR_SHADER_UNIFORM_TEXEL_SIZE], 1, _texelSize.v);
     glUniform1i(blurShaderUniforms[BLUR_SHADER_UNIFORM_USE_BLUR], GL_TRUE);
 
     glBindVertexArray(vertexArrays[VERTEX_ARRAY_CANVAS]);
