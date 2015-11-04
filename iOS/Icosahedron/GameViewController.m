@@ -196,9 +196,9 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
 - (void)setUpCanvas
 {
     const float verticies[] = {
-        -1.0, -1.0, 0.0, 0.0, 1.0, 1.0, 1.0,
+        -1.0, -1.0, 0.0, 0.1, 1.0, 1.0, 1.0,
         -1.0,  1.0, 0.0, 1.0, 1.0, 1.0, 1.0,
-         1.0, -1.0, 0.0, 0.0, 1.0, 1.0, 1.0,
+         1.0, -1.0, 0.0, 0.1, 1.0, 1.0, 1.0,
          1.0,  1.0, 0.0, 1.0, 1.0, 1.0, 1.0,
     };
 
@@ -290,7 +290,7 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
     GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -5.0);
 
     if (self.animationProgress < 1.0) {
-        self.animationProgress += self.timeSinceLastUpdate * 2;
+        self.animationProgress += self.timeSinceLastUpdate * 4;
         self.animationProgress = MIN(1.0, self.animationProgress);
     }
 

@@ -10,7 +10,6 @@ typedef struct {
 
 extern const int IcosahedronModelNumberOfPointVertices;
 extern const int IcosahedronModelNumberOfLineVertices;
-extern const int IcosahedronModelNumberOfFaceVertices;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,7 +19,6 @@ GLKQuaternion quaternionForRotate(IcosahedronVertex *from, IcosahedronVertex *to
 
 @property (nonatomic, readonly) Vertex *pointVertices;
 @property (nonatomic, readonly) Vertex *lineVertices;
-@property (nonatomic, readonly) Vertex *faceVertices;
 @property (nonatomic, readonly) NSDictionary<NSString *, IcosahedronVertex *> *vertexDict;
 
 @end
