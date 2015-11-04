@@ -108,9 +108,8 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
 
     glBindVertexArray(0);
 
-    CGFloat scale = [UIScreen mainScreen].scale;
-    float width = CGRectGetWidth(self.view.bounds) * scale;
-    float height = CGRectGetHeight(self.view.bounds) * scale;
+    float width = CGRectGetHeight([UIScreen mainScreen].nativeBounds);
+    float height = CGRectGetWidth([UIScreen mainScreen].nativeBounds);
     _texelSize = GLKVector2Make(1.0 / width, 1.0 / height);
 
     glGenTextures(1, &_modelColorTexture);
