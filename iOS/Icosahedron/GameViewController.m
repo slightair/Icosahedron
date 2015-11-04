@@ -18,6 +18,8 @@ GLuint programs[NUM_PROGRAMS];
 NS_ENUM(NSUInteger, ModelShaderUniforms) {
     MODEL_SHADER_UNIFORM_MODELVIEWPROJECTION_MATRIX,
     MODEL_SHADER_UNIFORM_NORMAL_MATRIX,
+    MODEL_SHADER_UNIFORM_VERTEX_TEXTURE,
+    MODEL_SHADER_UNIFORM_USE_TEXTURE,
     NUM_MODEL_SHADER_UNIFORMS,
 };
 GLint modelShaderUniforms[NUM_MODEL_SHADER_UNIFORMS];
@@ -50,6 +52,7 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
 @property (nonatomic) GLKQuaternion prevQuaternion;
 @property (nonatomic) GLKQuaternion currentQuaternion;
 @property (nonatomic) float animationProgress;
+@property (nonatomic) GLKTextureInfo *vertexTextureInfo;
 
 @end
 
@@ -90,6 +93,9 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
 
     [self setUpGL];
     [self setUpInfoView];
+
+    NSString *vertexTexturePath = [[NSBundle mainBundle] pathForResource:@"vertex" ofType:@"png"];
+    self.vertexTextureInfo = [GLKTextureLoader textureWithContentsOfFile:vertexTexturePath options:nil error:nil];
 
     [self.gameScene updateInfo:self.currentVertex];
 }
@@ -142,6 +148,8 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
     [RenderUtils loadShaders:&programs[PROGRAM_MODEL] path:@"ModelShader"];
     modelShaderUniforms[MODEL_SHADER_UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(programs[PROGRAM_MODEL], "modelViewProjectionMatrix");
     modelShaderUniforms[MODEL_SHADER_UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(programs[PROGRAM_MODEL], "normalMatrix");
+    modelShaderUniforms[MODEL_SHADER_UNIFORM_VERTEX_TEXTURE] = glGetUniformLocation(programs[PROGRAM_MODEL], "vertexTexture");
+    modelShaderUniforms[MODEL_SHADER_UNIFORM_USE_TEXTURE] = glGetUniformLocation(programs[PROGRAM_MODEL], "useTexture");
 
     [RenderUtils loadShaders:&programs[PROGRAM_BLUR] path:@"BlurShader"];
     blurShaderUniforms[BLUR_SHADER_UNIFORM_SOURCE_TEXTURE] = glGetUniformLocation(programs[PROGRAM_BLUR], "sourceTexture");
@@ -305,6 +313,8 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
     glBindFramebuffer(GL_FRAMEBUFFER, _modelFrameBufferObject);
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
     GLenum buffers[] = {
         GL_COLOR_ATTACHMENT0,
@@ -316,14 +326,19 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
 
     glUseProgram(programs[PROGRAM_MODEL]);
 
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, self.vertexTextureInfo.name);
     glUniformMatrix4fv(modelShaderUniforms[MODEL_SHADER_UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix.m);
     glUniformMatrix3fv(modelShaderUniforms[MODEL_SHADER_UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
+    glUniform1i(modelShaderUniforms[MODEL_SHADER_UNIFORM_VERTEX_TEXTURE], 0);
 
     glLineWidth(8);
+    glUniform1i(modelShaderUniforms[MODEL_SHADER_UNIFORM_USE_TEXTURE], GL_FALSE);
     glBindVertexArray(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjects[VERTEX_ARRAY_ICOSAHEDRON_LINES]);
     glDrawArrays(GL_LINES, 0, IcosahedronModelNumberOfLineVertices);
 
+    glUniform1i(modelShaderUniforms[MODEL_SHADER_UNIFORM_USE_TEXTURE], GL_TRUE);
     glBindVertexArray(vertexArrays[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjects[VERTEX_ARRAY_ICOSAHEDRON_POINTS]);
     glDrawArrays(GL_POINTS, 0, IcosahedronModelNumberOfPointVertices);
@@ -331,6 +346,7 @@ GLuint vertexBufferObjects[NUM_VERTEX_ARRAYS];
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFrameBufferObject);
 
     glDisable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
 
     glUseProgram(programs[PROGRAM_BLUR]);
 

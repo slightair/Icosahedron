@@ -21,6 +21,7 @@
 		579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 579013AA1BC1083400ADAE3E /* Main.storyboard */; };
 		579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 579013AD1BC1083400ADAE3E /* Assets.xcassets */; };
 		579013B11BC1083400ADAE3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 579013AF1BC1083400ADAE3E /* LaunchScreen.storyboard */; };
+		57D866BB1BEA384D0034DEDE /* vertex.png in Resources */ = {isa = PBXBuildFile; fileRef = 57D866BA1BEA384D0034DEDE /* vertex.png */; };
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
 		57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC9511BD7D180009423EA /* SpriteKit.framework */; };
 		57DDC9581BDB326B009423EA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC9571BDB326B009423EA /* GameScene.swift */; };
@@ -66,6 +67,7 @@
 		579013AD1BC1083400ADAE3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		579013B01BC1083400ADAE3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		579013B21BC1083400ADAE3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		57D866BA1BEA384D0034DEDE /* vertex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vertex.png; sourceTree = "<group>"; };
 		57DDC94F1BD7D173009423EA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		57DDC9511BD7D180009423EA /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		57DDC9571BDB326B009423EA /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 		579013A11BC1083400ADAE3E /* Icosahedron */ = {
 			isa = PBXGroup;
 			children = (
+				57D866B91BEA381B0034DEDE /* Texture */,
 				573132321BDCBF3200824EA5 /* Shader */,
 				57DDC9561BDB320F009423EA /* Scene */,
 				57DDC9531BDB2E70009423EA /* Entity */,
@@ -147,6 +150,14 @@
 				574A2B5C1BE88D9E00CFA4B4 /* RenderUtils.h */,
 			);
 			path = Icosahedron;
+			sourceTree = "<group>";
+		};
+		57D866B91BEA381B0034DEDE /* Texture */ = {
+			isa = PBXGroup;
+			children = (
+				57D866BA1BEA384D0034DEDE /* vertex.png */,
+			);
+			path = Texture;
 			sourceTree = "<group>";
 		};
 		57DDC9531BDB2E70009423EA /* Entity */ = {
@@ -254,6 +265,7 @@
 				573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */,
 				579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */,
 				579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */,
+				57D866BB1BEA384D0034DEDE /* vertex.png in Resources */,
 				579013B11BC1083400ADAE3E /* LaunchScreen.storyboard in Resources */,
 				574A2B5F1BE89BD400CFA4B4 /* BlurShader.fsh in Resources */,
 				574A2B601BE89BD400CFA4B4 /* BlurShader.vsh in Resources */,
