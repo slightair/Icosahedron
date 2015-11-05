@@ -4,7 +4,6 @@
 #import "GameViewController.h"
 #import "Icosahedron-Swift.h"
 #import "IcosahedronModel.h"
-#import "RenderUtils.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
