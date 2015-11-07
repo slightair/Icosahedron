@@ -1,7 +1,7 @@
 import Foundation
 import GLKit
 
-class IcosahedronVertex : NSObject {
+class IcosahedronVertex: CustomStringConvertible {
     let name: String
     let coordinate: GLKVector3
 
@@ -25,7 +25,7 @@ class IcosahedronVertex : NSObject {
         return nextVertices.map { $0.name }
     }
 
-    override var description: String {
+    var description: String {
         return "\(name) \(NSStringFromGLKVector3(coordinate))"
     }
 

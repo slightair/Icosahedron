@@ -1,8 +1,7 @@
 import OpenGLES
 
-class RenderUtils: NSObject {
-//    class func loadShaders(inout program: GLuint, path: String) -> Bool {
-    class func loadShaders(_program: UnsafeMutablePointer<GLuint>, path: String) -> Bool {
+class RenderUtils {
+    class func loadShaders(inout program: GLuint, path: String) -> Bool {
         let program = glCreateProgram()
 
         var vertexShader: GLuint = 0
@@ -45,8 +44,6 @@ class RenderUtils: NSObject {
             glDetachShader(program, fragmentShader)
             glDeleteShader(fragmentShader)
         }
-
-        _program.memory = program
 
         return true
     }
