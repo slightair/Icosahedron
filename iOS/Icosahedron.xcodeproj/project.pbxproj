@@ -467,7 +467,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cc.clv.ios.Icosahedron;
 				PRODUCT_NAME = Icosahedron;
-				SWIFT_OBJC_BRIDGING_HEADER = "Icosahedron/Icosahedron-Bridging-Header.h";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -486,7 +487,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cc.clv.ios.Icosahedron;
 				PRODUCT_NAME = Icosahedron;
-				SWIFT_OBJC_BRIDGING_HEADER = "Icosahedron/Icosahedron-Bridging-Header.h";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};
