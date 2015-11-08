@@ -248,22 +248,20 @@ class GameViewController: GLKViewController {
         location.x -= CGRectGetMidX(view.bounds)
         location.y -= CGRectGetMidY(view.bounds)
 
-        let locationVector = GLKVector3Make(Float(location.x * 2 / CGRectGetWidth(view.bounds)),
+        var locationVector = GLKVector3Make(Float(location.x * 2 / CGRectGetWidth(view.bounds)),
                                             Float(-location.y * 2 / CGRectGetHeight(view.bounds)),
                                             0)
-        print("location: \(NSStringFromGLKVector3(locationVector))")
+        locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(modelViewProjectionMatrix, nil), locationVector)
 
         var nearestDistance = FLT_MAX
         var nearestVertex: IcosahedronVertex?
         for vertex in currentVertex.nextVertices {
             let distance = GLKVector3Distance(locationVector, vertex.coordinate)
-            print("\(vertex.name) -> \(distance)")
             if distance < nearestDistance {
                 nearestDistance = distance
                 nearestVertex = vertex
             }
         }
-        print("selected: \(nearestVertex!.name) \(nearestDistance)")
 
         if let selectedVertex = nearestVertex {
             moveToVertex(selectedVertex)
