@@ -1,6 +1,6 @@
 import GLKit
 
-func quaternionForRotate(from from: IcosahedronVertex, to: IcosahedronVertex ) -> GLKQuaternion {
+func quaternionForRotate(from from: IcosahedronVertex, to: IcosahedronVertex) -> GLKQuaternion {
     let normalizedFrom = GLKVector3Normalize(from.coordinate)
     let normalizedTo = GLKVector3Normalize(to.coordinate)
 

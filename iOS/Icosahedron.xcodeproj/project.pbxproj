@@ -49,7 +49,6 @@
 		2418BDBEB5F57607DCBC1690 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		38FED04CDB28B30F908D55EE /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		4BA79710F87EB83A01083056 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		570DD04E1BC10A32004D5596 /* Icosahedron-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Icosahedron-Bridging-Header.h"; sourceTree = "<group>"; };
 		570DD0521BC10AE6004D5596 /* SwiftGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftGraphics.framework; path = Carthage/Build/iOS/SwiftGraphics.framework; sourceTree = "<group>"; };
 		570DD0531BC10AE6004D5596 /* SwiftUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUtilities.framework; path = Carthage/Build/iOS/SwiftUtilities.framework; sourceTree = "<group>"; };
 		570DD0581BC10BE0004D5596 /* SwiftGraphics.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftGraphics.framework.dSYM; path = Carthage/Build/iOS/SwiftGraphics.framework.dSYM; sourceTree = "<group>"; };
@@ -138,13 +137,12 @@
 				57DDC9561BDB320F009423EA /* Scene */,
 				57DDC9531BDB2E70009423EA /* Entity */,
 				579013A21BC1083400ADAE3E /* AppDelegate.swift */,
-				579013AA1BC1083400ADAE3E /* Main.storyboard */,
-				579013AD1BC1083400ADAE3E /* Assets.xcassets */,
-				579013AF1BC1083400ADAE3E /* LaunchScreen.storyboard */,
-				579013B21BC1083400ADAE3E /* Info.plist */,
-				570DD04E1BC10A32004D5596 /* Icosahedron-Bridging-Header.h */,
-				57D866BC1BEB97E50034DEDE /* RenderUtils.swift */,
 				57D866C21BEE3AA30034DEDE /* GameViewController.swift */,
+				57D866BC1BEB97E50034DEDE /* RenderUtils.swift */,
+				579013AA1BC1083400ADAE3E /* Main.storyboard */,
+				579013AF1BC1083400ADAE3E /* LaunchScreen.storyboard */,
+				579013AD1BC1083400ADAE3E /* Assets.xcassets */,
+				579013B21BC1083400ADAE3E /* Info.plist */,
 			);
 			path = Icosahedron;
 			sourceTree = "<group>";
