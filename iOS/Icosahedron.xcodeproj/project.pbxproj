@@ -11,7 +11,6 @@
 		570DD0551BC10AE6004D5596 /* SwiftUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570DD0531BC10AE6004D5596 /* SwiftUtilities.framework */; };
 		570DD05A1BC10BE0004D5596 /* SwiftGraphics.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 570DD0581BC10BE0004D5596 /* SwiftGraphics.framework.dSYM */; };
 		570DD05B1BC10BE0004D5596 /* SwiftUtilities.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 570DD0591BC10BE0004D5596 /* SwiftUtilities.framework.dSYM */; };
-		570DD05F1BC8BDAD004D5596 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 570DD05E1BC8BDAD004D5596 /* GameViewController.m */; };
 		573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132331BDCBF5200824EA5 /* ModelShader.fsh */; };
 		573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132341BDCBF5200824EA5 /* ModelShader.vsh */; };
 		574A2B5F1BE89BD400CFA4B4 /* BlurShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 574A2B5D1BE89BD400CFA4B4 /* BlurShader.fsh */; };
@@ -55,7 +54,6 @@
 		570DD0531BC10AE6004D5596 /* SwiftUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUtilities.framework; path = Carthage/Build/iOS/SwiftUtilities.framework; sourceTree = "<group>"; };
 		570DD0581BC10BE0004D5596 /* SwiftGraphics.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftGraphics.framework.dSYM; path = Carthage/Build/iOS/SwiftGraphics.framework.dSYM; sourceTree = "<group>"; };
 		570DD0591BC10BE0004D5596 /* SwiftUtilities.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftUtilities.framework.dSYM; path = Carthage/Build/iOS/SwiftUtilities.framework.dSYM; sourceTree = "<group>"; };
-		570DD05E1BC8BDAD004D5596 /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		573132331BDCBF5200824EA5 /* ModelShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.fsh; sourceTree = "<group>"; };
 		573132341BDCBF5200824EA5 /* ModelShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.vsh; sourceTree = "<group>"; };
 		574A2B5D1BE89BD400CFA4B4 /* BlurShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BlurShader.fsh; sourceTree = "<group>"; };
@@ -145,7 +143,6 @@
 				579013AF1BC1083400ADAE3E /* LaunchScreen.storyboard */,
 				579013B21BC1083400ADAE3E /* Info.plist */,
 				570DD04E1BC10A32004D5596 /* Icosahedron-Bridging-Header.h */,
-				570DD05E1BC8BDAD004D5596 /* GameViewController.m */,
 				57D866BC1BEB97E50034DEDE /* RenderUtils.swift */,
 				57D866C21BEE3AA30034DEDE /* GameViewController.swift */,
 			);
@@ -345,7 +342,6 @@
 			files = (
 				57D866BD1BEB97E50034DEDE /* RenderUtils.swift in Sources */,
 				57D866BF1BEDA1C30034DEDE /* IcosahedronModel.swift in Sources */,
-				570DD05F1BC8BDAD004D5596 /* GameViewController.m in Sources */,
 				57D866C11BEDA8400034DEDE /* ModelVertex.swift in Sources */,
 				57D866C31BEE3AA30034DEDE /* GameViewController.swift in Sources */,
 				579013A31BC1083400ADAE3E /* AppDelegate.swift in Sources */,

@@ -2,7 +2,7 @@ import OpenGLES
 
 class RenderUtils {
     class func loadShaders(inout program: GLuint, path: String) -> Bool {
-        let program = glCreateProgram()
+        program = glCreateProgram()
 
         var vertexShader: GLuint = 0
         let vertexShaderPathName = NSBundle.mainBundle().pathForResource(path, ofType: "vsh")!
@@ -62,18 +62,18 @@ class RenderUtils {
         glCompileShader(shader)
 
         var logLength: GLint = 0
-        glGetShaderiv(shader, GLenum(GL_INFO_LOG_LENGTH), &logLength);
+        glGetShaderiv(shader, GLenum(GL_INFO_LOG_LENGTH), &logLength)
         if logLength > 0 {
             let log = UnsafeMutablePointer<GLchar>(malloc(Int(logLength)))
-            glGetShaderInfoLog(shader, logLength, &logLength, log);
-            NSLog("Shader compile log: \n%s", log);
+            glGetShaderInfoLog(shader, logLength, &logLength, log)
+            print("Shader compile log: \n\(log)")
             free(log)
         }
 
         var status:GLint = 0
         glGetShaderiv(shader, GLenum(GL_COMPILE_STATUS), &status)
         if status == 0 {
-            glDeleteShader(shader);
+            glDeleteShader(shader)
             return false
         }
         return true

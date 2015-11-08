@@ -15,7 +15,7 @@ void main()
 {
     vec4 destColor = texture(sourceTexture, texcoord);
     if (useBlur) {
-        float iteration = 3.0;
+        float iteration = 2.0;
         vec2 texelSizeHalf = texelSize * 0.5;
         vec2 uvOffset = texelSize.xy * iteration + texelSizeHalf;
         vec2 texcoordSample;

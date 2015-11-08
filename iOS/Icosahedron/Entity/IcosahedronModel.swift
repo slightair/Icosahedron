@@ -1,6 +1,6 @@
 import GLKit
 
-func quaternionForRotate(from: IcosahedronVertex, to: IcosahedronVertex ) -> GLKQuaternion {
+func quaternionForRotate(from from: IcosahedronVertex, to: IcosahedronVertex ) -> GLKQuaternion {
     let normalizedFrom = GLKVector3Normalize(from.coordinate)
     let normalizedTo = GLKVector3Normalize(to.coordinate)
 
@@ -14,12 +14,18 @@ func quaternionForRotate(from: IcosahedronVertex, to: IcosahedronVertex ) -> GLK
 }
 
 struct IcosahedronModel {
-    static let NumberOfPointVertices = 12
-    static let NumberOfLineVertices = 30 * 2
+    static let NumberOfPointVertices: GLsizei = 12
+    static let NumberOfLineVertices: GLsizei = 30 * 2
 
-    var pointVertices: [ModelVertex]
-    var lineVertices: [ModelVertex]
+    var pointModelVertices: [ModelVertex]
+    var lineModelVertices: [ModelVertex]
     var vertices: [String: IcosahedronVertex] = [:]
+    var pointVertices: [Float] {
+        return pointModelVertices.flatMap { $0.v }
+    }
+    var lineVertices: [Float] {
+        return lineModelVertices.flatMap { $0.v }
+    }
 
     init() {
         let ratio: Float = (1.0 + sqrt(5.0)) / 2.0
@@ -53,7 +59,7 @@ struct IcosahedronModel {
 
         let lineColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
 
-        pointVertices = [
+        pointModelVertices = [
             ModelVertex(position: coordA, normal: coordA, color: colorA),
             ModelVertex(position: coordB, normal: coordB, color: colorB),
             ModelVertex(position: coordC, normal: coordC, color: colorC),
@@ -68,7 +74,7 @@ struct IcosahedronModel {
             ModelVertex(position: coordL, normal: coordL, color: colorL),
         ]
 
-        lineVertices = [
+        lineModelVertices = [
             ModelVertex(position: coordA, normal: coordA, color: lineColor), ModelVertex(position: coordB, normal: coordB, color: lineColor),
             ModelVertex(position: coordA, normal: coordA, color: lineColor), ModelVertex(position: coordC, normal: coordC, color: lineColor),
             ModelVertex(position: coordA, normal: coordA, color: lineColor), ModelVertex(position: coordE, normal: coordE, color: lineColor),
