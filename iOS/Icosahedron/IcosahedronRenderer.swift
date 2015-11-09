@@ -195,10 +195,10 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
 
     func setUpCanvas() {
         let vertices: [Float] = [
-            -1.0, -1.0, 0.0, 0.1, 1.0, 1.0, 1.0,
+            -1.0, -1.0, 0.0, 1.0, 1.0, 1.0, 1.0,
             -1.0,  1.0, 0.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, -1.0, 0.0, 0.1, 1.0, 1.0, 1.0,
-            1.0,  1.0, 0.0, 1.0, 1.0, 1.0, 1.0,
+             1.0, -1.0, 0.0, 1.0, 1.0, 1.0, 1.0,
+             1.0,  1.0, 0.0, 1.0, 1.0, 1.0, 1.0,
         ]
 
         let arrayID = VertexArray.Canvas.rawValue
@@ -318,10 +318,10 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.ModelLines.rawValue])
         glDrawArrays(GLenum(GL_LINES), 0, IcosahedronModel.NumberOfLineVertices)
 
-        glUniform1i(modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue], GL_TRUE)
-        glBindVertexArray(vertexArrays[VertexArray.ModelPoints.rawValue])
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.ModelPoints.rawValue])
-        glDrawArrays(GLenum(GL_POINTS), 0, IcosahedronModel.NumberOfPointVertices)
+//        glUniform1i(modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue], GL_TRUE)
+//        glBindVertexArray(vertexArrays[VertexArray.ModelPoints.rawValue])
+//        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.ModelPoints.rawValue])
+//        glDrawArrays(GLenum(GL_POINTS), 0, IcosahedronModel.NumberOfPointVertices)
 
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), GLuint(defaultFrameBufferObject))
 

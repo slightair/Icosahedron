@@ -44,34 +44,22 @@ struct IcosahedronModel {
         let coordC = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1, -ratio), scale)
         let coordI = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1, -ratio), scale)
 
-        let colorA = GLKVector4Make(0.902, 0.0,   0.071, 1.0)
-        let colorB = GLKVector4Make(0.953, 0.596, 0.0,   1.0)
-        let colorC = GLKVector4Make(1.0,   0.945, 0.0,   1.0)
-        let colorD = GLKVector4Make(0.561, 0.765, 0.122, 1.0)
-        let colorE = GLKVector4Make(0.0,   0.6,   0.267, 1.0)
-        let colorF = GLKVector4Make(0.0,   0.62,  0.588, 1.0)
-        let colorG = GLKVector4Make(0.0,   0.627, 0.914, 1.0)
-        let colorH = GLKVector4Make(0.0,   0.408, 0.718, 1.0)
-        let colorI = GLKVector4Make(0.114, 0.125, 0.533, 1.0)
-        let colorJ = GLKVector4Make(0.573, 0.027, 0.514, 1.0)
-        let colorK = GLKVector4Make(0.894, 0.0,   0.498, 1.0)
-        let colorL = GLKVector4Make(0.898, 0.0,   0.31,  1.0)
-
+        let pointColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
         let lineColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
 
         pointModelVertices = [
-            ModelVertex(position: coordA, normal: coordA, color: colorA),
-            ModelVertex(position: coordB, normal: coordB, color: colorB),
-            ModelVertex(position: coordC, normal: coordC, color: colorC),
-            ModelVertex(position: coordD, normal: coordD, color: colorD),
-            ModelVertex(position: coordE, normal: coordE, color: colorE),
-            ModelVertex(position: coordF, normal: coordF, color: colorF),
-            ModelVertex(position: coordG, normal: coordG, color: colorG),
-            ModelVertex(position: coordH, normal: coordH, color: colorH),
-            ModelVertex(position: coordI, normal: coordI, color: colorI),
-            ModelVertex(position: coordJ, normal: coordJ, color: colorJ),
-            ModelVertex(position: coordK, normal: coordK, color: colorK),
-            ModelVertex(position: coordL, normal: coordL, color: colorL),
+            ModelVertex(position: coordA, normal: coordA, color: pointColor),
+            ModelVertex(position: coordB, normal: coordB, color: pointColor),
+            ModelVertex(position: coordC, normal: coordC, color: pointColor),
+            ModelVertex(position: coordD, normal: coordD, color: pointColor),
+            ModelVertex(position: coordE, normal: coordE, color: pointColor),
+            ModelVertex(position: coordF, normal: coordF, color: pointColor),
+            ModelVertex(position: coordG, normal: coordG, color: pointColor),
+            ModelVertex(position: coordH, normal: coordH, color: pointColor),
+            ModelVertex(position: coordI, normal: coordI, color: pointColor),
+            ModelVertex(position: coordJ, normal: coordJ, color: pointColor),
+            ModelVertex(position: coordK, normal: coordK, color: pointColor),
+            ModelVertex(position: coordL, normal: coordL, color: pointColor),
         ]
 
         lineModelVertices = [
