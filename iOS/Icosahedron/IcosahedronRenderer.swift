@@ -38,12 +38,13 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
     }
 
     enum VertexArray: Int {
-        case ModelPoints
-        case ModelLines
+        case IcosahedronPoints
+        case IcosahedronLines
+        case Marker
         case Canvas
 
         static var count: Int {
-            return [ModelPoints, ModelLines, Canvas].count
+            return [IcosahedronPoints, IcosahedronLines, Marker, Canvas].count
         }
     }
 
@@ -55,6 +56,7 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
 
     let context: EAGLContext
     let icosahedronModel = IcosahedronModel()
+    let markerModel = TetrahedronModel()
     var prevVertex: IcosahedronVertex!
     var currentVertex: IcosahedronVertex!
     var prevQuaternion = GLKQuaternionIdentity
@@ -96,13 +98,18 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
 
         setUpShaders()
 
-        glGenVertexArrays(1, &vertexArrays[VertexArray.ModelPoints.rawValue])
-        glGenVertexArrays(1, &vertexArrays[VertexArray.ModelLines.rawValue])
+        glGenVertexArrays(1, &vertexArrays[VertexArray.IcosahedronPoints.rawValue])
+        glGenVertexArrays(1, &vertexArrays[VertexArray.IcosahedronLines.rawValue])
+        glGenVertexArrays(1, &vertexArrays[VertexArray.Marker.rawValue])
         glGenVertexArrays(1, &vertexArrays[VertexArray.Canvas.rawValue])
 
         setUpIcosahedronPoints()
         setUpIcosahedronLines()
         setUpCanvas()
+
+        let markerID = VertexArray.Marker.rawValue
+        glBindVertexArray(vertexArrays[markerID])
+        glGenBuffers(1, &vertexBufferObjects[markerID])
 
         glBindVertexArray(0)
 
@@ -160,7 +167,7 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
     }
 
     func setUpIcosahedronPoints() {
-        let arrayID = VertexArray.ModelPoints.rawValue
+        let arrayID = VertexArray.IcosahedronPoints.rawValue
         glBindVertexArray(vertexArrays[arrayID])
         glGenBuffers(1, &vertexBufferObjects[arrayID])
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[arrayID])
@@ -177,7 +184,7 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
     }
 
     func setUpIcosahedronLines() {
-        let arrayID = VertexArray.ModelLines.rawValue
+        let arrayID = VertexArray.IcosahedronLines.rawValue
         glBindVertexArray(vertexArrays[arrayID])
         glGenBuffers(1, &vertexBufferObjects[arrayID])
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[arrayID])
@@ -213,6 +220,22 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
 
         glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
         glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), stride, BUFFER_OFFSET(sizeof(Float) * 3))
+    }
+
+    func updateMarker(matrix: GLKMatrix4) {
+        let arrayID = VertexArray.Marker.rawValue
+        glBindVertexArray(vertexArrays[arrayID])
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[arrayID])
+        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * TetrahedronModel.NumberOfFaceVertices), markerModel.faceVertices(matrix), GLenum(GL_DYNAMIC_DRAW))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(0))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(sizeof(Float) * 3))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(sizeof(Float) * 6))
     }
 
     func tearDownGL() {
@@ -314,14 +337,19 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
 
         glLineWidth(8)
         glUniform1i(modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue], GL_FALSE)
-        glBindVertexArray(vertexArrays[VertexArray.ModelLines.rawValue])
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.ModelLines.rawValue])
+        glBindVertexArray(vertexArrays[VertexArray.IcosahedronLines.rawValue])
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.IcosahedronLines.rawValue])
         glDrawArrays(GLenum(GL_LINES), 0, IcosahedronModel.NumberOfLineVertices)
 
 //        glUniform1i(modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue], GL_TRUE)
-//        glBindVertexArray(vertexArrays[VertexArray.ModelPoints.rawValue])
-//        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.ModelPoints.rawValue])
+//        glBindVertexArray(vertexArrays[VertexArray.IcosahedronPoints.rawValue])
+//        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.IcosahedronPoints.rawValue])
 //        glDrawArrays(GLenum(GL_POINTS), 0, IcosahedronModel.NumberOfPointVertices)
+
+        glUniform1i(modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue], GL_FALSE)
+        glBindVertexArray(vertexArrays[VertexArray.Marker.rawValue])
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.Marker.rawValue])
+        glDrawArrays(GLenum(GL_TRIANGLE_STRIP), 0, TetrahedronModel.NumberOfFaceVertices)
 
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), GLuint(defaultFrameBufferObject))
 
