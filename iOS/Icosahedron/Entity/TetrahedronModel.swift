@@ -9,16 +9,12 @@ struct TetrahedronModel {
         return GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(x, y), GLKVector3Subtract(y, z)))
     }
 
-    func faceVertices(matrix: GLKMatrix4) -> [Float] {
-        return faceModelVertices.map { v -> ModelVertex in
-            print(NSStringFromGLKMatrix4(matrix))
-            let coord = GLKMatrix4MultiplyVector3(matrix, v.position)
-            return ModelVertex(position: coord, normal: coord, color: v.color)
-        }.flatMap { $0.v }
+    func faceVertices() -> [Float] {
+        return faceModelVertices.flatMap { $0.v }
     }
 
     init() {
-        let scale: Float = 0.02
+        let scale: Float = 0.05
 
         let coordA = GLKVector3MultiplyScalar(GLKVector3Make( 1, 1, 1), scale)
         let coordB = GLKVector3MultiplyScalar(GLKVector3Make( 1,-1,-1), scale)

@@ -24,8 +24,9 @@
 		57D866BF1BEDA1C30034DEDE /* IcosahedronModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866BE1BEDA1C30034DEDE /* IcosahedronModel.swift */; };
 		57D866C11BEDA8400034DEDE /* ModelVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C01BEDA8400034DEDE /* ModelVertex.swift */; };
 		57D866C31BEE3AA30034DEDE /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C21BEE3AA30034DEDE /* GameViewController.swift */; };
-		57D866C51BEF66F90034DEDE /* IcosahedronRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C41BEF66F90034DEDE /* IcosahedronRenderer.swift */; };
+		57D866C51BEF66F90034DEDE /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C41BEF66F90034DEDE /* Renderer.swift */; };
 		57D866C71BF0D2A90034DEDE /* TetrahedronModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C61BF0D2A90034DEDE /* TetrahedronModel.swift */; };
+		57D866C91BF2EA1D0034DEDE /* Renderable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C81BF2EA1D0034DEDE /* Renderable.swift */; };
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
 		57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC9511BD7D180009423EA /* SpriteKit.framework */; };
 		57DDC9581BDB326B009423EA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC9571BDB326B009423EA /* GameScene.swift */; };
@@ -70,8 +71,9 @@
 		57D866BE1BEDA1C30034DEDE /* IcosahedronModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IcosahedronModel.swift; sourceTree = "<group>"; };
 		57D866C01BEDA8400034DEDE /* ModelVertex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelVertex.swift; sourceTree = "<group>"; };
 		57D866C21BEE3AA30034DEDE /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
-		57D866C41BEF66F90034DEDE /* IcosahedronRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IcosahedronRenderer.swift; sourceTree = "<group>"; };
+		57D866C41BEF66F90034DEDE /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		57D866C61BF0D2A90034DEDE /* TetrahedronModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TetrahedronModel.swift; sourceTree = "<group>"; };
+		57D866C81BF2EA1D0034DEDE /* Renderable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderable.swift; sourceTree = "<group>"; };
 		57DDC94F1BD7D173009423EA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		57DDC9511BD7D180009423EA /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		57DDC9571BDB326B009423EA /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -142,7 +144,7 @@
 				57DDC9531BDB2E70009423EA /* Entity */,
 				579013A21BC1083400ADAE3E /* AppDelegate.swift */,
 				57D866C21BEE3AA30034DEDE /* GameViewController.swift */,
-				57D866C41BEF66F90034DEDE /* IcosahedronRenderer.swift */,
+				57D866C41BEF66F90034DEDE /* Renderer.swift */,
 				57D866BC1BEB97E50034DEDE /* RenderUtils.swift */,
 				579013AA1BC1083400ADAE3E /* Main.storyboard */,
 				579013AF1BC1083400ADAE3E /* LaunchScreen.storyboard */,
@@ -167,6 +169,7 @@
 				57D866BE1BEDA1C30034DEDE /* IcosahedronModel.swift */,
 				57D866C01BEDA8400034DEDE /* ModelVertex.swift */,
 				57D866C61BF0D2A90034DEDE /* TetrahedronModel.swift */,
+				57D866C81BF2EA1D0034DEDE /* Renderable.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -346,7 +349,8 @@
 			files = (
 				57D866BD1BEB97E50034DEDE /* RenderUtils.swift in Sources */,
 				57D866BF1BEDA1C30034DEDE /* IcosahedronModel.swift in Sources */,
-				57D866C51BEF66F90034DEDE /* IcosahedronRenderer.swift in Sources */,
+				57D866C51BEF66F90034DEDE /* Renderer.swift in Sources */,
+				57D866C91BF2EA1D0034DEDE /* Renderable.swift in Sources */,
 				57D866C71BF0D2A90034DEDE /* TetrahedronModel.swift in Sources */,
 				57D866C11BEDA8400034DEDE /* ModelVertex.swift in Sources */,
 				57D866C31BEE3AA30034DEDE /* GameViewController.swift in Sources */,

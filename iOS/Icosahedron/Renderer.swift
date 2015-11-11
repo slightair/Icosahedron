@@ -6,7 +6,7 @@ func BUFFER_OFFSET(i: Int) -> UnsafePointer<Void> {
     return p.advancedBy(i)
 }
 
-class IcosahedronRenderer: NSObject, GLKViewDelegate {
+class Renderer: NSObject, GLKViewDelegate {
     enum Program: Int {
         case Model
         case Blur
@@ -17,13 +17,14 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
     }
 
     enum ModelShaderUniform: Int {
-        case ModelViewProjectionMatrix
+        case ModelViewMatrix
+        case ProjectionMatrix
         case NormalMatrix
         case VertexTexture
         case UseTexture
 
         static var count: Int {
-            return [ModelViewProjectionMatrix, NormalMatrix, VertexTexture, UseTexture].count
+            return [ModelViewMatrix, ProjectionMatrix, NormalMatrix, VertexTexture, UseTexture].count
         }
     }
 
@@ -65,12 +66,14 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
     var vertexTextureInfo: GLKTextureInfo!
 
     var projectionMatrix = GLKMatrix4Identity
-    var modelViewProjectionMatrix = GLKMatrix4Identity
     var normalMatrix = GLKMatrix3Identity
     var modelFrameBufferObject: GLuint = 0
     var modelColorTexture: GLuint = 0
     var modelDepthRenderBufferObject: GLuint = 0
     var texelSize = GLKVector2Make(0, 0)
+
+    var modelViewMatrix = GLKMatrix4Identity
+    var markerMatrix = GLKMatrix4Identity
 
     deinit {
         tearDownGL()
@@ -154,7 +157,8 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
     func setUpShaders() {
         let modelProgramID = Program.Model.rawValue
         RenderUtils.loadShaders(&programs[modelProgramID], path: "ModelShader")
-        modelShaderUniforms[ModelShaderUniform.ModelViewProjectionMatrix.rawValue] = glGetUniformLocation(programs[modelProgramID], "modelViewProjectionMatrix")
+        modelShaderUniforms[ModelShaderUniform.ModelViewMatrix.rawValue] = glGetUniformLocation(programs[modelProgramID], "modelViewMatrix")
+        modelShaderUniforms[ModelShaderUniform.ProjectionMatrix.rawValue] = glGetUniformLocation(programs[modelProgramID], "projectionMatrix")
         modelShaderUniforms[ModelShaderUniform.NormalMatrix.rawValue] = glGetUniformLocation(programs[modelProgramID], "normalMatrix")
         modelShaderUniforms[ModelShaderUniform.VertexTexture.rawValue] = glGetUniformLocation(programs[modelProgramID], "vertexTexture")
         modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue] = glGetUniformLocation(programs[modelProgramID], "useTexture")
@@ -222,11 +226,11 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
         glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), stride, BUFFER_OFFSET(sizeof(Float) * 3))
     }
 
-    func updateMarker(matrix: GLKMatrix4) {
+    func updateMarker() {
         let arrayID = VertexArray.Marker.rawValue
         glBindVertexArray(vertexArrays[arrayID])
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[arrayID])
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * TetrahedronModel.NumberOfFaceVertices), markerModel.faceVertices(matrix), GLenum(GL_DYNAMIC_DRAW))
+        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * TetrahedronModel.NumberOfFaceVertices), markerModel.faceVertices(), GLenum(GL_DYNAMIC_DRAW))
 
         glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
         glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(0))
@@ -264,17 +268,18 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
 
         let modelQuaternion = GLKQuaternionSlerp(prevQuaternion, currentQuaternion, animationProgress)
 
-        var modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0)
+        modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0)
         modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0)
         modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, GLKMatrix4MakeWithQuaternion(modelQuaternion))
         modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix)
 
         normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelViewMatrix), nil)
-        modelViewProjectionMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix)
+
+        updateMarker()
     }
 
     func rotateModelWithTappedLocation(location: CGPoint) {
-        let locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(modelViewProjectionMatrix, nil), GLKVector3Make(Float(location.x), Float(location.y), 0))
+        let locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(modelViewMatrix, nil), GLKVector3Make(Float(location.x), Float(location.y), 0))
 
         var nearestDistance = FLT_MAX
         var nearestVertex: IcosahedronVertex?
@@ -327,11 +332,15 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
         glActiveTexture(GLenum(GL_TEXTURE0))
         glBindTexture(GLenum(GL_TEXTURE_2D), vertexTextureInfo.name)
 
-        withUnsafePointer(&modelViewProjectionMatrix, {
-            glUniformMatrix4fv(modelShaderUniforms[ModelShaderUniform.ModelViewProjectionMatrix.rawValue], 1, 0, UnsafePointer($0))
+        withUnsafePointer(&projectionMatrix, {
+            glUniformMatrix4fv(modelShaderUniforms[ModelShaderUniform.ProjectionMatrix.rawValue], 1, 0, UnsafePointer($0))
         })
         withUnsafePointer(&normalMatrix, {
             glUniformMatrix3fv(modelShaderUniforms[ModelShaderUniform.NormalMatrix.rawValue], 1, 0, UnsafePointer($0))
+        })
+
+        withUnsafePointer(&modelViewMatrix, {
+            glUniformMatrix4fv(modelShaderUniforms[ModelShaderUniform.ModelViewMatrix.rawValue], 1, 0, UnsafePointer($0))
         })
         glUniform1i(modelShaderUniforms[ModelShaderUniform.VertexTexture.rawValue], 0)
 
@@ -341,11 +350,14 @@ class IcosahedronRenderer: NSObject, GLKViewDelegate {
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.IcosahedronLines.rawValue])
         glDrawArrays(GLenum(GL_LINES), 0, IcosahedronModel.NumberOfLineVertices)
 
-//        glUniform1i(modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue], GL_TRUE)
-//        glBindVertexArray(vertexArrays[VertexArray.IcosahedronPoints.rawValue])
-//        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.IcosahedronPoints.rawValue])
-//        glDrawArrays(GLenum(GL_POINTS), 0, IcosahedronModel.NumberOfPointVertices)
+        glUniform1i(modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue], GL_TRUE)
+        glBindVertexArray(vertexArrays[VertexArray.IcosahedronPoints.rawValue])
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.IcosahedronPoints.rawValue])
+        glDrawArrays(GLenum(GL_POINTS), 0, IcosahedronModel.NumberOfPointVertices)
 
+        withUnsafePointer(&markerMatrix, {
+            glUniformMatrix4fv(modelShaderUniforms[ModelShaderUniform.ModelViewMatrix.rawValue], 1, 0, UnsafePointer($0))
+        })
         glUniform1i(modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue], GL_FALSE)
         glBindVertexArray(vertexArrays[VertexArray.Marker.rawValue])
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.Marker.rawValue])

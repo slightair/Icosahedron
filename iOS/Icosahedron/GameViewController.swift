@@ -4,13 +4,13 @@ import SpriteKit
 class GameViewController: GLKViewController {
     @IBOutlet var infoView: SKView!
     var gameScene: GameScene!
-    var renderer: IcosahedronRenderer!
+    var renderer: Renderer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let context = EAGLContext(API: .OpenGLES3)
-        renderer = IcosahedronRenderer(context: context)
+        renderer = Renderer(context: context)
 
         let glkView = view as! GLKView
         glkView.delegate = renderer
