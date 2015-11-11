@@ -7,37 +7,6 @@ func BUFFER_OFFSET(i: Int) -> UnsafePointer<Void> {
 }
 
 class Renderer: NSObject, GLKViewDelegate {
-    enum Program: Int {
-        case Model
-        case Blur
-
-        static var count: Int {
-            return [Model, Blur].count
-        }
-    }
-
-    enum ModelShaderUniform: Int {
-        case ModelViewMatrix
-        case ProjectionMatrix
-        case NormalMatrix
-        case VertexTexture
-        case UseTexture
-
-        static var count: Int {
-            return [ModelViewMatrix, ProjectionMatrix, NormalMatrix, VertexTexture, UseTexture].count
-        }
-    }
-
-    enum BlurShaderUniform: Int {
-        case SourceTexture
-        case TexelSize
-        case UseBlur
-
-        static var count: Int {
-            return [SourceTexture, TexelSize, UseBlur].count
-        }
-    }
-
     enum VertexArray: Int {
         case IcosahedronPoints
         case IcosahedronLines
@@ -49,9 +18,9 @@ class Renderer: NSObject, GLKViewDelegate {
         }
     }
 
-    var programs = [GLuint](count: Program.count, repeatedValue: 0)
-    var modelShaderUniforms = [GLint](count: ModelShaderUniform.count, repeatedValue: 0)
-    var blurShaderUniforms = [GLint](count: BlurShaderUniform.count, repeatedValue: 0)
+    var modelShaderProgram: ModelShaderProgram!
+    var blurShaderProgram: BlurShaderProgram!
+
     var vertexArrays = [GLuint](count: VertexArray.count, repeatedValue: 0)
     var vertexBufferObjects = [GLuint](count: VertexArray.count, repeatedValue: 0)
 
@@ -99,7 +68,8 @@ class Renderer: NSObject, GLKViewDelegate {
     func setUpGL() {
         EAGLContext.setCurrentContext(context)
 
-        setUpShaders()
+        modelShaderProgram = ModelShaderProgram()
+        blurShaderProgram = BlurShaderProgram()
 
         glGenVertexArrays(1, &vertexArrays[VertexArray.IcosahedronPoints.rawValue])
         glGenVertexArrays(1, &vertexArrays[VertexArray.IcosahedronLines.rawValue])
@@ -152,22 +122,6 @@ class Renderer: NSObject, GLKViewDelegate {
         }
 
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), 0)
-    }
-
-    func setUpShaders() {
-        let modelProgramID = Program.Model.rawValue
-        RenderUtils.loadShaders(&programs[modelProgramID], path: "ModelShader")
-        modelShaderUniforms[ModelShaderUniform.ModelViewMatrix.rawValue] = glGetUniformLocation(programs[modelProgramID], "modelViewMatrix")
-        modelShaderUniforms[ModelShaderUniform.ProjectionMatrix.rawValue] = glGetUniformLocation(programs[modelProgramID], "projectionMatrix")
-        modelShaderUniforms[ModelShaderUniform.NormalMatrix.rawValue] = glGetUniformLocation(programs[modelProgramID], "normalMatrix")
-        modelShaderUniforms[ModelShaderUniform.VertexTexture.rawValue] = glGetUniformLocation(programs[modelProgramID], "vertexTexture")
-        modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue] = glGetUniformLocation(programs[modelProgramID], "useTexture")
-
-        let blurProgramID = Program.Blur.rawValue
-        RenderUtils.loadShaders(&programs[blurProgramID], path: "BlurShader")
-        blurShaderUniforms[BlurShaderUniform.SourceTexture.rawValue] = glGetUniformLocation(programs[blurProgramID], "sourceTexture")
-        blurShaderUniforms[BlurShaderUniform.TexelSize.rawValue] = glGetUniformLocation(programs[blurProgramID], "texelSize")
-        blurShaderUniforms[BlurShaderUniform.UseBlur.rawValue] = glGetUniformLocation(programs[blurProgramID], "useBlur")
     }
 
     func setUpIcosahedronPoints() {
@@ -252,9 +206,6 @@ class Renderer: NSObject, GLKViewDelegate {
         glDeleteRenderbuffers(1, &modelDepthRenderBufferObject)
         glDeleteFramebuffers(1, &modelFrameBufferObject)
 
-        glDeleteProgram(programs[Program.Model.rawValue])
-        glDeleteProgram(programs[Program.Blur.rawValue])
-
         EAGLContext.setCurrentContext(nil)
     }
 
@@ -327,38 +278,29 @@ class Renderer: NSObject, GLKViewDelegate {
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT) | GLbitfield(GL_DEPTH_BUFFER_BIT))
 
-        glUseProgram(programs[Program.Model.rawValue])
+        glUseProgram(modelShaderProgram.programID)
 
         glActiveTexture(GLenum(GL_TEXTURE0))
         glBindTexture(GLenum(GL_TEXTURE_2D), vertexTextureInfo.name)
 
-        withUnsafePointer(&projectionMatrix, {
-            glUniformMatrix4fv(modelShaderUniforms[ModelShaderUniform.ProjectionMatrix.rawValue], 1, 0, UnsafePointer($0))
-        })
-        withUnsafePointer(&normalMatrix, {
-            glUniformMatrix3fv(modelShaderUniforms[ModelShaderUniform.NormalMatrix.rawValue], 1, 0, UnsafePointer($0))
-        })
-
-        withUnsafePointer(&modelViewMatrix, {
-            glUniformMatrix4fv(modelShaderUniforms[ModelShaderUniform.ModelViewMatrix.rawValue], 1, 0, UnsafePointer($0))
-        })
-        glUniform1i(modelShaderUniforms[ModelShaderUniform.VertexTexture.rawValue], 0)
+        modelShaderProgram.projectionMatrix = projectionMatrix
+        modelShaderProgram.normalMatrix = normalMatrix
+        modelShaderProgram.modelViewMatrix = modelViewMatrix
+        modelShaderProgram.vertexTexture = 0
 
         glLineWidth(8)
-        glUniform1i(modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue], GL_FALSE)
+        modelShaderProgram.useTexture = false
         glBindVertexArray(vertexArrays[VertexArray.IcosahedronLines.rawValue])
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.IcosahedronLines.rawValue])
         glDrawArrays(GLenum(GL_LINES), 0, IcosahedronModel.NumberOfLineVertices)
 
-        glUniform1i(modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue], GL_TRUE)
+        modelShaderProgram.useTexture = true
         glBindVertexArray(vertexArrays[VertexArray.IcosahedronPoints.rawValue])
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.IcosahedronPoints.rawValue])
         glDrawArrays(GLenum(GL_POINTS), 0, IcosahedronModel.NumberOfPointVertices)
 
-        withUnsafePointer(&markerMatrix, {
-            glUniformMatrix4fv(modelShaderUniforms[ModelShaderUniform.ModelViewMatrix.rawValue], 1, 0, UnsafePointer($0))
-        })
-        glUniform1i(modelShaderUniforms[ModelShaderUniform.UseTexture.rawValue], GL_FALSE)
+        modelShaderProgram.modelViewMatrix = markerMatrix
+        modelShaderProgram.useTexture = false
         glBindVertexArray(vertexArrays[VertexArray.Marker.rawValue])
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.Marker.rawValue])
         glDrawArrays(GLenum(GL_TRIANGLE_STRIP), 0, TetrahedronModel.NumberOfFaceVertices)
@@ -368,15 +310,13 @@ class Renderer: NSObject, GLKViewDelegate {
         glDisable(GLenum(GL_DEPTH_TEST))
         glDisable(GLenum(GL_BLEND))
 
-        glUseProgram(programs[Program.Blur.rawValue])
+        glUseProgram(blurShaderProgram.programID)
 
         glActiveTexture(GLenum(GL_TEXTURE0))
         glBindTexture(GLenum(GL_TEXTURE_2D), modelColorTexture)
-        glUniform1i(blurShaderUniforms[BlurShaderUniform.SourceTexture.rawValue], 0)
-        withUnsafePointer(&texelSize, {
-            glUniform2fv(blurShaderUniforms[BlurShaderUniform.TexelSize.rawValue], 1, UnsafePointer($0))
-        })
-        glUniform1i(blurShaderUniforms[BlurShaderUniform.UseBlur.rawValue], GL_TRUE)
+        blurShaderProgram.sourceTexture = 0
+        blurShaderProgram.texelSize = texelSize
+        blurShaderProgram.useBlur = true
 
         glBindVertexArray(vertexArrays[VertexArray.Canvas.rawValue])
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.Canvas.rawValue])

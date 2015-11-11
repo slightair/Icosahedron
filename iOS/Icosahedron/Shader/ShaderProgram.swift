@@ -1,6 +1,17 @@
 import OpenGLES
 
-class RenderUtils {
+class ShaderProgram {
+    var programID: GLuint = 0
+    var uniforms: [GLint] = []
+
+    init(shaderName: String) {
+        ShaderProgram.loadShaders(&programID, path: shaderName)
+    }
+
+    deinit {
+        glDeleteProgram(programID)
+    }
+
     class func loadShaders(inout program: GLuint, path: String) -> Bool {
         program = glCreateProgram()
 
