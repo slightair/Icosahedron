@@ -97,6 +97,7 @@ class Renderer: NSObject, GLKViewDelegate {
 
     func update(timeSinceLastUpdate: NSTimeInterval) {
         icosahedronModel.update(timeSinceLastUpdate)
+        markerModel.quaternion = icosahedronModel.quaternion
 
         normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(icosahedronModel.modelViewMatrix), nil)
     }

@@ -61,7 +61,7 @@ class TetrahedronModel: Renderable {
     }
 
     func render(program: ModelShaderProgram) {
-        program.modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, GLKMatrix4MakeWithQuaternion(quaternion))
+        program.modelViewMatrix = modelViewMatrix
         program.useTexture = false
 
         glBindVertexArray(vertexArray)
