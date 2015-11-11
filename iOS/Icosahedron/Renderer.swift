@@ -2,26 +2,23 @@ import GLKit
 import OpenGLES
 
 class Renderer: NSObject, GLKViewDelegate {
+    let context: EAGLContext
+
     var modelShaderProgram: ModelShaderProgram!
     var blurShaderProgram: BlurShaderProgram!
 
-    let context: EAGLContext
     let icosahedronModel = IcosahedronModel()
     let markerModel = TetrahedronModel()
     let blurCanvas = BlurCanvas()
 
-    var prevVertex: IcosahedronVertex!
-    var currentVertex: IcosahedronVertex!
-    var prevQuaternion = GLKQuaternionIdentity
-    var currentQuaternion = GLKQuaternionIdentity
-    var animationProgress: Float = 1.0
-
     var projectionMatrix = GLKMatrix4Identity
     var normalMatrix = GLKMatrix3Identity
+
     var modelFrameBufferObject: GLuint = 0
     var modelColorTexture: GLuint = 0
     var modelDepthRenderBufferObject: GLuint = 0
     var texelSize = GLKVector2Make(0, 0)
+    var models: [Renderable] = []
 
     deinit {
         tearDownGL()
@@ -32,9 +29,12 @@ class Renderer: NSObject, GLKViewDelegate {
 
         super.init()
 
-        currentVertex = icosahedronModel.vertices["C"]
-
         setUpGL()
+
+        models.append(icosahedronModel)
+        models.append(markerModel)
+
+        update(0)
     }
 
     func setUpGL() {
@@ -96,55 +96,9 @@ class Renderer: NSObject, GLKViewDelegate {
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval) {
-        let baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -1.0)
-
-        if (animationProgress < 1.0) {
-            animationProgress += Float(timeSinceLastUpdate) * 4
-            animationProgress = min(1.0, animationProgress)
-        }
-
-        let modelQuaternion = GLKQuaternionSlerp(prevQuaternion, currentQuaternion, animationProgress)
-
-        var modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0)
-        modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0)
-        modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, GLKMatrix4MakeWithQuaternion(modelQuaternion))
-        modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix)
-        icosahedronModel.modelViewMatrix = modelViewMatrix
-
-        modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0)
-        modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix)
-        markerModel.modelViewMatrix = modelViewMatrix
+        icosahedronModel.update(timeSinceLastUpdate)
 
         normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(icosahedronModel.modelViewMatrix), nil)
-    }
-
-    func rotateModelWithTappedLocation(location: CGPoint) {
-        let locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(icosahedronModel.modelViewMatrix, nil), GLKVector3Make(Float(location.x), Float(location.y), 0))
-
-        var nearestDistance = FLT_MAX
-        var nearestVertex: IcosahedronVertex?
-        for vertex in currentVertex.nextVertices {
-            let distance = GLKVector3Distance(locationVector, vertex.coordinate)
-            if distance < nearestDistance {
-                nearestDistance = distance
-                nearestVertex = vertex
-            }
-        }
-
-        if let selectedVertex = nearestVertex {
-            moveToVertex(selectedVertex)
-        }
-    }
-
-    func moveToVertex(vertex: IcosahedronVertex) {
-        prevVertex = currentVertex
-        currentVertex = vertex
-        animationProgress = 0.0
-
-        let relativeQuaternion = quaternionForRotate(from: currentVertex, to: prevVertex)
-
-        prevQuaternion = currentQuaternion
-        currentQuaternion = GLKQuaternionMultiply(currentQuaternion, relativeQuaternion)
     }
 
     // MARK: - GLKView delegate methods
@@ -172,8 +126,9 @@ class Renderer: NSObject, GLKViewDelegate {
         modelShaderProgram.projectionMatrix = projectionMatrix
         modelShaderProgram.normalMatrix = normalMatrix
 
-        icosahedronModel.render(modelShaderProgram)
-        markerModel.render(modelShaderProgram)
+        for model in models {
+            model.render(modelShaderProgram)
+        }
 
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), GLuint(defaultFrameBufferObject))
 
@@ -183,7 +138,7 @@ class Renderer: NSObject, GLKViewDelegate {
         glUseProgram(blurShaderProgram.programID)
 
         blurShaderProgram.texelSize = texelSize
-        blurShaderProgram.useBlur = true
+        blurShaderProgram.useBlur = false
 
         blurCanvas.render(blurShaderProgram, sourceTexture: modelColorTexture)
 

@@ -1,7 +1,6 @@
 import GLKit
 
 class TetrahedronModel: Renderable {
-    var modelViewMatrix = GLKMatrix4Identity
     var quaternion = GLKQuaternionIdentity
     var vertexArray: GLuint = 0
     var vertexBuffer: GLuint = 0

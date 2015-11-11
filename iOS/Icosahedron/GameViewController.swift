@@ -20,7 +20,7 @@ class GameViewController: GLKViewController {
 
         gameScene = GameScene(size: view.bounds.size)
         infoView.presentScene(gameScene)
-        gameScene.updateInfo(renderer.currentVertex)
+        gameScene.updateInfo(renderer.icosahedronModel.currentVertex)
     }
 
     func update() {
@@ -35,7 +35,7 @@ class GameViewController: GLKViewController {
         let normalizedLocation = CGPointMake(location.x * 2 / CGRectGetWidth(view.bounds),
                                             -location.y * 2 / CGRectGetHeight(view.bounds))
 
-        renderer.rotateModelWithTappedLocation(normalizedLocation)
-        gameScene.updateInfo(renderer.currentVertex)
+        renderer.icosahedronModel.rotateModelWithTappedLocation(normalizedLocation)
+        gameScene.updateInfo(renderer.icosahedronModel.currentVertex)
     }
 }

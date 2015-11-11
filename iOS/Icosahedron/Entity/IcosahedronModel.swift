@@ -14,8 +14,12 @@ func quaternionForRotate(from from: IcosahedronVertex, to: IcosahedronVertex) ->
 }
 
 class IcosahedronModel: Renderable {
-    var modelViewMatrix = GLKMatrix4Identity
-    var quaternion = GLKQuaternionIdentity
+    var quaternion: GLKQuaternion {
+        let baseQuaternion = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0)
+        let animateQuaternion = GLKQuaternionSlerp(prevQuaternion, currentQuaternion, animationProgress)
+        return GLKQuaternionMultiply(baseQuaternion, animateQuaternion)
+    }
+
     var pointVertexArray: GLuint = 0
     var lineVertexArray: GLuint = 0
     var pointVertexBuffer: GLuint = 0
@@ -31,6 +35,12 @@ class IcosahedronModel: Renderable {
         return lineModelVertices.flatMap { $0.v }
     }
     var vertexTextureInfo: GLKTextureInfo!
+
+    var prevVertex: IcosahedronVertex!
+    var currentVertex: IcosahedronVertex!
+    var prevQuaternion = GLKQuaternionIdentity
+    var currentQuaternion = GLKQuaternionIdentity
+    var animationProgress: Float = 1.0
 
     init() {
         let ratio: Float = (1.0 + sqrt(5.0)) / 2.0
@@ -190,6 +200,8 @@ class IcosahedronModel: Renderable {
         vertices["D"]!.leftFoot  = vertices["J"]
         vertices["D"]!.rightHand = vertices["H"]
         vertices["D"]!.rightFoot = vertices["B"]
+
+        currentVertex = vertices["C"]
     }
 
     deinit {
@@ -197,6 +209,42 @@ class IcosahedronModel: Renderable {
         glDeleteBuffers(1, &lineVertexBuffer)
         glDeleteVertexArrays(1, &pointVertexArray)
         glDeleteVertexArrays(1, &lineVertexArray)
+    }
+
+    func update(timeSinceLastUpdate: NSTimeInterval) {
+        if (animationProgress < 1.0) {
+            animationProgress += Float(timeSinceLastUpdate) * 4
+            animationProgress = min(1.0, animationProgress)
+        }
+    }
+
+    func rotateModelWithTappedLocation(location: CGPoint) {
+        let locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(modelViewMatrix, nil), GLKVector3Make(Float(location.x), Float(location.y), 0))
+
+        var nearestDistance = FLT_MAX
+        var nearestVertex: IcosahedronVertex?
+        for vertex in currentVertex.nextVertices {
+            let distance = GLKVector3Distance(locationVector, vertex.coordinate)
+            if distance < nearestDistance {
+                nearestDistance = distance
+                nearestVertex = vertex
+            }
+        }
+
+        if let selectedVertex = nearestVertex {
+            moveToVertex(selectedVertex)
+        }
+    }
+
+    func moveToVertex(vertex: IcosahedronVertex) {
+        prevVertex = currentVertex
+        currentVertex = vertex
+        animationProgress = 0.0
+
+        let relativeQuaternion = quaternionForRotate(from: currentVertex, to: prevVertex)
+
+        prevQuaternion = currentQuaternion
+        currentQuaternion = GLKQuaternionMultiply(currentQuaternion, relativeQuaternion)
     }
 
     func prepare() {
