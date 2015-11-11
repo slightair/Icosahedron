@@ -1,7 +1,7 @@
 import GLKit
 
 struct ModelVertex {
-    static let size = GLsizei(sizeof(Float) * 10)
+    static let size = sizeof(Float) * 10
 
     let position: GLKVector3
     let normal: GLKVector3

@@ -13,9 +13,13 @@ func quaternionForRotate(from from: IcosahedronVertex, to: IcosahedronVertex) ->
     return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5)
 }
 
-struct IcosahedronModel {
-    static let NumberOfPointVertices: GLsizei = 12
-    static let NumberOfLineVertices: GLsizei = 30 * 2
+class IcosahedronModel: Renderable {
+    var modelViewMatrix = GLKMatrix4Identity
+    var quaternion = GLKQuaternionIdentity
+    var pointVertexArray: GLuint = 0
+    var lineVertexArray: GLuint = 0
+    var pointVertexBuffer: GLuint = 0
+    var lineVertexBuffer: GLuint = 0
 
     var pointModelVertices: [ModelVertex]
     var lineModelVertices: [ModelVertex]
@@ -26,6 +30,7 @@ struct IcosahedronModel {
     var lineVertices: [Float] {
         return lineModelVertices.flatMap { $0.v }
     }
+    var vertexTextureInfo: GLKTextureInfo!
 
     init() {
         let ratio: Float = (1.0 + sqrt(5.0)) / 2.0
@@ -185,5 +190,73 @@ struct IcosahedronModel {
         vertices["D"]!.leftFoot  = vertices["J"]
         vertices["D"]!.rightHand = vertices["H"]
         vertices["D"]!.rightFoot = vertices["B"]
+    }
+
+    deinit {
+        glDeleteBuffers(1, &pointVertexBuffer)
+        glDeleteBuffers(1, &lineVertexBuffer)
+        glDeleteVertexArrays(1, &pointVertexArray)
+        glDeleteVertexArrays(1, &lineVertexArray)
+    }
+
+    func prepare() {
+        do {
+            let vertexTexturePath = NSBundle.mainBundle().pathForResource("vertex", ofType: "png")!
+            vertexTextureInfo = try GLKTextureLoader.textureWithContentsOfFile(vertexTexturePath, options: nil)
+        } catch {
+            fatalError("Failed to load vertex texture")
+        }
+
+        glGenVertexArrays(1, &pointVertexArray)
+        glBindVertexArray(pointVertexArray)
+
+        glGenBuffers(1, &pointVertexBuffer)
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), pointVertexBuffer)
+        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * pointModelVertices.count), pointVertices, GLenum(GL_STATIC_DRAW))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(0))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 3))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 6))
+
+        glGenVertexArrays(1, &lineVertexArray)
+        glBindVertexArray(lineVertexArray)
+        glGenBuffers(1, &lineVertexBuffer)
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), lineVertexBuffer)
+        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * lineModelVertices.count), lineVertices, GLenum(GL_STATIC_DRAW))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(0))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 3))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 6))
+
+        glBindVertexArray(0)
+    }
+
+    func render(program: ModelShaderProgram) {
+        glActiveTexture(GLenum(GL_TEXTURE0))
+        glBindTexture(GLenum(GL_TEXTURE_2D), vertexTextureInfo.name)
+
+        program.modelViewMatrix = modelViewMatrix
+        program.vertexTexture = 0
+
+        glLineWidth(8)
+        program.useTexture = false
+        glBindVertexArray(lineVertexArray)
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), lineVertexBuffer)
+        glDrawArrays(GLenum(GL_LINES), 0, GLsizei(lineModelVertices.count))
+
+        program.useTexture = true
+        glBindVertexArray(pointVertexArray)
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), pointVertexBuffer)
+        glDrawArrays(GLenum(GL_POINTS), 0, GLsizei(pointModelVertices.count))
     }
 }

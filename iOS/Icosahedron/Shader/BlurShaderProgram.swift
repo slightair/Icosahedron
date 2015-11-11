@@ -1,7 +1,7 @@
 import GLKit
 import OpenGLES
 
-class BlurShaderProgram : ShaderProgram {
+class BlurShaderProgram: ShaderProgram {
     enum Uniform: Int {
         case SourceTexture
         case TexelSize

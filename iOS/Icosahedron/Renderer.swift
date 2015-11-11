@@ -1,38 +1,20 @@
 import GLKit
 import OpenGLES
 
-func BUFFER_OFFSET(i: Int) -> UnsafePointer<Void> {
-    let p: UnsafePointer<Void> = nil
-    return p.advancedBy(i)
-}
-
 class Renderer: NSObject, GLKViewDelegate {
-    enum VertexArray: Int {
-        case IcosahedronPoints
-        case IcosahedronLines
-        case Marker
-        case Canvas
-
-        static var count: Int {
-            return [IcosahedronPoints, IcosahedronLines, Marker, Canvas].count
-        }
-    }
-
     var modelShaderProgram: ModelShaderProgram!
     var blurShaderProgram: BlurShaderProgram!
-
-    var vertexArrays = [GLuint](count: VertexArray.count, repeatedValue: 0)
-    var vertexBufferObjects = [GLuint](count: VertexArray.count, repeatedValue: 0)
 
     let context: EAGLContext
     let icosahedronModel = IcosahedronModel()
     let markerModel = TetrahedronModel()
+    let blurCanvas = BlurCanvas()
+
     var prevVertex: IcosahedronVertex!
     var currentVertex: IcosahedronVertex!
     var prevQuaternion = GLKQuaternionIdentity
     var currentQuaternion = GLKQuaternionIdentity
     var animationProgress: Float = 1.0
-    var vertexTextureInfo: GLKTextureInfo!
 
     var projectionMatrix = GLKMatrix4Identity
     var normalMatrix = GLKMatrix3Identity
@@ -40,9 +22,6 @@ class Renderer: NSObject, GLKViewDelegate {
     var modelColorTexture: GLuint = 0
     var modelDepthRenderBufferObject: GLuint = 0
     var texelSize = GLKVector2Make(0, 0)
-
-    var modelViewMatrix = GLKMatrix4Identity
-    var markerMatrix = GLKMatrix4Identity
 
     deinit {
         tearDownGL()
@@ -56,13 +35,6 @@ class Renderer: NSObject, GLKViewDelegate {
         currentVertex = icosahedronModel.vertices["C"]
 
         setUpGL()
-
-        do {
-            let vertexTexturePath = NSBundle.mainBundle().pathForResource("vertex", ofType: "png")!
-            vertexTextureInfo = try GLKTextureLoader.textureWithContentsOfFile(vertexTexturePath, options: nil)
-        } catch {
-            fatalError("Failed to load vertex texture")
-        }
     }
 
     func setUpGL() {
@@ -71,20 +43,9 @@ class Renderer: NSObject, GLKViewDelegate {
         modelShaderProgram = ModelShaderProgram()
         blurShaderProgram = BlurShaderProgram()
 
-        glGenVertexArrays(1, &vertexArrays[VertexArray.IcosahedronPoints.rawValue])
-        glGenVertexArrays(1, &vertexArrays[VertexArray.IcosahedronLines.rawValue])
-        glGenVertexArrays(1, &vertexArrays[VertexArray.Marker.rawValue])
-        glGenVertexArrays(1, &vertexArrays[VertexArray.Canvas.rawValue])
-
-        setUpIcosahedronPoints()
-        setUpIcosahedronLines()
-        setUpCanvas()
-
-        let markerID = VertexArray.Marker.rawValue
-        glBindVertexArray(vertexArrays[markerID])
-        glGenBuffers(1, &vertexBufferObjects[markerID])
-
-        glBindVertexArray(0)
+        blurCanvas.prepare()
+        icosahedronModel.prepare()
+        markerModel.prepare()
 
         let width = GLsizei(CGRectGetHeight(UIScreen.mainScreen().nativeBounds)) // long side
         let height = GLsizei(CGRectGetWidth(UIScreen.mainScreen().nativeBounds)) // short side
@@ -124,83 +85,8 @@ class Renderer: NSObject, GLKViewDelegate {
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), 0)
     }
 
-    func setUpIcosahedronPoints() {
-        let arrayID = VertexArray.IcosahedronPoints.rawValue
-        glBindVertexArray(vertexArrays[arrayID])
-        glGenBuffers(1, &vertexBufferObjects[arrayID])
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[arrayID])
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * IcosahedronModel.NumberOfPointVertices), icosahedronModel.pointVertices, GLenum(GL_STATIC_DRAW))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(0))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(sizeof(Float) * 3))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(sizeof(Float) * 6))
-    }
-
-    func setUpIcosahedronLines() {
-        let arrayID = VertexArray.IcosahedronLines.rawValue
-        glBindVertexArray(vertexArrays[arrayID])
-        glGenBuffers(1, &vertexBufferObjects[arrayID])
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[arrayID])
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * IcosahedronModel.NumberOfLineVertices), icosahedronModel.lineVertices, GLenum(GL_STATIC_DRAW))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(0))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(sizeof(Float) * 3))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(sizeof(Float) * 6))
-    }
-
-    func setUpCanvas() {
-        let vertices: [Float] = [
-            -1.0, -1.0, 0.0, 1.0, 1.0, 1.0, 1.0,
-            -1.0,  1.0, 0.0, 1.0, 1.0, 1.0, 1.0,
-             1.0, -1.0, 0.0, 1.0, 1.0, 1.0, 1.0,
-             1.0,  1.0, 0.0, 1.0, 1.0, 1.0, 1.0,
-        ]
-
-        let arrayID = VertexArray.Canvas.rawValue
-        glBindVertexArray(vertexArrays[arrayID])
-        glGenBuffers(1, &vertexBufferObjects[arrayID])
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[arrayID])
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(sizeof(Float) * vertices.count), vertices, GLenum(GL_STATIC_DRAW))
-
-        let stride = GLsizei(sizeof(Float) * 7)
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), stride, BUFFER_OFFSET(0))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), stride, BUFFER_OFFSET(sizeof(Float) * 3))
-    }
-
-    func updateMarker() {
-        let arrayID = VertexArray.Marker.rawValue
-        glBindVertexArray(vertexArrays[arrayID])
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[arrayID])
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * TetrahedronModel.NumberOfFaceVertices), markerModel.faceVertices(), GLenum(GL_DYNAMIC_DRAW))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(0))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(sizeof(Float) * 3))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), ModelVertex.size, BUFFER_OFFSET(sizeof(Float) * 6))
-    }
-
     func tearDownGL() {
         EAGLContext.setCurrentContext(context)
-
-        glDeleteBuffers(GLsizei(VertexArray.count), vertexBufferObjects)
-        glDeleteVertexArrays(GLsizei(VertexArray.count), vertexArrays)
 
         glDeleteTextures(1, &modelColorTexture)
         glDeleteRenderbuffers(1, &modelDepthRenderBufferObject)
@@ -210,7 +96,7 @@ class Renderer: NSObject, GLKViewDelegate {
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval) {
-        let baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -5.0)
+        let baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -1.0)
 
         if (animationProgress < 1.0) {
             animationProgress += Float(timeSinceLastUpdate) * 4
@@ -219,18 +105,21 @@ class Renderer: NSObject, GLKViewDelegate {
 
         let modelQuaternion = GLKQuaternionSlerp(prevQuaternion, currentQuaternion, animationProgress)
 
-        modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0)
+        var modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0)
         modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0)
         modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, GLKMatrix4MakeWithQuaternion(modelQuaternion))
         modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix)
+        icosahedronModel.modelViewMatrix = modelViewMatrix
 
-        normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelViewMatrix), nil)
+        modelViewMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, 0.0)
+        modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix)
+        markerModel.modelViewMatrix = modelViewMatrix
 
-        updateMarker()
+        normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(icosahedronModel.modelViewMatrix), nil)
     }
 
     func rotateModelWithTappedLocation(location: CGPoint) {
-        let locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(modelViewMatrix, nil), GLKVector3Make(Float(location.x), Float(location.y), 0))
+        let locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(icosahedronModel.modelViewMatrix, nil), GLKVector3Make(Float(location.x), Float(location.y), 0))
 
         var nearestDistance = FLT_MAX
         var nearestVertex: IcosahedronVertex?
@@ -280,30 +169,11 @@ class Renderer: NSObject, GLKViewDelegate {
 
         glUseProgram(modelShaderProgram.programID)
 
-        glActiveTexture(GLenum(GL_TEXTURE0))
-        glBindTexture(GLenum(GL_TEXTURE_2D), vertexTextureInfo.name)
-
         modelShaderProgram.projectionMatrix = projectionMatrix
         modelShaderProgram.normalMatrix = normalMatrix
-        modelShaderProgram.modelViewMatrix = modelViewMatrix
-        modelShaderProgram.vertexTexture = 0
 
-        glLineWidth(8)
-        modelShaderProgram.useTexture = false
-        glBindVertexArray(vertexArrays[VertexArray.IcosahedronLines.rawValue])
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.IcosahedronLines.rawValue])
-        glDrawArrays(GLenum(GL_LINES), 0, IcosahedronModel.NumberOfLineVertices)
-
-        modelShaderProgram.useTexture = true
-        glBindVertexArray(vertexArrays[VertexArray.IcosahedronPoints.rawValue])
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.IcosahedronPoints.rawValue])
-        glDrawArrays(GLenum(GL_POINTS), 0, IcosahedronModel.NumberOfPointVertices)
-
-        modelShaderProgram.modelViewMatrix = markerMatrix
-        modelShaderProgram.useTexture = false
-        glBindVertexArray(vertexArrays[VertexArray.Marker.rawValue])
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.Marker.rawValue])
-        glDrawArrays(GLenum(GL_TRIANGLE_STRIP), 0, TetrahedronModel.NumberOfFaceVertices)
+        icosahedronModel.render(modelShaderProgram)
+        markerModel.render(modelShaderProgram)
 
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), GLuint(defaultFrameBufferObject))
 
@@ -312,15 +182,10 @@ class Renderer: NSObject, GLKViewDelegate {
 
         glUseProgram(blurShaderProgram.programID)
 
-        glActiveTexture(GLenum(GL_TEXTURE0))
-        glBindTexture(GLenum(GL_TEXTURE_2D), modelColorTexture)
-        blurShaderProgram.sourceTexture = 0
         blurShaderProgram.texelSize = texelSize
         blurShaderProgram.useBlur = true
 
-        glBindVertexArray(vertexArrays[VertexArray.Canvas.rawValue])
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBufferObjects[VertexArray.Canvas.rawValue])
-        glDrawArrays(GLenum(GL_TRIANGLE_STRIP), 0, 4)
+        blurCanvas.render(blurShaderProgram, sourceTexture: modelColorTexture)
 
         glBindVertexArray(0)
     }

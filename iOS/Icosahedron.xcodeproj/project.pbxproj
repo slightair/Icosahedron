@@ -29,6 +29,7 @@
 		57D866CB1BF2ED5E0034DEDE /* ShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866CA1BF2ED5E0034DEDE /* ShaderProgram.swift */; };
 		57D866CD1BF2EF0C0034DEDE /* ModelShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866CC1BF2EF0C0034DEDE /* ModelShaderProgram.swift */; };
 		57D866CF1BF2EF190034DEDE /* BlurShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866CE1BF2EF190034DEDE /* BlurShaderProgram.swift */; };
+		57D866D11BF2FED20034DEDE /* BlurCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866D01BF2FED20034DEDE /* BlurCanvas.swift */; };
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
 		57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC9511BD7D180009423EA /* SpriteKit.framework */; };
 		57DDC9581BDB326B009423EA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC9571BDB326B009423EA /* GameScene.swift */; };
@@ -78,6 +79,7 @@
 		57D866CA1BF2ED5E0034DEDE /* ShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShaderProgram.swift; sourceTree = "<group>"; };
 		57D866CC1BF2EF0C0034DEDE /* ModelShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelShaderProgram.swift; sourceTree = "<group>"; };
 		57D866CE1BF2EF190034DEDE /* BlurShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurShaderProgram.swift; sourceTree = "<group>"; };
+		57D866D01BF2FED20034DEDE /* BlurCanvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurCanvas.swift; sourceTree = "<group>"; };
 		57DDC94F1BD7D173009423EA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		57DDC9511BD7D180009423EA /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		57DDC9571BDB326B009423EA /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				57D866C01BEDA8400034DEDE /* ModelVertex.swift */,
 				57D866C61BF0D2A90034DEDE /* TetrahedronModel.swift */,
 				57D866C81BF2EA1D0034DEDE /* Renderable.swift */,
+				57D866D01BF2FED20034DEDE /* BlurCanvas.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -364,6 +367,7 @@
 				57DDC95C1BDB338B009423EA /* IcosahedronVertex.swift in Sources */,
 				57D866CB1BF2ED5E0034DEDE /* ShaderProgram.swift in Sources */,
 				57D866CD1BF2EF0C0034DEDE /* ModelShaderProgram.swift in Sources */,
+				57D866D11BF2FED20034DEDE /* BlurCanvas.swift in Sources */,
 				57DDC9581BDB326B009423EA /* GameScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

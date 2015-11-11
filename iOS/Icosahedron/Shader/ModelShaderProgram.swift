@@ -1,7 +1,7 @@
 import GLKit
 import OpenGLES
 
-class ModelShaderProgram : ShaderProgram {
+class ModelShaderProgram: ShaderProgram {
     enum Uniform: Int {
         case ProjectionMatrix
         case ModelViewMatrix
