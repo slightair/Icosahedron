@@ -8,7 +8,7 @@ class Renderer: NSObject, GLKViewDelegate {
     var blurShaderProgram: BlurShaderProgram!
 
     let icosahedronModel = IcosahedronModel()
-    let markerModel = TetrahedronModel()
+    let markerModel: TetrahedronModel
     let blurCanvas = BlurCanvas()
 
     var projectionMatrix = GLKMatrix4Identity
@@ -26,6 +26,7 @@ class Renderer: NSObject, GLKViewDelegate {
 
     init(context: EAGLContext) {
         self.context = context
+        markerModel = TetrahedronModel(initPosition: icosahedronModel.currentVertex.coordinate)
 
         super.init()
 
@@ -111,8 +112,6 @@ class Renderer: NSObject, GLKViewDelegate {
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), modelFrameBufferObject)
 
         glEnable(GLenum(GL_DEPTH_TEST))
-        glEnable(GLenum(GL_BLEND))
-        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE))
 
         let buffers = [
             GLenum(GL_COLOR_ATTACHMENT0),

@@ -302,7 +302,7 @@ class IcosahedronModel: Renderable {
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), lineVertexBuffer)
         glDrawArrays(GLenum(GL_LINES), 0, GLsizei(lineModelVertices.count))
 
-        program.useTexture = true
+        program.useTexture = false
         glBindVertexArray(pointVertexArray)
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), pointVertexBuffer)
         glDrawArrays(GLenum(GL_POINTS), 0, GLsizei(pointModelVertices.count))
