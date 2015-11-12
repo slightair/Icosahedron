@@ -6,9 +6,10 @@ layout (location = 2) in vec4 color;
 
 out lowp vec4 colorVarying;
 
-uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
+uniform mat4 worldMatrix;
 uniform mat3 normalMatrix;
+uniform mat4 modelMatrix;
 
 void main()
 {
@@ -20,6 +21,6 @@ void main()
 
     colorVarying = diffuseColor * nDotVP * color;
 
-    gl_Position = projectionMatrix * modelViewMatrix * position;
+    gl_Position = projectionMatrix * worldMatrix * modelMatrix * position;
     gl_PointSize = 24.0;
 }

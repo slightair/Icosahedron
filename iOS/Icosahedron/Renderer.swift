@@ -8,10 +8,11 @@ class Renderer: NSObject, GLKViewDelegate {
     var blurShaderProgram: BlurShaderProgram!
 
     let icosahedronModel = IcosahedronModel()
-    let markerModel: TetrahedronModel
+    var markerModel: TetrahedronModel!
     let blurCanvas = BlurCanvas()
 
     var projectionMatrix = GLKMatrix4Identity
+    var worldMatrix = GLKMatrix4Identity
     var normalMatrix = GLKMatrix3Identity
 
     var modelFrameBufferObject: GLuint = 0
@@ -20,15 +21,23 @@ class Renderer: NSObject, GLKViewDelegate {
     var texelSize = GLKVector2Make(0, 0)
     var models: [Renderable] = []
 
+    var prevVertex: IcosahedronVertex!
+    var currentVertex: IcosahedronVertex!
+    var prevQuaternion = GLKQuaternionIdentity
+    var currentQuaternion = GLKQuaternionIdentity
+    var animationProgress: Float = 1.0
+
     deinit {
         tearDownGL()
     }
 
     init(context: EAGLContext) {
         self.context = context
-        markerModel = TetrahedronModel(initPosition: icosahedronModel.currentVertex.coordinate)
 
         super.init()
+
+        currentVertex = icosahedronModel.vertices["C"]
+        markerModel = TetrahedronModel(initPosition: currentVertex.coordinate)
 
         setUpGL()
 
@@ -96,11 +105,48 @@ class Renderer: NSObject, GLKViewDelegate {
         EAGLContext.setCurrentContext(nil)
     }
 
-    func update(timeSinceLastUpdate: NSTimeInterval) {
-        icosahedronModel.update(timeSinceLastUpdate)
-        markerModel.quaternion = icosahedronModel.quaternion
+    func rotateModelWithTappedLocation(location: CGPoint) {
+        let locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(worldMatrix, nil), GLKVector3Make(Float(location.x), Float(location.y), 0))
 
-        normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(icosahedronModel.modelViewMatrix), nil)
+        var nearestDistance = FLT_MAX
+        var nearestVertex: IcosahedronVertex?
+        for vertex in currentVertex.nextVertices {
+            let distance = GLKVector3Distance(locationVector, vertex.coordinate)
+            if distance < nearestDistance {
+                nearestDistance = distance
+                nearestVertex = vertex
+            }
+        }
+
+        if let selectedVertex = nearestVertex {
+            moveToVertex(selectedVertex)
+        }
+    }
+
+    func moveToVertex(vertex: IcosahedronVertex) {
+        prevVertex = currentVertex
+        currentVertex = vertex
+        animationProgress = 0.0
+
+        let relativeQuaternion = quaternionForRotate(from: currentVertex, to: prevVertex)
+
+        prevQuaternion = currentQuaternion
+        currentQuaternion = GLKQuaternionMultiply(currentQuaternion, relativeQuaternion)
+    }
+
+    func update(timeSinceLastUpdate: NSTimeInterval) {
+        if (animationProgress < 1.0) {
+            animationProgress += Float(timeSinceLastUpdate) * 4
+            animationProgress = min(1.0, animationProgress)
+        }
+
+        let baseQuaternion = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0)
+        let movingQuaternion = GLKQuaternionSlerp(prevQuaternion, currentQuaternion, animationProgress)
+        let worldQuaternion = GLKQuaternionMultiply(baseQuaternion, movingQuaternion)
+
+        let baseMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -1.0)
+        worldMatrix = GLKMatrix4Multiply(baseMatrix, GLKMatrix4MakeWithQuaternion(worldQuaternion))
+        normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(worldMatrix), nil)
     }
 
     // MARK: - GLKView delegate methods
@@ -124,6 +170,7 @@ class Renderer: NSObject, GLKViewDelegate {
         glUseProgram(modelShaderProgram.programID)
 
         modelShaderProgram.projectionMatrix = projectionMatrix
+        modelShaderProgram.worldMatrix = worldMatrix
         modelShaderProgram.normalMatrix = normalMatrix
 
         for model in models {

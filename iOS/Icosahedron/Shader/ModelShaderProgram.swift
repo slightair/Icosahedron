@@ -4,13 +4,14 @@ import OpenGLES
 class ModelShaderProgram: ShaderProgram {
     enum Uniform: Int {
         case ProjectionMatrix
-        case ModelViewMatrix
+        case WorldMatrix
         case NormalMatrix
+        case ModelMatrix
         case VertexTexture
         case UseTexture
 
         static var count: Int {
-            return [ProjectionMatrix, ModelViewMatrix, NormalMatrix, VertexTexture, UseTexture].count
+            return [ProjectionMatrix, WorldMatrix, NormalMatrix, ModelMatrix, VertexTexture, UseTexture].count
         }
     }
 
@@ -18,6 +19,14 @@ class ModelShaderProgram: ShaderProgram {
         didSet {
             withUnsafePointer(&projectionMatrix, {
                 glUniformMatrix4fv(uniforms[Uniform.ProjectionMatrix.rawValue], 1, 0, UnsafePointer($0))
+            })
+        }
+    }
+
+    var worldMatrix: GLKMatrix4 = GLKMatrix4Identity {
+        didSet {
+            withUnsafePointer(&worldMatrix, {
+                glUniformMatrix4fv(uniforms[Uniform.WorldMatrix.rawValue], 1, 0, UnsafePointer($0))
             })
         }
     }
@@ -30,10 +39,10 @@ class ModelShaderProgram: ShaderProgram {
         }
     }
 
-    var modelViewMatrix: GLKMatrix4 = GLKMatrix4Identity {
+    var modelMatrix: GLKMatrix4 = GLKMatrix4Identity {
         didSet {
-            withUnsafePointer(&modelViewMatrix, {
-                glUniformMatrix4fv(uniforms[Uniform.ModelViewMatrix.rawValue], 1, 0, UnsafePointer($0))
+            withUnsafePointer(&modelMatrix, {
+                glUniformMatrix4fv(uniforms[Uniform.ModelMatrix.rawValue], 1, 0, UnsafePointer($0))
             })
         }
     }
@@ -56,8 +65,9 @@ class ModelShaderProgram: ShaderProgram {
 
         uniforms = [GLint](count: Uniform.count, repeatedValue: 0)
         uniforms[Uniform.ProjectionMatrix.rawValue] = glGetUniformLocation(programID, "projectionMatrix")
+        uniforms[Uniform.WorldMatrix.rawValue] = glGetUniformLocation(programID, "worldMatrix")
         uniforms[Uniform.NormalMatrix.rawValue] = glGetUniformLocation(programID, "normalMatrix")
-        uniforms[Uniform.ModelViewMatrix.rawValue] = glGetUniformLocation(programID, "modelViewMatrix")
+        uniforms[Uniform.ModelMatrix.rawValue] = glGetUniformLocation(programID, "modelMatrix")
         uniforms[Uniform.VertexTexture.rawValue] = glGetUniformLocation(programID, "vertexTexture")
         uniforms[Uniform.UseTexture.rawValue] = glGetUniformLocation(programID, "useTexture")
     }
