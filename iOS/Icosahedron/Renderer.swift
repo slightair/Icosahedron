@@ -8,7 +8,7 @@ class Renderer: NSObject, GLKViewDelegate {
     var blurShaderProgram: BlurShaderProgram!
 
     let icosahedronModel = IcosahedronModel()
-    var markerModel: TetrahedronModel!
+    var markerModel = TetrahedronModel()
     let blurCanvas = BlurCanvas()
 
     var projectionMatrix = GLKMatrix4Identity
@@ -37,7 +37,7 @@ class Renderer: NSObject, GLKViewDelegate {
         super.init()
 
         currentVertex = icosahedronModel.vertices["C"]
-        markerModel = TetrahedronModel(initPosition: currentVertex.coordinate)
+        markerModel.position = currentVertex.coordinate
 
         setUpGL()
 

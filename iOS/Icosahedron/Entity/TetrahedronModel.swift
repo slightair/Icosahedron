@@ -1,8 +1,7 @@
 import GLKit
 
 class TetrahedronModel: Renderable {
-    var position: GLKVector3
-    var modelMatrix = GLKMatrix4Identity
+    var position = GLKVector3Make(0.0, 0.0, 0.0)
     var quaternion = GLKQuaternionIdentity
     var vertexArray: GLuint = 0
     var vertexBuffer: GLuint = 0
@@ -16,9 +15,7 @@ class TetrahedronModel: Renderable {
         return GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(x, y), GLKVector3Subtract(y, z)))
     }
 
-    init(initPosition: GLKVector3) {
-        position = initPosition
-
+    init() {
         let scale: Float = 0.02
 
         let coordA = GLKVector3MultiplyScalar(GLKVector3Make( 1, 1, 1), scale)
@@ -65,8 +62,7 @@ class TetrahedronModel: Renderable {
     }
 
     func render(program: ModelShaderProgram) {
-        let translationMatrix = GLKMatrix4MakeTranslation(position.x, position.y, position.z)
-        program.modelMatrix = GLKMatrix4Multiply(modelMatrix, translationMatrix)
+        program.modelMatrix = modelMatrix
         program.useTexture = false
 
         glBindVertexArray(vertexArray)

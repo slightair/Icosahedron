@@ -14,7 +14,8 @@ func quaternionForRotate(from from: IcosahedronVertex, to: IcosahedronVertex) ->
 }
 
 class IcosahedronModel: Renderable {
-    var modelMatrix = GLKMatrix4Identity
+    let position = GLKVector3Make(0.0, 0.0, 0.0)
+    let quaternion = GLKQuaternionIdentity
     var pointVertexArray: GLuint = 0
     var lineVertexArray: GLuint = 0
     var pointVertexBuffer: GLuint = 0
