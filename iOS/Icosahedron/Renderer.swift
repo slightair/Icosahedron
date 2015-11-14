@@ -1,6 +1,19 @@
 import GLKit
 import OpenGLES
 
+func quaternionForRotate(from from: GLKVector3, to: GLKVector3) -> GLKQuaternion {
+    let normalizedFrom = GLKVector3Normalize(from)
+    let normalizedTo = GLKVector3Normalize(to)
+
+    let cosineTheta = GLKVector3DotProduct(normalizedFrom, normalizedTo)
+    let rotationAxis = GLKVector3CrossProduct(normalizedFrom, normalizedTo)
+
+    let s = sqrtf((1 + cosineTheta) * 2)
+    let inverse = 1 / s
+
+    return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5)
+}
+
 class Renderer: NSObject, GLKViewDelegate {
     let context: EAGLContext
 
@@ -38,6 +51,7 @@ class Renderer: NSObject, GLKViewDelegate {
 
         currentVertex = icosahedronModel.vertices["C"]
         markerModel.position = currentVertex.coordinate
+        markerModel.quaternion = quaternionForRotate(from: markerModel.topCoordinate, to: markerModel.position)
 
         setUpGL()
 
@@ -128,7 +142,7 @@ class Renderer: NSObject, GLKViewDelegate {
         currentVertex = vertex
         animationProgress = 0.0
 
-        let relativeQuaternion = quaternionForRotate(from: currentVertex, to: prevVertex)
+        let relativeQuaternion = quaternionForRotate(from: currentVertex.coordinate, to: prevVertex.coordinate)
 
         prevQuaternion = currentQuaternion
         currentQuaternion = GLKQuaternionMultiply(currentQuaternion, relativeQuaternion)

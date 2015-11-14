@@ -1,21 +1,9 @@
 import GLKit
 
-func quaternionForRotate(from from: IcosahedronVertex, to: IcosahedronVertex) -> GLKQuaternion {
-    let normalizedFrom = GLKVector3Normalize(from.coordinate)
-    let normalizedTo = GLKVector3Normalize(to.coordinate)
-
-    let cosineTheta = GLKVector3DotProduct(normalizedFrom, normalizedTo)
-    let rotationAxis = GLKVector3CrossProduct(normalizedFrom, normalizedTo)
-
-    let s = sqrtf((1 + cosineTheta) * 2)
-    let inverse = 1 / s
-
-    return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5)
-}
-
 class IcosahedronModel: Renderable {
     let position = GLKVector3Make(0.0, 0.0, 0.0)
     let quaternion = GLKQuaternionIdentity
+
     var pointVertexArray: GLuint = 0
     var lineVertexArray: GLuint = 0
     var pointVertexBuffer: GLuint = 0

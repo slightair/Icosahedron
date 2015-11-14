@@ -3,6 +3,7 @@ import GLKit
 class TetrahedronModel: Renderable {
     var position = GLKVector3Make(0.0, 0.0, 0.0)
     var quaternion = GLKQuaternionIdentity
+
     var vertexArray: GLuint = 0
     var vertexBuffer: GLuint = 0
 
@@ -14,6 +15,7 @@ class TetrahedronModel: Renderable {
     func createFaceNormal(x: GLKVector3, y: GLKVector3, z: GLKVector3) -> GLKVector3 {
         return GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(x, y), GLKVector3Subtract(y, z)))
     }
+    let topCoordinate: GLKVector3
 
     init() {
         let scale: Float = 0.02
@@ -33,6 +35,8 @@ class TetrahedronModel: Renderable {
             ModelVertex(position: coordD, normal: coordD, color: pointColor),
             ModelVertex(position: coordB, normal: coordB, color: pointColor),
         ]
+
+        topCoordinate = coordA
     }
 
     deinit {
