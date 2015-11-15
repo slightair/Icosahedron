@@ -3,26 +3,31 @@ import GLKit
 class IcosahedronModel: Renderable {
     let position = GLKVector3Make(0.0, 0.0, 0.0)
     let quaternion = GLKQuaternionIdentity
-
     var localModelVertices: [ModelVertex]
+
+    class var scale: Float {
+        return 0.15
+    }
+    class var faceColor: GLKVector4 {
+        return GLKVector4Make(1.0, 1.0, 1.0, 1.0)
+    }
     var pointDict: [String: IcosahedronVertex] = [:]
 
     init() {
         let ratio: Float = (1.0 + sqrt(5.0)) / 2.0
-        let scale: Float = 0.15
 
-        let coordG = GLKVector3MultiplyScalar(GLKVector3Make( ratio,  0,  1), scale)
-        let coordE = GLKVector3MultiplyScalar(GLKVector3Make( ratio,  0, -1), scale)
-        let coordH = GLKVector3MultiplyScalar(GLKVector3Make(-ratio,  0,  1), scale)
-        let coordD = GLKVector3MultiplyScalar(GLKVector3Make(-ratio,  0, -1), scale)
-        let coordA = GLKVector3MultiplyScalar(GLKVector3Make( 1,  ratio,  0), scale)
-        let coordB = GLKVector3MultiplyScalar(GLKVector3Make(-1,  ratio,  0), scale)
-        let coordK = GLKVector3MultiplyScalar(GLKVector3Make( 1, -ratio,  0), scale)
-        let coordJ = GLKVector3MultiplyScalar(GLKVector3Make(-1, -ratio,  0), scale)
-        let coordF = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1,  ratio), scale)
-        let coordL = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1,  ratio), scale)
-        let coordC = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1, -ratio), scale)
-        let coordI = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1, -ratio), scale)
+        let coordG = GLKVector3MultiplyScalar(GLKVector3Make( ratio,  0,  1), self.dynamicType.scale)
+        let coordE = GLKVector3MultiplyScalar(GLKVector3Make( ratio,  0, -1), self.dynamicType.scale)
+        let coordH = GLKVector3MultiplyScalar(GLKVector3Make(-ratio,  0,  1), self.dynamicType.scale)
+        let coordD = GLKVector3MultiplyScalar(GLKVector3Make(-ratio,  0, -1), self.dynamicType.scale)
+        let coordA = GLKVector3MultiplyScalar(GLKVector3Make( 1,  ratio,  0), self.dynamicType.scale)
+        let coordB = GLKVector3MultiplyScalar(GLKVector3Make(-1,  ratio,  0), self.dynamicType.scale)
+        let coordK = GLKVector3MultiplyScalar(GLKVector3Make( 1, -ratio,  0), self.dynamicType.scale)
+        let coordJ = GLKVector3MultiplyScalar(GLKVector3Make(-1, -ratio,  0), self.dynamicType.scale)
+        let coordF = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1,  ratio), self.dynamicType.scale)
+        let coordL = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1,  ratio), self.dynamicType.scale)
+        let coordC = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1, -ratio), self.dynamicType.scale)
+        let coordI = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1, -ratio), self.dynamicType.scale)
 
         let normalABF = createFaceNormal(coordA, y: coordB, z: coordF)
         let normalACB = createFaceNormal(coordA, y: coordC, z: coordB)
@@ -45,88 +50,86 @@ class IcosahedronModel: Renderable {
         let normalIKJ = createFaceNormal(coordI, y: coordK, z: coordJ)
         let normalJKL = createFaceNormal(coordJ, y: coordK, z: coordL)
 
-        let faceColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
-
         localModelVertices = [
-            ModelVertex(position: coordA, normal: normalABF, color: faceColor),
-            ModelVertex(position: coordB, normal: normalABF, color: faceColor),
-            ModelVertex(position: coordF, normal: normalABF, color: faceColor),
+            ModelVertex(position: coordA, normal: normalABF, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordB, normal: normalABF, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordF, normal: normalABF, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordA, normal: normalACB, color: faceColor),
-            ModelVertex(position: coordC, normal: normalACB, color: faceColor),
-            ModelVertex(position: coordB, normal: normalACB, color: faceColor),
+            ModelVertex(position: coordA, normal: normalACB, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordC, normal: normalACB, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordB, normal: normalACB, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordA, normal: normalAEC, color: faceColor),
-            ModelVertex(position: coordE, normal: normalAEC, color: faceColor),
-            ModelVertex(position: coordC, normal: normalAEC, color: faceColor),
+            ModelVertex(position: coordA, normal: normalAEC, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordE, normal: normalAEC, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordC, normal: normalAEC, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordA, normal: normalAFG, color: faceColor),
-            ModelVertex(position: coordF, normal: normalAFG, color: faceColor),
-            ModelVertex(position: coordG, normal: normalAFG, color: faceColor),
+            ModelVertex(position: coordA, normal: normalAFG, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordF, normal: normalAFG, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordG, normal: normalAFG, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordA, normal: normalAGE, color: faceColor),
-            ModelVertex(position: coordG, normal: normalAGE, color: faceColor),
-            ModelVertex(position: coordE, normal: normalAGE, color: faceColor),
+            ModelVertex(position: coordA, normal: normalAGE, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordG, normal: normalAGE, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordE, normal: normalAGE, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordB, normal: normalBCD, color: faceColor),
-            ModelVertex(position: coordC, normal: normalBCD, color: faceColor),
-            ModelVertex(position: coordD, normal: normalBCD, color: faceColor),
+            ModelVertex(position: coordB, normal: normalBCD, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordC, normal: normalBCD, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordD, normal: normalBCD, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordB, normal: normalBDH, color: faceColor),
-            ModelVertex(position: coordD, normal: normalBDH, color: faceColor),
-            ModelVertex(position: coordH, normal: normalBDH, color: faceColor),
+            ModelVertex(position: coordB, normal: normalBDH, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordD, normal: normalBDH, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordH, normal: normalBDH, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordB, normal: normalBHF, color: faceColor),
-            ModelVertex(position: coordH, normal: normalBHF, color: faceColor),
-            ModelVertex(position: coordF, normal: normalBHF, color: faceColor),
+            ModelVertex(position: coordB, normal: normalBHF, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordH, normal: normalBHF, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordF, normal: normalBHF, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordC, normal: normalCEI, color: faceColor),
-            ModelVertex(position: coordE, normal: normalCEI, color: faceColor),
-            ModelVertex(position: coordI, normal: normalCEI, color: faceColor),
+            ModelVertex(position: coordC, normal: normalCEI, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordE, normal: normalCEI, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordI, normal: normalCEI, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordC, normal: normalCID, color: faceColor),
-            ModelVertex(position: coordI, normal: normalCID, color: faceColor),
-            ModelVertex(position: coordD, normal: normalCID, color: faceColor),
+            ModelVertex(position: coordC, normal: normalCID, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordI, normal: normalCID, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordD, normal: normalCID, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordD, normal: normalDIJ, color: faceColor),
-            ModelVertex(position: coordI, normal: normalDIJ, color: faceColor),
-            ModelVertex(position: coordJ, normal: normalDIJ, color: faceColor),
+            ModelVertex(position: coordD, normal: normalDIJ, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordI, normal: normalDIJ, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordJ, normal: normalDIJ, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordD, normal: normalDJH, color: faceColor),
-            ModelVertex(position: coordJ, normal: normalDJH, color: faceColor),
-            ModelVertex(position: coordH, normal: normalDJH, color: faceColor),
+            ModelVertex(position: coordD, normal: normalDJH, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordJ, normal: normalDJH, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordH, normal: normalDJH, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordE, normal: normalEGK, color: faceColor),
-            ModelVertex(position: coordG, normal: normalEGK, color: faceColor),
-            ModelVertex(position: coordK, normal: normalEGK, color: faceColor),
+            ModelVertex(position: coordE, normal: normalEGK, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordG, normal: normalEGK, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordK, normal: normalEGK, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordE, normal: normalEKI, color: faceColor),
-            ModelVertex(position: coordK, normal: normalEKI, color: faceColor),
-            ModelVertex(position: coordI, normal: normalEKI, color: faceColor),
+            ModelVertex(position: coordE, normal: normalEKI, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordK, normal: normalEKI, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordI, normal: normalEKI, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordF, normal: normalFHL, color: faceColor),
-            ModelVertex(position: coordH, normal: normalFHL, color: faceColor),
-            ModelVertex(position: coordL, normal: normalFHL, color: faceColor),
+            ModelVertex(position: coordF, normal: normalFHL, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordH, normal: normalFHL, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordL, normal: normalFHL, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordF, normal: normalFLG, color: faceColor),
-            ModelVertex(position: coordL, normal: normalFLG, color: faceColor),
-            ModelVertex(position: coordG, normal: normalFLG, color: faceColor),
+            ModelVertex(position: coordF, normal: normalFLG, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordL, normal: normalFLG, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordG, normal: normalFLG, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordG, normal: normalGLK, color: faceColor),
-            ModelVertex(position: coordL, normal: normalGLK, color: faceColor),
-            ModelVertex(position: coordK, normal: normalGLK, color: faceColor),
+            ModelVertex(position: coordG, normal: normalGLK, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordL, normal: normalGLK, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordK, normal: normalGLK, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordH, normal: normalHJL, color: faceColor),
-            ModelVertex(position: coordJ, normal: normalHJL, color: faceColor),
-            ModelVertex(position: coordL, normal: normalHJL, color: faceColor),
+            ModelVertex(position: coordH, normal: normalHJL, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordJ, normal: normalHJL, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordL, normal: normalHJL, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordI, normal: normalIKJ, color: faceColor),
-            ModelVertex(position: coordK, normal: normalIKJ, color: faceColor),
-            ModelVertex(position: coordJ, normal: normalIKJ, color: faceColor),
+            ModelVertex(position: coordI, normal: normalIKJ, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordK, normal: normalIKJ, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordJ, normal: normalIKJ, color: self.dynamicType.faceColor),
 
-            ModelVertex(position: coordJ, normal: normalJKL, color: faceColor),
-            ModelVertex(position: coordK, normal: normalJKL, color: faceColor),
-            ModelVertex(position: coordL, normal: normalJKL, color: faceColor),
+            ModelVertex(position: coordJ, normal: normalJKL, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordK, normal: normalJKL, color: self.dynamicType.faceColor),
+            ModelVertex(position: coordL, normal: normalJKL, color: self.dynamicType.faceColor),
         ]
 
         let points = [

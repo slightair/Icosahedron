@@ -28,6 +28,7 @@ class Renderer: NSObject, GLKViewDelegate {
     var models: [Renderable] = []
     let icosahedronModel = IcosahedronModel()
     let markerModel = TetrahedronModel()
+    var items: [ItemModel] = []
 
     var prevVertex: IcosahedronVertex!
     var currentVertex: IcosahedronVertex!
@@ -41,12 +42,19 @@ class Renderer: NSObject, GLKViewDelegate {
 
     init(context: EAGLContext) {
         self.context = context
+        let points = icosahedronModel.pointDict.values.map{ $0.coordinate }
+        for coordinate in points {
+            let item = ItemModel()
+            item.setPosition(coordinate)
+
+            items.append(item)
+            models.append(item)
+        }
 
         super.init()
 
         currentVertex = icosahedronModel.pointDict["C"]
-        markerModel.position = currentVertex.coordinate
-        markerModel.quaternion = quaternionForRotate(from: markerModel.topCoordinate, to: markerModel.position)
+        markerModel.setPosition(currentVertex.coordinate)
 
         setUpGL()
 

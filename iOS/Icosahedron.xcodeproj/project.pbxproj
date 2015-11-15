@@ -15,6 +15,7 @@
 		573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132341BDCBF5200824EA5 /* ModelShader.vsh */; };
 		574A2B5F1BE89BD400CFA4B4 /* BlurShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 574A2B5D1BE89BD400CFA4B4 /* BlurShader.fsh */; };
 		574A2B601BE89BD400CFA4B4 /* BlurShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 574A2B5E1BE89BD400CFA4B4 /* BlurShader.vsh */; };
+		578117A61BF88E90006A575D /* ItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578117A51BF88E90006A575D /* ItemModel.swift */; };
 		579013A31BC1083400ADAE3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579013A21BC1083400ADAE3E /* AppDelegate.swift */; };
 		579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 579013AA1BC1083400ADAE3E /* Main.storyboard */; };
 		579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 579013AD1BC1083400ADAE3E /* Assets.xcassets */; };
@@ -63,6 +64,7 @@
 		573132341BDCBF5200824EA5 /* ModelShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.vsh; sourceTree = "<group>"; };
 		574A2B5D1BE89BD400CFA4B4 /* BlurShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BlurShader.fsh; sourceTree = "<group>"; };
 		574A2B5E1BE89BD400CFA4B4 /* BlurShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BlurShader.vsh; sourceTree = "<group>"; };
+		578117A51BF88E90006A575D /* ItemModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
 		5790139F1BC1083400ADAE3E /* Icosahedron.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Icosahedron.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		579013A21BC1083400ADAE3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		579013AB1BC1083400ADAE3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				57D866C61BF0D2A90034DEDE /* TetrahedronModel.swift */,
 				57D866C81BF2EA1D0034DEDE /* Renderable.swift */,
 				57D866D01BF2FED20034DEDE /* BlurCanvas.swift */,
+				578117A51BF88E90006A575D /* ItemModel.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -368,6 +371,7 @@
 				57D866CB1BF2ED5E0034DEDE /* ShaderProgram.swift in Sources */,
 				57D866CD1BF2EF0C0034DEDE /* ModelShaderProgram.swift in Sources */,
 				57D866D11BF2FED20034DEDE /* BlurCanvas.swift in Sources */,
+				578117A61BF88E90006A575D /* ItemModel.swift in Sources */,
 				57DDC9581BDB326B009423EA /* GameScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
