@@ -77,7 +77,7 @@ class ShaderProgram {
         if logLength > 0 {
             let log = UnsafeMutablePointer<GLchar>(malloc(Int(logLength)))
             glGetShaderInfoLog(shader, logLength, &logLength, log)
-            print("Shader compile log: \n\(log)")
+            NSLog("Shader compile log: \n%s", log)
             free(log)
         }
 
@@ -98,7 +98,7 @@ class ShaderProgram {
         if logLength > 0 {
             let log = UnsafeMutablePointer<GLchar>(malloc(Int(logLength)))
             glGetProgramInfoLog(program, logLength, &logLength, log)
-            print("Program link log:\n\(log)")
+            NSLog("Program link log:\n%s", log)
             free(log)
         }
 
@@ -118,7 +118,7 @@ class ShaderProgram {
         if logLength > 0 {
             let log = UnsafeMutablePointer<GLchar>(malloc(Int(logLength)))
             glGetProgramInfoLog(program, logLength, &logLength, log)
-            print("Program validate log:\n\(log)")
+            NSLog("Program validate log:\n%s", log)
             free(log)
         }
 
