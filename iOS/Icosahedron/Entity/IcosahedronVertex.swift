@@ -2,7 +2,26 @@ import Foundation
 import GLKit
 
 class IcosahedronVertex: CustomStringConvertible {
-    let name: String
+    enum Point: String {
+        case A = "A"
+        case B = "B"
+        case C = "C"
+        case D = "D"
+        case E = "E"
+        case F = "F"
+        case G = "G"
+        case H = "H"
+        case I = "I"
+        case J = "J"
+        case K = "K"
+        case L = "L"
+
+        static var values: [Point] {
+            return [A, B, C, D, E, F, G, H, I, J, K, L]
+        }
+    }
+
+    let point: Point
     let coordinate: GLKVector3
 
     var head: IcosahedronVertex!
@@ -22,15 +41,15 @@ class IcosahedronVertex: CustomStringConvertible {
     }
 
     var nextVertexNames: [String] {
-        return nextVertices.map { $0.name }
+        return nextVertices.map { $0.point.rawValue }
     }
 
     var description: String {
-        return "\(name) \(NSStringFromGLKVector3(coordinate))"
+        return "\(point.rawValue) \(NSStringFromGLKVector3(coordinate))"
     }
 
-    init(name: String, coordinate: GLKVector3) {
-        self.name = name
+    init(point: Point, coordinate: GLKVector3) {
+        self.point = point
         self.coordinate = coordinate
     }
 }

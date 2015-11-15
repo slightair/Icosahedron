@@ -42,10 +42,9 @@ class Renderer: NSObject, GLKViewDelegate {
 
     init(context: EAGLContext) {
         self.context = context
-        let points = icosahedronModel.pointDict.values.map{ $0.coordinate }
-        for coordinate in points {
+        for point in IcosahedronVertex.Point.values {
             let item = ItemModel()
-            item.setPosition(coordinate)
+            item.setPosition(icosahedronModel.pointDict[point]!.coordinate)
 
             items.append(item)
             models.append(item)
@@ -53,7 +52,8 @@ class Renderer: NSObject, GLKViewDelegate {
 
         super.init()
 
-        currentVertex = icosahedronModel.pointDict["C"]
+        let point = IcosahedronVertex.Point.C
+        currentVertex = icosahedronModel.pointDict[point]
         markerModel.setPosition(currentVertex.coordinate)
 
         setUpGL()
