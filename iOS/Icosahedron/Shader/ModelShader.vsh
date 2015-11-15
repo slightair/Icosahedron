@@ -13,7 +13,7 @@ uniform mat4 modelMatrix;
 
 void main()
 {
-    vec3 eyeNormal = normalize(normalMatrix * normal);
+    vec3 eyeNormal = normalize(normalMatrix * mat3(modelMatrix) * normal);
     vec3 lightPosition = vec3(0.0, 0.0, 1.0);
     vec4 diffuseColor = vec4(1.0, 1.0, 1.0, 1.0);
 

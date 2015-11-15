@@ -11,10 +11,6 @@ class TetrahedronModel: Renderable {
     var vertices: [Float] {
         return modelVertices.flatMap { $0.v }
     }
-
-    func createFaceNormal(x: GLKVector3, y: GLKVector3, z: GLKVector3) -> GLKVector3 {
-        return GLKVector3Normalize(GLKVector3CrossProduct(GLKVector3Subtract(x, y), GLKVector3Subtract(y, z)))
-    }
     let topCoordinate: GLKVector3
 
     init() {
@@ -25,15 +21,29 @@ class TetrahedronModel: Renderable {
         let coordC = GLKVector3MultiplyScalar(GLKVector3Make(-1, 1,-1), scale)
         let coordD = GLKVector3MultiplyScalar(GLKVector3Make(-1,-1, 1), scale)
 
-        let pointColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
+        let faceColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
+
+        let normalDCB = createFaceNormal(coordD, y: coordC, z: coordB)
+        let normalCAB = createFaceNormal(coordC, y: coordA, z: coordB)
+        let normalCDA = createFaceNormal(coordC, y: coordD, z: coordA)
+        let normalBAD = createFaceNormal(coordB, y: coordA, z: coordD)
 
         modelVertices = [
-            ModelVertex(position: coordD, normal: coordD, color: pointColor),
-            ModelVertex(position: coordB, normal: coordB, color: pointColor),
-            ModelVertex(position: coordC, normal: coordC, color: pointColor),
-            ModelVertex(position: coordA, normal: coordA, color: pointColor),
-            ModelVertex(position: coordD, normal: coordD, color: pointColor),
-            ModelVertex(position: coordB, normal: coordB, color: pointColor),
+            ModelVertex(position: coordD, normal: normalDCB, color: faceColor),
+            ModelVertex(position: coordC, normal: normalDCB, color: faceColor),
+            ModelVertex(position: coordB, normal: normalDCB, color: faceColor),
+
+            ModelVertex(position: coordC, normal: normalCAB, color: faceColor),
+            ModelVertex(position: coordA, normal: normalCAB, color: faceColor),
+            ModelVertex(position: coordB, normal: normalCAB, color: faceColor),
+
+            ModelVertex(position: coordC, normal: normalCDA, color: faceColor),
+            ModelVertex(position: coordD, normal: normalCDA, color: faceColor),
+            ModelVertex(position: coordA, normal: normalCDA, color: faceColor),
+
+            ModelVertex(position: coordB, normal: normalBAD, color: faceColor),
+            ModelVertex(position: coordA, normal: normalBAD, color: faceColor),
+            ModelVertex(position: coordD, normal: normalBAD, color: faceColor),
         ]
 
         topCoordinate = coordA
@@ -71,6 +81,6 @@ class TetrahedronModel: Renderable {
 
         glBindVertexArray(vertexArray)
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-        glDrawArrays(GLenum(GL_TRIANGLE_STRIP), 0, GLsizei(modelVertices.count))
+        glDrawArrays(GLenum(GL_TRIANGLES), 0, GLsizei(modelVertices.count))
     }
 }
