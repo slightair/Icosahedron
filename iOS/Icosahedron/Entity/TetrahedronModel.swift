@@ -21,12 +21,12 @@ class TetrahedronModel: Renderable {
         let coordC = GLKVector3MultiplyScalar(GLKVector3Make(-1, 1,-1), scale)
         let coordD = GLKVector3MultiplyScalar(GLKVector3Make(-1,-1, 1), scale)
 
-        let faceColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
-
         let normalDCB = createFaceNormal(coordD, y: coordC, z: coordB)
         let normalCAB = createFaceNormal(coordC, y: coordA, z: coordB)
         let normalCDA = createFaceNormal(coordC, y: coordD, z: coordA)
         let normalBAD = createFaceNormal(coordB, y: coordA, z: coordD)
+
+        let faceColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
 
         modelVertices = [
             ModelVertex(position: coordD, normal: normalDCB, color: faceColor),

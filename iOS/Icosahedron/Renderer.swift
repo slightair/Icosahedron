@@ -43,7 +43,7 @@ class Renderer: NSObject, GLKViewDelegate {
 
         super.init()
 
-        currentVertex = icosahedronModel.vertices["C"]
+        currentVertex = icosahedronModel.pointDict["C"]
         markerModel.position = currentVertex.coordinate
         markerModel.quaternion = quaternionForRotate(from: markerModel.topCoordinate, to: markerModel.position)
 

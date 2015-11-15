@@ -4,20 +4,14 @@ class IcosahedronModel: Renderable {
     let position = GLKVector3Make(0.0, 0.0, 0.0)
     let quaternion = GLKQuaternionIdentity
 
-    var pointVertexArray: GLuint = 0
-    var lineVertexArray: GLuint = 0
-    var pointVertexBuffer: GLuint = 0
-    var lineVertexBuffer: GLuint = 0
+    var vertexArray: GLuint = 0
+    var vertexBuffer: GLuint = 0
 
-    var pointModelVertices: [ModelVertex]
-    var lineModelVertices: [ModelVertex]
-    var vertices: [String: IcosahedronVertex] = [:]
-    var pointVertices: [Float] {
-        return pointModelVertices.flatMap { $0.v }
+    var modelVertices: [ModelVertex]
+    var vertices: [Float] {
+        return modelVertices.flatMap { $0.v }
     }
-    var lineVertices: [Float] {
-        return lineModelVertices.flatMap { $0.v }
-    }
+    var pointDict: [String: IcosahedronVertex] = [:]
     var vertexTextureInfo: GLKTextureInfo!
 
     init() {
@@ -37,55 +31,109 @@ class IcosahedronModel: Renderable {
         let coordC = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1, -ratio), scale)
         let coordI = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1, -ratio), scale)
 
-        let pointColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
-        let lineColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
+        let normalABF = createFaceNormal(coordA, y: coordB, z: coordF)
+        let normalACB = createFaceNormal(coordA, y: coordC, z: coordB)
+        let normalAEC = createFaceNormal(coordA, y: coordE, z: coordC)
+        let normalAFG = createFaceNormal(coordA, y: coordF, z: coordG)
+        let normalAGE = createFaceNormal(coordA, y: coordG, z: coordE)
+        let normalBCD = createFaceNormal(coordB, y: coordC, z: coordD)
+        let normalBDH = createFaceNormal(coordB, y: coordD, z: coordH)
+        let normalBHF = createFaceNormal(coordB, y: coordH, z: coordF)
+        let normalCEI = createFaceNormal(coordC, y: coordE, z: coordI)
+        let normalCID = createFaceNormal(coordC, y: coordI, z: coordD)
+        let normalDIJ = createFaceNormal(coordD, y: coordI, z: coordJ)
+        let normalDJH = createFaceNormal(coordD, y: coordJ, z: coordH)
+        let normalEGK = createFaceNormal(coordE, y: coordG, z: coordK)
+        let normalEKI = createFaceNormal(coordE, y: coordK, z: coordI)
+        let normalFHL = createFaceNormal(coordF, y: coordH, z: coordL)
+        let normalFLG = createFaceNormal(coordF, y: coordL, z: coordG)
+        let normalGLK = createFaceNormal(coordG, y: coordL, z: coordK)
+        let normalHJL = createFaceNormal(coordH, y: coordJ, z: coordL)
+        let normalIKJ = createFaceNormal(coordI, y: coordK, z: coordJ)
+        let normalJKL = createFaceNormal(coordJ, y: coordK, z: coordL)
 
-        pointModelVertices = [
-            ModelVertex(position: coordA, normal: coordA, color: pointColor),
-            ModelVertex(position: coordB, normal: coordB, color: pointColor),
-            ModelVertex(position: coordC, normal: coordC, color: pointColor),
-            ModelVertex(position: coordD, normal: coordD, color: pointColor),
-            ModelVertex(position: coordE, normal: coordE, color: pointColor),
-            ModelVertex(position: coordF, normal: coordF, color: pointColor),
-            ModelVertex(position: coordG, normal: coordG, color: pointColor),
-            ModelVertex(position: coordH, normal: coordH, color: pointColor),
-            ModelVertex(position: coordI, normal: coordI, color: pointColor),
-            ModelVertex(position: coordJ, normal: coordJ, color: pointColor),
-            ModelVertex(position: coordK, normal: coordK, color: pointColor),
-            ModelVertex(position: coordL, normal: coordL, color: pointColor),
-        ]
+        let faceColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
 
-        lineModelVertices = [
-            ModelVertex(position: coordA, normal: coordA, color: lineColor), ModelVertex(position: coordB, normal: coordB, color: lineColor),
-            ModelVertex(position: coordA, normal: coordA, color: lineColor), ModelVertex(position: coordC, normal: coordC, color: lineColor),
-            ModelVertex(position: coordA, normal: coordA, color: lineColor), ModelVertex(position: coordE, normal: coordE, color: lineColor),
-            ModelVertex(position: coordA, normal: coordA, color: lineColor), ModelVertex(position: coordF, normal: coordF, color: lineColor),
-            ModelVertex(position: coordA, normal: coordA, color: lineColor), ModelVertex(position: coordG, normal: coordG, color: lineColor),
-            ModelVertex(position: coordB, normal: coordB, color: lineColor), ModelVertex(position: coordC, normal: coordC, color: lineColor),
-            ModelVertex(position: coordB, normal: coordB, color: lineColor), ModelVertex(position: coordD, normal: coordD, color: lineColor),
-            ModelVertex(position: coordB, normal: coordB, color: lineColor), ModelVertex(position: coordF, normal: coordF, color: lineColor),
-            ModelVertex(position: coordB, normal: coordB, color: lineColor), ModelVertex(position: coordH, normal: coordH, color: lineColor),
-            ModelVertex(position: coordC, normal: coordC, color: lineColor), ModelVertex(position: coordD, normal: coordD, color: lineColor),
-            ModelVertex(position: coordC, normal: coordC, color: lineColor), ModelVertex(position: coordE, normal: coordE, color: lineColor),
-            ModelVertex(position: coordC, normal: coordC, color: lineColor), ModelVertex(position: coordI, normal: coordI, color: lineColor),
-            ModelVertex(position: coordD, normal: coordD, color: lineColor), ModelVertex(position: coordH, normal: coordH, color: lineColor),
-            ModelVertex(position: coordD, normal: coordD, color: lineColor), ModelVertex(position: coordI, normal: coordI, color: lineColor),
-            ModelVertex(position: coordD, normal: coordD, color: lineColor), ModelVertex(position: coordJ, normal: coordJ, color: lineColor),
-            ModelVertex(position: coordE, normal: coordE, color: lineColor), ModelVertex(position: coordG, normal: coordG, color: lineColor),
-            ModelVertex(position: coordE, normal: coordE, color: lineColor), ModelVertex(position: coordI, normal: coordI, color: lineColor),
-            ModelVertex(position: coordE, normal: coordE, color: lineColor), ModelVertex(position: coordK, normal: coordK, color: lineColor),
-            ModelVertex(position: coordF, normal: coordF, color: lineColor), ModelVertex(position: coordG, normal: coordG, color: lineColor),
-            ModelVertex(position: coordF, normal: coordF, color: lineColor), ModelVertex(position: coordH, normal: coordH, color: lineColor),
-            ModelVertex(position: coordF, normal: coordF, color: lineColor), ModelVertex(position: coordL, normal: coordL, color: lineColor),
-            ModelVertex(position: coordG, normal: coordG, color: lineColor), ModelVertex(position: coordK, normal: coordK, color: lineColor),
-            ModelVertex(position: coordG, normal: coordG, color: lineColor), ModelVertex(position: coordL, normal: coordL, color: lineColor),
-            ModelVertex(position: coordH, normal: coordH, color: lineColor), ModelVertex(position: coordJ, normal: coordJ, color: lineColor),
-            ModelVertex(position: coordH, normal: coordH, color: lineColor), ModelVertex(position: coordL, normal: coordL, color: lineColor),
-            ModelVertex(position: coordI, normal: coordI, color: lineColor), ModelVertex(position: coordJ, normal: coordJ, color: lineColor),
-            ModelVertex(position: coordI, normal: coordI, color: lineColor), ModelVertex(position: coordK, normal: coordK, color: lineColor),
-            ModelVertex(position: coordJ, normal: coordJ, color: lineColor), ModelVertex(position: coordK, normal: coordK, color: lineColor),
-            ModelVertex(position: coordJ, normal: coordJ, color: lineColor), ModelVertex(position: coordL, normal: coordL, color: lineColor),
-            ModelVertex(position: coordK, normal: coordK, color: lineColor), ModelVertex(position: coordL, normal: coordL, color: lineColor),
+        modelVertices = [
+            ModelVertex(position: coordA, normal: normalABF, color: faceColor),
+            ModelVertex(position: coordB, normal: normalABF, color: faceColor),
+            ModelVertex(position: coordF, normal: normalABF, color: faceColor),
+
+            ModelVertex(position: coordA, normal: normalACB, color: faceColor),
+            ModelVertex(position: coordC, normal: normalACB, color: faceColor),
+            ModelVertex(position: coordB, normal: normalACB, color: faceColor),
+
+            ModelVertex(position: coordA, normal: normalAEC, color: faceColor),
+            ModelVertex(position: coordE, normal: normalAEC, color: faceColor),
+            ModelVertex(position: coordC, normal: normalAEC, color: faceColor),
+
+            ModelVertex(position: coordA, normal: normalAFG, color: faceColor),
+            ModelVertex(position: coordF, normal: normalAFG, color: faceColor),
+            ModelVertex(position: coordG, normal: normalAFG, color: faceColor),
+
+            ModelVertex(position: coordA, normal: normalAGE, color: faceColor),
+            ModelVertex(position: coordG, normal: normalAGE, color: faceColor),
+            ModelVertex(position: coordE, normal: normalAGE, color: faceColor),
+
+            ModelVertex(position: coordB, normal: normalBCD, color: faceColor),
+            ModelVertex(position: coordC, normal: normalBCD, color: faceColor),
+            ModelVertex(position: coordD, normal: normalBCD, color: faceColor),
+
+            ModelVertex(position: coordB, normal: normalBDH, color: faceColor),
+            ModelVertex(position: coordD, normal: normalBDH, color: faceColor),
+            ModelVertex(position: coordH, normal: normalBDH, color: faceColor),
+
+            ModelVertex(position: coordB, normal: normalBHF, color: faceColor),
+            ModelVertex(position: coordH, normal: normalBHF, color: faceColor),
+            ModelVertex(position: coordF, normal: normalBHF, color: faceColor),
+
+            ModelVertex(position: coordC, normal: normalCEI, color: faceColor),
+            ModelVertex(position: coordE, normal: normalCEI, color: faceColor),
+            ModelVertex(position: coordI, normal: normalCEI, color: faceColor),
+
+            ModelVertex(position: coordC, normal: normalCID, color: faceColor),
+            ModelVertex(position: coordI, normal: normalCID, color: faceColor),
+            ModelVertex(position: coordD, normal: normalCID, color: faceColor),
+
+            ModelVertex(position: coordD, normal: normalDIJ, color: faceColor),
+            ModelVertex(position: coordI, normal: normalDIJ, color: faceColor),
+            ModelVertex(position: coordJ, normal: normalDIJ, color: faceColor),
+
+            ModelVertex(position: coordD, normal: normalDJH, color: faceColor),
+            ModelVertex(position: coordJ, normal: normalDJH, color: faceColor),
+            ModelVertex(position: coordH, normal: normalDJH, color: faceColor),
+
+            ModelVertex(position: coordE, normal: normalEGK, color: faceColor),
+            ModelVertex(position: coordG, normal: normalEGK, color: faceColor),
+            ModelVertex(position: coordK, normal: normalEGK, color: faceColor),
+
+            ModelVertex(position: coordE, normal: normalEKI, color: faceColor),
+            ModelVertex(position: coordK, normal: normalEKI, color: faceColor),
+            ModelVertex(position: coordI, normal: normalEKI, color: faceColor),
+
+            ModelVertex(position: coordF, normal: normalFHL, color: faceColor),
+            ModelVertex(position: coordH, normal: normalFHL, color: faceColor),
+            ModelVertex(position: coordL, normal: normalFHL, color: faceColor),
+
+            ModelVertex(position: coordF, normal: normalFLG, color: faceColor),
+            ModelVertex(position: coordL, normal: normalFLG, color: faceColor),
+            ModelVertex(position: coordG, normal: normalFLG, color: faceColor),
+
+            ModelVertex(position: coordG, normal: normalGLK, color: faceColor),
+            ModelVertex(position: coordL, normal: normalGLK, color: faceColor),
+            ModelVertex(position: coordK, normal: normalGLK, color: faceColor),
+
+            ModelVertex(position: coordH, normal: normalHJL, color: faceColor),
+            ModelVertex(position: coordJ, normal: normalHJL, color: faceColor),
+            ModelVertex(position: coordL, normal: normalHJL, color: faceColor),
+
+            ModelVertex(position: coordI, normal: normalIKJ, color: faceColor),
+            ModelVertex(position: coordK, normal: normalIKJ, color: faceColor),
+            ModelVertex(position: coordJ, normal: normalIKJ, color: faceColor),
+
+            ModelVertex(position: coordJ, normal: normalJKL, color: faceColor),
+            ModelVertex(position: coordK, normal: normalJKL, color: faceColor),
+            ModelVertex(position: coordL, normal: normalJKL, color: faceColor),
         ]
 
         let points = [
@@ -104,87 +152,86 @@ class IcosahedronModel: Renderable {
         ]
 
         for point in points {
-            vertices[point.name] = point
+            pointDict[point.name] = point
         }
 
-        vertices["C"]!.head      = vertices["I"]
-        vertices["C"]!.leftHand  = vertices["D"]
-        vertices["C"]!.leftFoot  = vertices["B"]
-        vertices["C"]!.rightHand = vertices["E"]
-        vertices["C"]!.rightFoot = vertices["A"]
+        pointDict["C"]!.head      = pointDict["I"]
+        pointDict["C"]!.leftHand  = pointDict["D"]
+        pointDict["C"]!.leftFoot  = pointDict["B"]
+        pointDict["C"]!.rightHand = pointDict["E"]
+        pointDict["C"]!.rightFoot = pointDict["A"]
 
-        vertices["B"]!.head      = vertices["A"]
-        vertices["B"]!.leftHand  = vertices["C"]
-        vertices["B"]!.leftFoot  = vertices["D"]
-        vertices["B"]!.rightHand = vertices["H"]
-        vertices["B"]!.rightFoot = vertices["F"]
+        pointDict["B"]!.head      = pointDict["A"]
+        pointDict["B"]!.leftHand  = pointDict["C"]
+        pointDict["B"]!.leftFoot  = pointDict["D"]
+        pointDict["B"]!.rightHand = pointDict["H"]
+        pointDict["B"]!.rightFoot = pointDict["F"]
 
-        vertices["A"]!.head      = vertices["E"]
-        vertices["A"]!.leftHand  = vertices["C"]
-        vertices["A"]!.leftFoot  = vertices["B"]
-        vertices["A"]!.rightHand = vertices["F"]
-        vertices["A"]!.rightFoot = vertices["G"]
+        pointDict["A"]!.head      = pointDict["E"]
+        pointDict["A"]!.leftHand  = pointDict["C"]
+        pointDict["A"]!.leftFoot  = pointDict["B"]
+        pointDict["A"]!.rightHand = pointDict["F"]
+        pointDict["A"]!.rightFoot = pointDict["G"]
 
-        vertices["E"]!.head      = vertices["G"]
-        vertices["E"]!.leftHand  = vertices["K"]
-        vertices["E"]!.leftFoot  = vertices["I"]
-        vertices["E"]!.rightHand = vertices["C"]
-        vertices["E"]!.rightFoot = vertices["A"]
+        pointDict["E"]!.head      = pointDict["G"]
+        pointDict["E"]!.leftHand  = pointDict["K"]
+        pointDict["E"]!.leftFoot  = pointDict["I"]
+        pointDict["E"]!.rightHand = pointDict["C"]
+        pointDict["E"]!.rightFoot = pointDict["A"]
 
-        vertices["G"]!.head      = vertices["L"]
-        vertices["G"]!.leftHand  = vertices["K"]
-        vertices["G"]!.leftFoot  = vertices["E"]
-        vertices["G"]!.rightHand = vertices["A"]
-        vertices["G"]!.rightFoot = vertices["F"]
+        pointDict["G"]!.head      = pointDict["L"]
+        pointDict["G"]!.leftHand  = pointDict["K"]
+        pointDict["G"]!.leftFoot  = pointDict["E"]
+        pointDict["G"]!.rightHand = pointDict["A"]
+        pointDict["G"]!.rightFoot = pointDict["F"]
 
-        vertices["L"]!.head      = vertices["F"]
-        vertices["L"]!.leftHand  = vertices["H"]
-        vertices["L"]!.leftFoot  = vertices["J"]
-        vertices["L"]!.rightHand = vertices["K"]
-        vertices["L"]!.rightFoot = vertices["G"]
+        pointDict["L"]!.head      = pointDict["F"]
+        pointDict["L"]!.leftHand  = pointDict["H"]
+        pointDict["L"]!.leftFoot  = pointDict["J"]
+        pointDict["L"]!.rightHand = pointDict["K"]
+        pointDict["L"]!.rightFoot = pointDict["G"]
 
-        vertices["F"]!.head      = vertices["H"]
-        vertices["F"]!.leftHand  = vertices["L"]
-        vertices["F"]!.leftFoot  = vertices["G"]
-        vertices["F"]!.rightHand = vertices["A"]
-        vertices["F"]!.rightFoot = vertices["B"]
+        pointDict["F"]!.head      = pointDict["H"]
+        pointDict["F"]!.leftHand  = pointDict["L"]
+        pointDict["F"]!.leftFoot  = pointDict["G"]
+        pointDict["F"]!.rightHand = pointDict["A"]
+        pointDict["F"]!.rightFoot = pointDict["B"]
 
-        vertices["H"]!.head      = vertices["J"]
-        vertices["H"]!.leftHand  = vertices["L"]
-        vertices["H"]!.leftFoot  = vertices["F"]
-        vertices["H"]!.rightHand = vertices["B"]
-        vertices["H"]!.rightFoot = vertices["D"]
+        pointDict["H"]!.head      = pointDict["J"]
+        pointDict["H"]!.leftHand  = pointDict["L"]
+        pointDict["H"]!.leftFoot  = pointDict["F"]
+        pointDict["H"]!.rightHand = pointDict["B"]
+        pointDict["H"]!.rightFoot = pointDict["D"]
 
-        vertices["J"]!.head      = vertices["K"]
-        vertices["J"]!.leftHand  = vertices["L"]
-        vertices["J"]!.leftFoot  = vertices["H"]
-        vertices["J"]!.rightHand = vertices["D"]
-        vertices["J"]!.rightFoot = vertices["I"]
+        pointDict["J"]!.head      = pointDict["K"]
+        pointDict["J"]!.leftHand  = pointDict["L"]
+        pointDict["J"]!.leftFoot  = pointDict["H"]
+        pointDict["J"]!.rightHand = pointDict["D"]
+        pointDict["J"]!.rightFoot = pointDict["I"]
 
-        vertices["K"]!.head      = vertices["I"]
-        vertices["K"]!.leftHand  = vertices["E"]
-        vertices["K"]!.leftFoot  = vertices["G"]
-        vertices["K"]!.rightHand = vertices["L"]
-        vertices["K"]!.rightFoot = vertices["J"]
+        pointDict["K"]!.head      = pointDict["I"]
+        pointDict["K"]!.leftHand  = pointDict["E"]
+        pointDict["K"]!.leftFoot  = pointDict["G"]
+        pointDict["K"]!.rightHand = pointDict["L"]
+        pointDict["K"]!.rightFoot = pointDict["J"]
 
-        vertices["I"]!.head      = vertices["D"]
-        vertices["I"]!.leftHand  = vertices["C"]
-        vertices["I"]!.leftFoot  = vertices["E"]
-        vertices["I"]!.rightHand = vertices["K"]
-        vertices["I"]!.rightFoot = vertices["J"]
+        pointDict["I"]!.head      = pointDict["D"]
+        pointDict["I"]!.leftHand  = pointDict["C"]
+        pointDict["I"]!.leftFoot  = pointDict["E"]
+        pointDict["I"]!.rightHand = pointDict["K"]
+        pointDict["I"]!.rightFoot = pointDict["J"]
 
-        vertices["D"]!.head      = vertices["C"]
-        vertices["D"]!.leftHand  = vertices["I"]
-        vertices["D"]!.leftFoot  = vertices["J"]
-        vertices["D"]!.rightHand = vertices["H"]
-        vertices["D"]!.rightFoot = vertices["B"]
+        pointDict["D"]!.head      = pointDict["C"]
+        pointDict["D"]!.leftHand  = pointDict["I"]
+        pointDict["D"]!.leftFoot  = pointDict["J"]
+        pointDict["D"]!.rightHand = pointDict["H"]
+        pointDict["D"]!.rightFoot = pointDict["B"]
     }
 
     deinit {
-        glDeleteBuffers(1, &pointVertexBuffer)
-        glDeleteBuffers(1, &lineVertexBuffer)
-        glDeleteVertexArrays(1, &pointVertexArray)
-        glDeleteVertexArrays(1, &lineVertexArray)
+        glDeleteBuffers(1, &vertexBuffer)
+
+        glDeleteVertexArrays(1, &vertexArray)
     }
 
     func prepare() {
@@ -195,27 +242,12 @@ class IcosahedronModel: Renderable {
             fatalError("Failed to load vertex texture")
         }
 
-        glGenVertexArrays(1, &pointVertexArray)
-        glBindVertexArray(pointVertexArray)
+        glGenVertexArrays(1, &vertexArray)
+        glBindVertexArray(vertexArray)
 
-        glGenBuffers(1, &pointVertexBuffer)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), pointVertexBuffer)
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * pointModelVertices.count), pointVertices, GLenum(GL_STATIC_DRAW))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(0))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 3))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 6))
-
-        glGenVertexArrays(1, &lineVertexArray)
-        glBindVertexArray(lineVertexArray)
-        glGenBuffers(1, &lineVertexBuffer)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), lineVertexBuffer)
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * lineModelVertices.count), lineVertices, GLenum(GL_STATIC_DRAW))
+        glGenBuffers(1, &vertexBuffer)
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
+        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * modelVertices.count), vertices, GLenum(GL_STATIC_DRAW))
 
         glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
         glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(0))
@@ -236,15 +268,9 @@ class IcosahedronModel: Renderable {
         program.modelMatrix = modelMatrix
         program.vertexTexture = 0
 
-        glLineWidth(8)
         program.useTexture = false
-        glBindVertexArray(lineVertexArray)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), lineVertexBuffer)
-        glDrawArrays(GLenum(GL_LINES), 0, GLsizei(lineModelVertices.count))
-
-        program.useTexture = false
-        glBindVertexArray(pointVertexArray)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), pointVertexBuffer)
-        glDrawArrays(GLenum(GL_POINTS), 0, GLsizei(pointModelVertices.count))
+        glBindVertexArray(vertexArray)
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
+        glDrawArrays(GLenum(GL_TRIANGLES), 0, GLsizei(modelVertices.count))
     }
 }
