@@ -4,15 +4,8 @@ class IcosahedronModel: Renderable {
     let position = GLKVector3Make(0.0, 0.0, 0.0)
     let quaternion = GLKQuaternionIdentity
 
-    var vertexArray: GLuint = 0
-    var vertexBuffer: GLuint = 0
-
-    var modelVertices: [ModelVertex]
-    var vertices: [Float] {
-        return modelVertices.flatMap { $0.v }
-    }
+    var localModelVertices: [ModelVertex]
     var pointDict: [String: IcosahedronVertex] = [:]
-    var vertexTextureInfo: GLKTextureInfo!
 
     init() {
         let ratio: Float = (1.0 + sqrt(5.0)) / 2.0
@@ -54,7 +47,7 @@ class IcosahedronModel: Renderable {
 
         let faceColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
 
-        modelVertices = [
+        localModelVertices = [
             ModelVertex(position: coordA, normal: normalABF, color: faceColor),
             ModelVertex(position: coordB, normal: normalABF, color: faceColor),
             ModelVertex(position: coordF, normal: normalABF, color: faceColor),
@@ -226,51 +219,5 @@ class IcosahedronModel: Renderable {
         pointDict["D"]!.leftFoot  = pointDict["J"]
         pointDict["D"]!.rightHand = pointDict["H"]
         pointDict["D"]!.rightFoot = pointDict["B"]
-    }
-
-    deinit {
-        glDeleteBuffers(1, &vertexBuffer)
-
-        glDeleteVertexArrays(1, &vertexArray)
-    }
-
-    func prepare() {
-        do {
-            let vertexTexturePath = NSBundle.mainBundle().pathForResource("vertex", ofType: "png")!
-            vertexTextureInfo = try GLKTextureLoader.textureWithContentsOfFile(vertexTexturePath, options: nil)
-        } catch {
-            fatalError("Failed to load vertex texture")
-        }
-
-        glGenVertexArrays(1, &vertexArray)
-        glBindVertexArray(vertexArray)
-
-        glGenBuffers(1, &vertexBuffer)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * modelVertices.count), vertices, GLenum(GL_STATIC_DRAW))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(0))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 3))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 6))
-
-        glBindVertexArray(0)
-    }
-
-    func render(program: ModelShaderProgram) {
-        glActiveTexture(GLenum(GL_TEXTURE0))
-        glBindTexture(GLenum(GL_TEXTURE_2D), vertexTextureInfo.name)
-
-        program.modelMatrix = modelMatrix
-        program.vertexTexture = 0
-
-        program.useTexture = false
-        glBindVertexArray(vertexArray)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-        glDrawArrays(GLenum(GL_TRIANGLES), 0, GLsizei(modelVertices.count))
     }
 }

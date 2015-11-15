@@ -8,15 +8,12 @@ func createFaceNormal(x: GLKVector3, y: GLKVector3, z: GLKVector3) -> GLKVector3
 protocol Renderable {
     var position: GLKVector3 { get }
     var quaternion: GLKQuaternion { get }
-    func prepare()
-    func render(program: ModelShaderProgram)
+    var localModelVertices: [ModelVertex] { get }
 }
 
 extension Renderable {
-    var modelMatrix: GLKMatrix4 {
+    var modelVertices: [ModelVertex] {
         let quaternionMatrix = GLKMatrix4MakeWithQuaternion(quaternion)
-        let translationMatrix = GLKMatrix4MakeTranslation(position.x, position.y, position.z)
-
-        return GLKMatrix4Multiply(translationMatrix, quaternionMatrix)
+        return localModelVertices.map { $0.multiplyMatrix4(quaternionMatrix).addVector3(position) }
     }
 }

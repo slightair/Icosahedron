@@ -4,13 +4,7 @@ class TetrahedronModel: Renderable {
     var position = GLKVector3Make(0.0, 0.0, 0.0)
     var quaternion = GLKQuaternionIdentity
 
-    var vertexArray: GLuint = 0
-    var vertexBuffer: GLuint = 0
-
-    var modelVertices: [ModelVertex]
-    var vertices: [Float] {
-        return modelVertices.flatMap { $0.v }
-    }
+    var localModelVertices: [ModelVertex]
     let topCoordinate: GLKVector3
 
     init() {
@@ -28,7 +22,7 @@ class TetrahedronModel: Renderable {
 
         let faceColor = GLKVector4Make(1.0, 1.0, 1.0, 1.0)
 
-        modelVertices = [
+        localModelVertices = [
             ModelVertex(position: coordD, normal: normalDCB, color: faceColor),
             ModelVertex(position: coordC, normal: normalDCB, color: faceColor),
             ModelVertex(position: coordB, normal: normalDCB, color: faceColor),
@@ -47,40 +41,5 @@ class TetrahedronModel: Renderable {
         ]
 
         topCoordinate = coordA
-    }
-
-    deinit {
-        glDeleteBuffers(1, &vertexBuffer)
-        glDeleteVertexArrays(1, &vertexArray)
-    }
-
-    func prepare() {
-        glGenVertexArrays(1, &vertexArray)
-        glBindVertexArray(vertexArray)
-
-        glGenBuffers(1, &vertexBuffer)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * modelVertices.count), vertices, GLenum(GL_STATIC_DRAW))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(0))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 3))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 6))
-
-        glBindVertexArray(0)
-    }
-
-    func render(program: ModelShaderProgram) {
-        program.modelMatrix = modelMatrix
-        program.useTexture = false
-
-        glBindVertexArray(vertexArray)
-        glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-        glDrawArrays(GLenum(GL_TRIANGLES), 0, GLsizei(modelVertices.count))
     }
 }

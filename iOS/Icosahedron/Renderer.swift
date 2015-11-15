@@ -17,16 +17,17 @@ func quaternionForRotate(from from: GLKVector3, to: GLKVector3) -> GLKQuaternion
 class Renderer: NSObject, GLKViewDelegate {
     let context: EAGLContext
 
+    var modelVertexArray: GLuint = 0
+    var modelVertexBuffer: GLuint = 0
     var modelShaderProgram: ModelShaderProgram!
-
-    let icosahedronModel = IcosahedronModel()
-    var markerModel = TetrahedronModel()
 
     var projectionMatrix = GLKMatrix4Identity
     var worldMatrix = GLKMatrix4Identity
     var normalMatrix = GLKMatrix3Identity
 
     var models: [Renderable] = []
+    let icosahedronModel = IcosahedronModel()
+    let markerModel = TetrahedronModel()
 
     var prevVertex: IcosahedronVertex!
     var currentVertex: IcosahedronVertex!
@@ -52,16 +53,13 @@ class Renderer: NSObject, GLKViewDelegate {
         models.append(icosahedronModel)
         models.append(markerModel)
 
-        update(0)
+        update()
     }
 
     func setUpGL() {
         EAGLContext.setCurrentContext(context)
 
         modelShaderProgram = ModelShaderProgram()
-
-        icosahedronModel.prepare()
-        markerModel.prepare()
 
         let width = GLsizei(CGRectGetHeight(UIScreen.mainScreen().nativeBounds)) // long side
         let height = GLsizei(CGRectGetWidth(UIScreen.mainScreen().nativeBounds)) // short side
@@ -70,10 +68,18 @@ class Renderer: NSObject, GLKViewDelegate {
         let projectionWidth: Float = 1.0
         let projectionHeight = projectionWidth / aspect
         projectionMatrix = GLKMatrix4MakeOrtho(-projectionWidth / 2, projectionWidth / 2, -projectionHeight / 2, projectionHeight / 2, 0.1, 100)
+
+        glGenVertexArrays(1, &modelVertexArray)
+        glBindVertexArray(modelVertexArray)
+
+        glGenBuffers(1, &modelVertexBuffer)
+
+        glBindVertexArray(0)
     }
 
     func tearDownGL() {
-
+        glDeleteBuffers(1, &modelVertexBuffer)
+        glDeleteVertexArrays(1, &modelVertexArray)
     }
 
     func rotateModelWithTappedLocation(location: CGPoint) {
@@ -105,7 +111,39 @@ class Renderer: NSObject, GLKViewDelegate {
         currentQuaternion = GLKQuaternionMultiply(currentQuaternion, relativeQuaternion)
     }
 
-    func update(timeSinceLastUpdate: NSTimeInterval) {
+    func renderModels() {
+        glEnable(GLenum(GL_DEPTH_TEST))
+
+        glUseProgram(modelShaderProgram.programID)
+
+        modelShaderProgram.projectionMatrix = projectionMatrix
+        modelShaderProgram.worldMatrix = worldMatrix
+        modelShaderProgram.normalMatrix = normalMatrix
+
+        let modelVertices = models.flatMap { $0.modelVertices }
+        let vertices: [Float] = modelVertices.flatMap { $0.v }
+
+        glBindVertexArray(modelVertexArray)
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), modelVertexBuffer)
+
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), modelVertexBuffer)
+        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * modelVertices.count), vertices, GLenum(GL_STATIC_DRAW))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(0))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 3))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 6))
+
+        glDrawArrays(GLenum(GL_TRIANGLES), 0, GLsizei(modelVertices.count))
+
+        glBindVertexArray(0)
+    }
+
+    func update(timeSinceLastUpdate: NSTimeInterval = 0) {
         if (animationProgress < 1.0) {
             animationProgress += Float(timeSinceLastUpdate) * 4
             animationProgress = min(1.0, animationProgress)
@@ -123,23 +161,9 @@ class Renderer: NSObject, GLKViewDelegate {
     // MARK: - GLKView delegate methods
 
     func glkView(view: GLKView, drawInRect rect: CGRect) {
-        glEnable(GLenum(GL_DEPTH_TEST))
-        glEnable(GLenum(GL_BLEND))
-        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE))
-
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT) | GLbitfield(GL_DEPTH_BUFFER_BIT))
 
-        glUseProgram(modelShaderProgram.programID)
-
-        modelShaderProgram.projectionMatrix = projectionMatrix
-        modelShaderProgram.worldMatrix = worldMatrix
-        modelShaderProgram.normalMatrix = normalMatrix
-
-        for model in models {
-            model.render(modelShaderProgram)
-        }
-
-        glBindVertexArray(0)
+        renderModels()
     }
 }
