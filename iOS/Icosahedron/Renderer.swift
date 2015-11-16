@@ -34,7 +34,14 @@ class Renderer: NSObject, GLKViewDelegate {
     var currentVertex: IcosahedronVertex!
     var prevQuaternion = GLKQuaternionIdentity
     var currentQuaternion = GLKQuaternionIdentity
-    var animationProgress: Float = 1.0
+    var animationProgress: Float = 1.0 {
+        didSet {
+            if prevVertex != nil && currentVertex != nil {
+                let markerPosition = GLKVector3Lerp(prevVertex.coordinate, currentVertex.coordinate, animationProgress)
+                markerModel.setPosition(markerPosition)
+            }
+        }
+    }
 
     deinit {
         tearDownGL()
@@ -153,8 +160,7 @@ class Renderer: NSObject, GLKViewDelegate {
 
     func update(timeSinceLastUpdate: NSTimeInterval = 0) {
         if (animationProgress < 1.0) {
-            animationProgress += Float(timeSinceLastUpdate) * 4
-            animationProgress = min(1.0, animationProgress)
+            animationProgress = min(1.0, animationProgress + Float(timeSinceLastUpdate) * 4)
         }
 
         let baseQuaternion = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0)
