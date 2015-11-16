@@ -3,7 +3,7 @@ import GLKit
 class IcosahedronModel: Renderable {
     let position = GLKVector3Make(0.0, 0.0, 0.0)
     let quaternion = GLKQuaternionIdentity
-    var localModelVertices: [ModelVertex]
+    let localModelVertices: [ModelVertex]
 
     class var scale: Float {
         return 0.15

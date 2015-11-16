@@ -6,7 +6,7 @@ class TetrahedronModel: Renderable {
     var localModelVertices: [ModelVertex]
 
     class var scale: Float {
-        return 0.02
+        return 1.0
     }
     class var faceColor: GLKVector4 {
         return GLKVector4Make(1.0, 1.0, 1.0, 1.0)
@@ -42,7 +42,7 @@ class TetrahedronModel: Renderable {
             ModelVertex(position: coordD, normal: normalBAD, color: self.dynamicType.faceColor),
         ]
 
-        topCoordinate = GLKVector3Make(-1, -1, -1)
+        topCoordinate = GLKVector3MultiplyScalar(GLKVector3Make(-1,-1,-1), self.dynamicType.scale)
     }
 
     func setPosition(newPosition: GLKVector3) {

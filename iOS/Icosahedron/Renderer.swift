@@ -27,7 +27,7 @@ class Renderer: NSObject, GLKViewDelegate {
 
     var models: [Renderable] = []
     let icosahedronModel = IcosahedronModel()
-    let markerModel = TetrahedronModel()
+    let markerModel = MarkerModel()
     var items: [ItemModel] = []
 
     var prevVertex: IcosahedronVertex!
