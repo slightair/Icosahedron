@@ -5,10 +5,19 @@ func quaternionForRotate(from from: GLKVector3, to: GLKVector3) -> GLKQuaternion
     let normalizedFrom = GLKVector3Normalize(from)
     let normalizedTo = GLKVector3Normalize(to)
 
-    let cosineTheta = GLKVector3DotProduct(normalizedFrom, normalizedTo)
+    let cosTheta = GLKVector3DotProduct(normalizedFrom, normalizedTo)
     let rotationAxis = GLKVector3CrossProduct(normalizedFrom, normalizedTo)
 
-    let s = sqrtf((1 + cosineTheta) * 2)
+    if cosTheta < -1 + 0.001 {
+        var axis = GLKVector3CrossProduct(GLKVector3Make(0, 0, 1), from)
+        if GLKVector3Length(rotationAxis) < 0.01 {
+            axis = GLKVector3CrossProduct(GLKVector3Make(1, 0, 0), from)
+        }
+        axis = GLKVector3Normalize(axis)
+        return GLKQuaternionMakeWithAngleAndVector3Axis(Float(M_PI), axis)
+    }
+
+    let s = sqrtf((1 + cosTheta) * 2)
     let inverse = 1 / s
 
     return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5)
@@ -38,7 +47,7 @@ class Renderer: NSObject, GLKViewDelegate {
         didSet {
             if prevVertex != nil && currentVertex != nil {
                 let markerPosition = GLKVector3Lerp(prevVertex.coordinate, currentVertex.coordinate, animationProgress)
-                markerModel.setPosition(markerPosition)
+                markerModel.setPosition(markerPosition, prevPosition: prevVertex.coordinate)
             }
         }
     }
@@ -59,9 +68,9 @@ class Renderer: NSObject, GLKViewDelegate {
 
         super.init()
 
-        let point = IcosahedronVertex.Point.C
-        currentVertex = icosahedronModel.pointDict[point]
-        markerModel.setPosition(currentVertex.coordinate)
+        currentVertex = icosahedronModel.pointDict[.C]
+        let dummyVertex = icosahedronModel.pointDict[.F]!
+        markerModel.setPosition(currentVertex.coordinate, prevPosition: dummyVertex.coordinate)
 
         setUpGL()
 

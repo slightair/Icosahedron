@@ -6,6 +6,7 @@ class MarkerModel: Renderable {
     var localModelVertices: [ModelVertex]
 
     let topCoordinate: GLKVector3
+    let tailCoordinate: GLKVector3
 
     init() {
         let scale: Float = 0.02
@@ -83,11 +84,25 @@ class MarkerModel: Renderable {
             ModelVertex(position: coordD, normal: normalFED, color: faceColor),
         ]
 
-        topCoordinate = GLKVector3MultiplyScalar(GLKVector3Make(0, 1, 0), scale)
+        topCoordinate = GLKVector3Make(0, 1, 0)
+        tailCoordinate = GLKVector3Make(-1, 0, 0)
     }
 
-    func setPosition(newPosition: GLKVector3) {
+    func setPosition(newPosition: GLKVector3, prevPosition: GLKVector3) {
         position = newPosition
-        quaternion = quaternionForRotate(from: topCoordinate, to: position)
+
+        let dotProduct = GLKVector3DotProduct(GLKVector3Normalize(newPosition), GLKVector3Normalize(newPosition))
+        let k = GLKVector3Length(newPosition) / (GLKVector3Length(prevPosition) * dotProduct)
+        let tailDestination = GLKVector3Subtract(GLKVector3MultiplyScalar(prevPosition, k), newPosition)
+
+        let adjustTopQuaternion = quaternionForRotate(from: topCoordinate, to: newPosition)
+
+        let right = GLKVector3CrossProduct(newPosition, tailDestination)
+        let desiredTailCoordinate = GLKVector3CrossProduct(right, newPosition)
+
+        let newTailCoordinate = GLKQuaternionRotateVector3(adjustTopQuaternion, tailCoordinate)
+        let adjustTailQuaternion = quaternionForRotate(from: newTailCoordinate, to: desiredTailCoordinate)
+
+        quaternion = GLKQuaternionMultiply(adjustTailQuaternion, adjustTopQuaternion)
     }
 }

@@ -42,7 +42,7 @@ class TetrahedronModel: Renderable {
             ModelVertex(position: coordD, normal: normalBAD, color: self.dynamicType.faceColor),
         ]
 
-        topCoordinate = GLKVector3MultiplyScalar(GLKVector3Make(-1,-1,-1), self.dynamicType.scale)
+        topCoordinate = GLKVector3Make(-1, -1, -1)
     }
 
     func setPosition(newPosition: GLKVector3) {
