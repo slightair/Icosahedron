@@ -25,6 +25,7 @@ func quaternionForRotate(from from: GLKVector3, to: GLKVector3) -> GLKQuaternion
 
 class Renderer: NSObject, GLKViewDelegate {
     let context: EAGLContext
+    let world: World
 
     var modelVertexArray: GLuint = 0
     var modelVertexBuffer: GLuint = 0
@@ -56,9 +57,11 @@ class Renderer: NSObject, GLKViewDelegate {
         tearDownGL()
     }
 
-    init(context: EAGLContext) {
+    init(context: EAGLContext, world: World) {
         self.context = context
-        for point in IcosahedronVertex.Point.values {
+        self.world = world
+
+        for point in Icosahedron.Point.values {
             let item = ItemModel()
             item.setPosition(icosahedronModel.pointDict[point]!.coordinate)
 

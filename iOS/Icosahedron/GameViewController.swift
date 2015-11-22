@@ -5,12 +5,13 @@ class GameViewController: GLKViewController {
     @IBOutlet var infoView: SKView!
     var gameScene: GameScene!
     var renderer: Renderer!
+    let world = World()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let context = EAGLContext(API: .OpenGLES3)
-        renderer = Renderer(context: context)
+        renderer = Renderer(context: context, world: world)
 
         let glkView = view as! GLKView
         glkView.delegate = renderer

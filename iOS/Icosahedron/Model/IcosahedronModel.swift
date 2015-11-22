@@ -11,7 +11,7 @@ class IcosahedronModel: Renderable {
     class var faceColor: GLKVector4 {
         return GLKVector4Make(1.0, 1.0, 1.0, 1.0)
     }
-    var pointDict: [IcosahedronVertex.Point: IcosahedronVertex] = [:]
+    var pointDict: [Icosahedron.Point: IcosahedronVertex] = [:]
 
     init() {
         let ratio: Float = (1.0 + sqrt(5.0)) / 2.0
