@@ -223,4 +223,11 @@ class IcosahedronModel: Renderable {
         pointDict[.D]!.rightHand = pointDict[.H]
         pointDict[.D]!.rightFoot = pointDict[.B]
     }
+
+    func coordinateOfPoint(point: Icosahedron.Point) -> GLKVector3 {
+        guard let vertex = pointDict[point] else {
+            fatalError("unexpected Point")
+        }
+        return vertex.coordinate
+    }
 }

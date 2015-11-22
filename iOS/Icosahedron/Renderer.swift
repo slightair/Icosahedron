@@ -35,10 +35,14 @@ class Renderer: NSObject, GLKViewDelegate {
     var worldMatrix = GLKMatrix4Identity
     var normalMatrix = GLKMatrix3Identity
 
-    var models: [Renderable] = []
     let icosahedronModel = IcosahedronModel()
     let markerModel = MarkerModel()
-    var items: [ItemModel] = []
+    var models: [Renderable] {
+        let requiredModels: [Renderable] = [icosahedronModel, markerModel]
+        let items: [Renderable] = world.items.map { ItemModel(initialPosition: icosahedronModel.coordinateOfPoint($0.point)) }
+
+        return requiredModels + items
+    }
 
     var prevVertex: IcosahedronVertex!
     var currentVertex: IcosahedronVertex!
@@ -61,14 +65,6 @@ class Renderer: NSObject, GLKViewDelegate {
         self.context = context
         self.world = world
 
-        for point in Icosahedron.Point.values {
-            let item = ItemModel()
-            item.setPosition(icosahedronModel.pointDict[point]!.coordinate)
-
-            items.append(item)
-            models.append(item)
-        }
-
         super.init()
 
         currentVertex = icosahedronModel.pointDict[.C]
@@ -76,9 +72,6 @@ class Renderer: NSObject, GLKViewDelegate {
         markerModel.setPosition(currentVertex.coordinate, prevPosition: dummyVertex.coordinate)
 
         setUpGL()
-
-        models.append(icosahedronModel)
-        models.append(markerModel)
 
         update()
     }

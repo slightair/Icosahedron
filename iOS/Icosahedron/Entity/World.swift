@@ -1,9 +1,12 @@
 import Foundation
 
 class World {
-    enum Item {
-        case Normal
-    }
-
     var items: [Item] = []
+
+    init() {
+        let points: [Icosahedron.Point] = [.A, .B, .F, .G, .H]
+        for point in points {
+            items.append(Item(point: point))
+        }
+    }
 }
