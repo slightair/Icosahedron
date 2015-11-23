@@ -43,10 +43,15 @@ class Renderer: NSObject, GLKViewDelegate {
     let icosahedronModel = MotherIcosahedronModel()
     let markerModel = MarkerModel()
     var models: [Renderable] {
-        let requiredModels: [Renderable] = [icosahedronModel, markerModel]
-        let items: [Renderable] = world.items.map { ItemModel(initialPosition: icosahedronModel.coordinateOfPoint($0.point)) }
+        func coord(point: Icosahedron.Point) -> GLKVector3 {
+            return icosahedronModel.coordinateOfPoint(point)
+        }
 
-        return requiredModels + items
+        let requiredModels: [Renderable] = [icosahedronModel, markerModel]
+        let items: [Renderable] = world.items.map { ItemModel(initialPosition: coord($0.point)) }
+        let roads: [Renderable] = world.roads.map { RoadModel(leftPosition: coord($0.left), rightPosition: coord($0.right))}
+
+        return requiredModels + items + roads
     }
 
     var prevVertex: IcosahedronVertex!

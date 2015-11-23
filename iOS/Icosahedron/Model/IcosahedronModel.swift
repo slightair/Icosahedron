@@ -9,6 +9,7 @@ class IcosahedronModel: Renderable {
     class var scale: Float {
         return 1.0
     }
+
     class var faceColor: GLKVector4 {
         return GLKVector4Make(1.0, 1.0, 1.0, 1.0)
     }

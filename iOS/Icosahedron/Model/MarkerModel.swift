@@ -96,13 +96,9 @@ class MarkerModel: Renderable {
         let tailDestination = GLKVector3Subtract(GLKVector3MultiplyScalar(prevPosition, k), newPosition)
 
         let adjustTopQuaternion = quaternionForRotate(from: topCoordinate, to: newPosition)
-
-        let right = GLKVector3CrossProduct(newPosition, tailDestination)
-        let desiredTailCoordinate = GLKVector3CrossProduct(right, newPosition)
-
         let newTailCoordinate = GLKQuaternionRotateVector3(adjustTopQuaternion, tailCoordinate)
+        let desiredTailCoordinate = GLKVector3CrossProduct(GLKVector3CrossProduct(newPosition, tailDestination), newPosition)
         let adjustTailQuaternion = quaternionForRotate(from: newTailCoordinate, to: desiredTailCoordinate)
-
         quaternion = GLKQuaternionMultiply(adjustTailQuaternion, adjustTopQuaternion)
     }
 }
