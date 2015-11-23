@@ -4,14 +4,14 @@ class IcosahedronModel: Renderable {
     let position = GLKVector3Make(0.0, 0.0, 0.0)
     let quaternion = GLKQuaternionIdentity
     let localModelVertices: [ModelVertex]
+    let icosahedronVertices: [IcosahedronVertex]
 
     class var scale: Float {
-        return 0.15
+        return 1.0
     }
     class var faceColor: GLKVector4 {
         return GLKVector4Make(1.0, 1.0, 1.0, 1.0)
     }
-    var pointDict: [Icosahedron.Point: IcosahedronVertex] = [:]
 
     init() {
         let ratio: Float = (1.0 + sqrt(5.0)) / 2.0
@@ -132,7 +132,7 @@ class IcosahedronModel: Renderable {
             ModelVertex(position: coordL, normal: normalJKL, color: self.dynamicType.faceColor),
         ]
 
-        let icosahedronVertices = [
+        icosahedronVertices = [
             IcosahedronVertex(point: .A, coordinate: coordA),
             IcosahedronVertex(point: .B, coordinate: coordB),
             IcosahedronVertex(point: .C, coordinate: coordC),
@@ -146,88 +146,5 @@ class IcosahedronModel: Renderable {
             IcosahedronVertex(point: .K, coordinate: coordK),
             IcosahedronVertex(point: .L, coordinate: coordL),
         ]
-
-        for vertex in icosahedronVertices {
-            pointDict[vertex.point] = vertex
-        }
-
-        pointDict[.C]!.head      = pointDict[.I]
-        pointDict[.C]!.leftHand  = pointDict[.D]
-        pointDict[.C]!.leftFoot  = pointDict[.B]
-        pointDict[.C]!.rightHand = pointDict[.E]
-        pointDict[.C]!.rightFoot = pointDict[.A]
-
-        pointDict[.B]!.head      = pointDict[.A]
-        pointDict[.B]!.leftHand  = pointDict[.C]
-        pointDict[.B]!.leftFoot  = pointDict[.D]
-        pointDict[.B]!.rightHand = pointDict[.H]
-        pointDict[.B]!.rightFoot = pointDict[.F]
-
-        pointDict[.A]!.head      = pointDict[.E]
-        pointDict[.A]!.leftHand  = pointDict[.C]
-        pointDict[.A]!.leftFoot  = pointDict[.B]
-        pointDict[.A]!.rightHand = pointDict[.F]
-        pointDict[.A]!.rightFoot = pointDict[.G]
-
-        pointDict[.E]!.head      = pointDict[.G]
-        pointDict[.E]!.leftHand  = pointDict[.K]
-        pointDict[.E]!.leftFoot  = pointDict[.I]
-        pointDict[.E]!.rightHand = pointDict[.C]
-        pointDict[.E]!.rightFoot = pointDict[.A]
-
-        pointDict[.G]!.head      = pointDict[.L]
-        pointDict[.G]!.leftHand  = pointDict[.K]
-        pointDict[.G]!.leftFoot  = pointDict[.E]
-        pointDict[.G]!.rightHand = pointDict[.A]
-        pointDict[.G]!.rightFoot = pointDict[.F]
-
-        pointDict[.L]!.head      = pointDict[.F]
-        pointDict[.L]!.leftHand  = pointDict[.H]
-        pointDict[.L]!.leftFoot  = pointDict[.J]
-        pointDict[.L]!.rightHand = pointDict[.K]
-        pointDict[.L]!.rightFoot = pointDict[.G]
-
-        pointDict[.F]!.head      = pointDict[.H]
-        pointDict[.F]!.leftHand  = pointDict[.L]
-        pointDict[.F]!.leftFoot  = pointDict[.G]
-        pointDict[.F]!.rightHand = pointDict[.A]
-        pointDict[.F]!.rightFoot = pointDict[.B]
-
-        pointDict[.H]!.head      = pointDict[.J]
-        pointDict[.H]!.leftHand  = pointDict[.L]
-        pointDict[.H]!.leftFoot  = pointDict[.F]
-        pointDict[.H]!.rightHand = pointDict[.B]
-        pointDict[.H]!.rightFoot = pointDict[.D]
-
-        pointDict[.J]!.head      = pointDict[.K]
-        pointDict[.J]!.leftHand  = pointDict[.L]
-        pointDict[.J]!.leftFoot  = pointDict[.H]
-        pointDict[.J]!.rightHand = pointDict[.D]
-        pointDict[.J]!.rightFoot = pointDict[.I]
-
-        pointDict[.K]!.head      = pointDict[.I]
-        pointDict[.K]!.leftHand  = pointDict[.E]
-        pointDict[.K]!.leftFoot  = pointDict[.G]
-        pointDict[.K]!.rightHand = pointDict[.L]
-        pointDict[.K]!.rightFoot = pointDict[.J]
-
-        pointDict[.I]!.head      = pointDict[.D]
-        pointDict[.I]!.leftHand  = pointDict[.C]
-        pointDict[.I]!.leftFoot  = pointDict[.E]
-        pointDict[.I]!.rightHand = pointDict[.K]
-        pointDict[.I]!.rightFoot = pointDict[.J]
-
-        pointDict[.D]!.head      = pointDict[.C]
-        pointDict[.D]!.leftHand  = pointDict[.I]
-        pointDict[.D]!.leftFoot  = pointDict[.J]
-        pointDict[.D]!.rightHand = pointDict[.H]
-        pointDict[.D]!.rightFoot = pointDict[.B]
-    }
-
-    func coordinateOfPoint(point: Icosahedron.Point) -> GLKVector3 {
-        guard let vertex = pointDict[point] else {
-            fatalError("unexpected Point")
-        }
-        return vertex.coordinate
     }
 }

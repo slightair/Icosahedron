@@ -40,7 +40,7 @@ class Renderer: NSObject, GLKViewDelegate {
     var worldMatrix = GLKMatrix4Identity
     var normalMatrix = GLKMatrix3Identity
 
-    let icosahedronModel = IcosahedronModel()
+    let icosahedronModel = MotherIcosahedronModel()
     let markerModel = MarkerModel()
     var models: [Renderable] {
         let requiredModels: [Renderable] = [icosahedronModel, markerModel]

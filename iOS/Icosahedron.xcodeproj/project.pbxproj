@@ -26,6 +26,7 @@
 		579AD6061C01EEB900218D38 /* Renderable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AD5FE1C01EEB900218D38 /* Renderable.swift */; };
 		579AD6071C01EEB900218D38 /* TetrahedronModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AD5FF1C01EEB900218D38 /* TetrahedronModel.swift */; };
 		579AD6091C01F35300218D38 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AD6081C01F35300218D38 /* Item.swift */; };
+		579AD60C1C02F92700218D38 /* MotherIcosahedronModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AD60B1C02F92700218D38 /* MotherIcosahedronModel.swift */; };
 		57D866BB1BEA384D0034DEDE /* vertex.png in Resources */ = {isa = PBXBuildFile; fileRef = 57D866BA1BEA384D0034DEDE /* vertex.png */; };
 		57D866C31BEE3AA30034DEDE /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C21BEE3AA30034DEDE /* GameViewController.swift */; };
 		57D866C51BEF66F90034DEDE /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C41BEF66F90034DEDE /* Renderer.swift */; };
@@ -63,6 +64,7 @@
 		579AD5FE1C01EEB900218D38 /* Renderable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderable.swift; sourceTree = "<group>"; };
 		579AD5FF1C01EEB900218D38 /* TetrahedronModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TetrahedronModel.swift; sourceTree = "<group>"; };
 		579AD6081C01F35300218D38 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		579AD60B1C02F92700218D38 /* MotherIcosahedronModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotherIcosahedronModel.swift; sourceTree = "<group>"; };
 		57D866BA1BEA384D0034DEDE /* vertex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vertex.png; sourceTree = "<group>"; };
 		57D866C21BEE3AA30034DEDE /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		57D866C41BEF66F90034DEDE /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
@@ -142,16 +144,25 @@
 		579AD5F71C01EE1100218D38 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				579AD5F81C01EEB900218D38 /* BlurCanvas.swift */,
-				579AD5F91C01EEB900218D38 /* IcosahedronModel.swift */,
+				579AD5FE1C01EEB900218D38 /* Renderable.swift */,
+				579AD5FD1C01EEB900218D38 /* ModelVertex.swift */,
 				579AD5FA1C01EEB900218D38 /* IcosahedronVertex.swift */,
+				579AD60A1C02F8CE00218D38 /* BaseModel */,
 				579AD5FB1C01EEB900218D38 /* ItemModel.swift */,
 				579AD5FC1C01EEB900218D38 /* MarkerModel.swift */,
-				579AD5FD1C01EEB900218D38 /* ModelVertex.swift */,
-				579AD5FE1C01EEB900218D38 /* Renderable.swift */,
-				579AD5FF1C01EEB900218D38 /* TetrahedronModel.swift */,
+				579AD60B1C02F92700218D38 /* MotherIcosahedronModel.swift */,
+				579AD5F81C01EEB900218D38 /* BlurCanvas.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		579AD60A1C02F8CE00218D38 /* BaseModel */ = {
+			isa = PBXGroup;
+			children = (
+				579AD5F91C01EEB900218D38 /* IcosahedronModel.swift */,
+				579AD5FF1C01EEB900218D38 /* TetrahedronModel.swift */,
+			);
+			name = BaseModel;
 			sourceTree = "<group>";
 		};
 		57D866B91BEA381B0034DEDE /* Texture */ = {
@@ -338,6 +349,7 @@
 				57D866CB1BF2ED5E0034DEDE /* ShaderProgram.swift in Sources */,
 				579AD6091C01F35300218D38 /* Item.swift in Sources */,
 				57D866CD1BF2EF0C0034DEDE /* ModelShaderProgram.swift in Sources */,
+				579AD60C1C02F92700218D38 /* MotherIcosahedronModel.swift in Sources */,
 				579AD5F41C01ECA100218D38 /* World.swift in Sources */,
 				57DDC9581BDB326B009423EA /* GameScene.swift in Sources */,
 				579AD6051C01EEB900218D38 /* ModelVertex.swift in Sources */,

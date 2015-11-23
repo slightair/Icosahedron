@@ -44,9 +44,4 @@ class TetrahedronModel: Renderable {
 
         topCoordinate = GLKVector3Make(-1, -1, -1)
     }
-
-    func setPosition(newPosition: GLKVector3) {
-        position = GLKVector3MultiplyScalar(newPosition, 1.1)
-        quaternion = quaternionForRotate(from: topCoordinate, to: position)
-    }
 }
