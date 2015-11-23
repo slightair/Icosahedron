@@ -23,9 +23,14 @@ func quaternionForRotate(from from: GLKVector3, to: GLKVector3) -> GLKQuaternion
     return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5)
 }
 
+protocol RendererDelegate {
+    func didChangeIcosahedronPoint(point: Icosahedron.Point)
+}
+
 class Renderer: NSObject, GLKViewDelegate {
     let context: EAGLContext
     let world: World
+    var delegate: RendererDelegate?
 
     var modelVertexArray: GLuint = 0
     var modelVertexBuffer: GLuint = 0
@@ -129,6 +134,8 @@ class Renderer: NSObject, GLKViewDelegate {
 
         prevQuaternion = currentQuaternion
         currentQuaternion = GLKQuaternionMultiply(currentQuaternion, relativeQuaternion)
+
+        delegate?.didChangeIcosahedronPoint(currentVertex.point)
     }
 
     func renderModels() {

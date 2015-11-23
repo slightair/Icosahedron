@@ -1,6 +1,6 @@
 import Foundation
 
-struct Icosahedron {
+class Icosahedron {
     enum Point: String {
         case A = "A"
         case B = "B"

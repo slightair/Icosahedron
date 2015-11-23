@@ -1,7 +1,7 @@
 import GLKit
 import SpriteKit
 
-class GameViewController: GLKViewController {
+class GameViewController: GLKViewController, RendererDelegate {
     @IBOutlet var infoView: SKView!
     var gameScene: GameScene!
     var renderer: Renderer!
@@ -12,6 +12,7 @@ class GameViewController: GLKViewController {
 
         let context = EAGLContext(API: .OpenGLES3)
         renderer = Renderer(context: context, world: world)
+        renderer.delegate = self
 
         let glkView = view as! GLKView
         glkView.delegate = renderer
@@ -19,9 +20,9 @@ class GameViewController: GLKViewController {
         glkView.drawableColorFormat = .SRGBA8888
         glkView.drawableDepthFormat = .Format24
 
-        gameScene = GameScene(size: view.bounds.size)
+        gameScene = GameScene(size: view.bounds.size, world: world)
         infoView.presentScene(gameScene)
-        gameScene.updateInfo(renderer.currentVertex)
+        gameScene.updateInfo()
     }
 
     func update() {
@@ -37,6 +38,10 @@ class GameViewController: GLKViewController {
                                             -location.y * 2 / CGRectGetHeight(view.bounds))
 
         renderer.rotateModelWithTappedLocation(normalizedLocation)
-        gameScene.updateInfo(renderer.currentVertex)
+    }
+
+    func didChangeIcosahedronPoint(point: Icosahedron.Point) {
+        world.currentPoint = point
+        gameScene.updateInfo()
     }
 }
