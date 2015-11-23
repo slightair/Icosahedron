@@ -5,6 +5,14 @@ class RoadModel: LeadModel {
         return 0.15
     }
 
+    override class var leftColor: GLKVector4 {
+        return GLKVector4Make(0.2, 0.2, 0.2, 1.0)
+    }
+
+    override class var rightColor: GLKVector4 {
+        return GLKVector4Make(0.2, 0.2, 0.2, 1.0)
+    }
+
     init(leftPosition: GLKVector3, rightPosition: GLKVector3) {
         super.init()
 
