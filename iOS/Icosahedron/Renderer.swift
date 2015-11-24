@@ -10,7 +10,7 @@ func quaternionForRotate(from from: GLKVector3, to: GLKVector3) -> GLKQuaternion
 
     if cosTheta < -1 + 0.001 {
         var axis = GLKVector3CrossProduct(GLKVector3Make(0, 0, 1), from)
-        if GLKVector3Length(axis) < 0.01 {
+        if GLKVector3Length(axis) < 0.1 {
             axis = GLKVector3CrossProduct(GLKVector3Make(1, 0, 0), from)
         }
         axis = GLKVector3Normalize(axis)
