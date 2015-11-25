@@ -5,12 +5,20 @@ class ItemModel: TetrahedronModel {
         return 0.01
     }
 
-    override class var faceColor: GLKVector4 {
-        return GLKVector4Make(0.0, 0.5, 1.0, 1.0)
+    static func colorOfKind(kind: Item.Kind) -> GLKVector4 {
+        switch kind {
+        case .Red:
+            return GLKVector4Make(1.0, 0.0, 0.0, 1.0)
+        case .Green:
+            return GLKVector4Make(0.0, 1.0, 0.0, 1.0)
+        case .Blue:
+            return GLKVector4Make(0.0, 0.0, 1.0, 1.0)
+        }
     }
 
-    init(initialPosition: GLKVector3) {
-        super.init()
+    init(initialPosition: GLKVector3, kind: Item.Kind) {
+        let color = ItemModel.colorOfKind(kind)
+        super.init(color: color)
 
         setPosition(initialPosition)
     }

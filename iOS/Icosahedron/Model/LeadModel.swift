@@ -9,19 +9,11 @@ class LeadModel: Renderable {
         return 1.0
     }
 
-    class var leftColor: GLKVector4 {
-        return GLKVector4Make(1.0, 0.0, 0.0, 1.0)
-    }
-
-    class var rightColor: GLKVector4 {
-        return GLKVector4Make(0.0, 0.0, 1.0, 1.0)
-    }
-
     let topCoordinate: GLKVector3
     let leftCoordinate: GLKVector3
     let rightCoordinate: GLKVector3
 
-    init() {
+    init(leftColor: GLKVector4 = GLKVector4Make(1.0, 0.0, 0.0, 1.0), rightColor: GLKVector4 = GLKVector4Make(0.0, 0.0, 1.0, 1.0)) {
         let coordA = GLKVector3MultiplyScalar(GLKVector3Make(-1, -0.01, 0), self.dynamicType.scale)
         let coordB = GLKVector3MultiplyScalar(GLKVector3Make(-1,  0.01, 0), self.dynamicType.scale)
         let coordC = GLKVector3MultiplyScalar(GLKVector3Make( 1, -0.01, 0), self.dynamicType.scale)
@@ -31,13 +23,13 @@ class LeadModel: Renderable {
         let normalCDB = createFaceNormal(coordC, y: coordD, z: coordB)
 
         localModelVertices = [
-            ModelVertex(position: coordA, normal: normalACB, color: self.dynamicType.leftColor),
-            ModelVertex(position: coordC, normal: normalACB, color: self.dynamicType.rightColor),
-            ModelVertex(position: coordB, normal: normalACB, color: self.dynamicType.leftColor),
+            ModelVertex(position: coordA, normal: normalACB, color: leftColor),
+            ModelVertex(position: coordC, normal: normalACB, color: rightColor),
+            ModelVertex(position: coordB, normal: normalACB, color: leftColor),
 
-            ModelVertex(position: coordC, normal: normalCDB, color: self.dynamicType.rightColor),
-            ModelVertex(position: coordD, normal: normalCDB, color: self.dynamicType.rightColor),
-            ModelVertex(position: coordB, normal: normalCDB, color: self.dynamicType.leftColor),
+            ModelVertex(position: coordC, normal: normalCDB, color: rightColor),
+            ModelVertex(position: coordD, normal: normalCDB, color: rightColor),
+            ModelVertex(position: coordB, normal: normalCDB, color: leftColor),
         ]
 
         topCoordinate = GLKVector3Make(0, 0, 1)

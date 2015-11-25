@@ -5,16 +5,20 @@ class RoadModel: LeadModel {
         return 0.15
     }
 
-    override class var leftColor: GLKVector4 {
-        return GLKVector4Make(0.2, 0.2, 0.2, 1.0)
+    static func colorOfKind(kind: Road.Kind) -> GLKVector4 {
+        switch kind {
+        case .Red:
+            return GLKVector4Make(1.0, 0.0, 0.0, 1.0)
+        case .Green:
+            return GLKVector4Make(0.0, 1.0, 0.0, 1.0)
+        case .Blue:
+            return GLKVector4Make(0.0, 0.0, 1.0, 1.0)
+        }
     }
 
-    override class var rightColor: GLKVector4 {
-        return GLKVector4Make(0.2, 0.2, 0.2, 1.0)
-    }
-
-    init(leftPosition: GLKVector3, rightPosition: GLKVector3) {
-        super.init()
+    init(leftPosition: GLKVector3, rightPosition: GLKVector3, kind: Road.Kind) {
+        let color = RoadModel.colorOfKind(kind)
+        super.init(leftColor: color, rightColor: color)
 
         setPosition(leftPosition, right: rightPosition)
     }

@@ -48,8 +48,8 @@ class Renderer: NSObject, GLKViewDelegate {
         }
 
         let requiredModels: [Renderable] = [icosahedronModel, markerModel]
-        let items: [Renderable] = world.items.map { ItemModel(initialPosition: coord($0.point)) }
-        let roads: [Renderable] = world.roads.map { RoadModel(leftPosition: coord($0.left), rightPosition: coord($0.right))}
+        let items: [Renderable] = world.items.map { ItemModel(initialPosition: coord($0.point), kind: $0.kind) }
+        let roads: [Renderable] = world.roads.map { RoadModel(leftPosition: coord($0.left), rightPosition: coord($0.right), kind: $0.kind)}
 
         return requiredModels + items + roads
     }
