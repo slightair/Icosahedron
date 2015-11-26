@@ -39,7 +39,7 @@
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
 		57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC9511BD7D180009423EA /* SpriteKit.framework */; };
 		57DDC9581BDB326B009423EA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC9571BDB326B009423EA /* GameScene.swift */; };
-		98811DB37D5721A1862FEB21 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2418BDBEB5F57607DCBC1690 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		98811DB37D5721A1862FEB21 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2418BDBEB5F57607DCBC1690 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
