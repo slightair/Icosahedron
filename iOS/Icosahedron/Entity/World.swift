@@ -4,7 +4,17 @@ class World {
     let icosahedron = Icosahedron()
     var items: [Item] = []
     var roads: [Road] = []
-    var currentPoint = Icosahedron.Point.C
+    var currentPoint = Icosahedron.Point.C {
+        didSet {
+            let itemPoints = items.map { $0.point }
+            if let itemIndex = itemPoints.indexOf(currentPoint) {
+                let catchedItem = items[itemIndex]
+                items.removeAtIndex(itemIndex)
+
+                print(catchedItem.kind)
+            }
+        }
+    }
 
     init() {
         items = [
