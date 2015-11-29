@@ -39,6 +39,7 @@
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
 		57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC9511BD7D180009423EA /* SpriteKit.framework */; };
 		57DDC9581BDB326B009423EA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC9571BDB326B009423EA /* GameScene.swift */; };
+		57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */; };
 		98811DB37D5721A1862FEB21 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2418BDBEB5F57607DCBC1690 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +81,7 @@
 		57DDC94F1BD7D173009423EA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		57DDC9511BD7D180009423EA /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		57DDC9571BDB326B009423EA /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 		579013A11BC1083400ADAE3E /* Icosahedron */ = {
 			isa = PBXGroup;
 			children = (
+				57E2FA131C0AB86500DF1796 /* Utility */,
 				579AD5F71C01EE1100218D38 /* Model */,
 				57D866B91BEA381B0034DEDE /* Texture */,
 				573132321BDCBF3200824EA5 /* Shader */,
@@ -198,6 +201,14 @@
 				57DDC9571BDB326B009423EA /* GameScene.swift */,
 			);
 			path = Scene;
+			sourceTree = "<group>";
+		};
+		57E2FA131C0AB86500DF1796 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 		CF23D3D0BEEF2BA621C93C49 /* Pods */ = {
@@ -350,6 +361,7 @@
 				57D866C51BEF66F90034DEDE /* Renderer.swift in Sources */,
 				579AD6011C01EEB900218D38 /* IcosahedronModel.swift in Sources */,
 				579AD6031C01EEB900218D38 /* ItemModel.swift in Sources */,
+				57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */,
 				579AD5F61C01EE0500218D38 /* Icosahedron.swift in Sources */,
 				57CDCD751C0300E000A4E085 /* Road.swift in Sources */,
 				579AD6001C01EEB900218D38 /* BlurCanvas.swift in Sources */,

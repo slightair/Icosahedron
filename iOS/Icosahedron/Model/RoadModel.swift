@@ -1,4 +1,5 @@
 import GLKit
+import ChameleonFramework
 
 class RoadModel: LeadModel {
     override class var scale: Float {
@@ -8,11 +9,11 @@ class RoadModel: LeadModel {
     static func colorOfKind(kind: Road.Kind) -> GLKVector4 {
         switch kind {
         case .Red:
-            return GLKVector4Make(1.0, 0.0, 0.0, 1.0)
+            return UIColor.flatRedColor().glColor
         case .Green:
-            return GLKVector4Make(0.0, 1.0, 0.0, 1.0)
+            return UIColor.flatGreenColor().glColor
         case .Blue:
-            return GLKVector4Make(0.0, 0.0, 1.0, 1.0)
+            return UIColor.flatBlueColor().glColor
         }
     }
 
