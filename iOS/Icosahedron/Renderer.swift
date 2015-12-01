@@ -63,6 +63,10 @@ class Renderer: NSObject, GLKViewDelegate {
             if prevVertex != nil && currentVertex != nil {
                 let markerPosition = GLKVector3Lerp(prevVertex.coordinate, currentVertex.coordinate, animationProgress)
                 markerModel.setPosition(markerPosition, prevPosition: prevVertex.coordinate)
+
+                if animationProgress == 1.0 {
+                    delegate?.didChangeIcosahedronPoint(currentVertex.point)
+                }
             }
         }
     }
@@ -113,6 +117,10 @@ class Renderer: NSObject, GLKViewDelegate {
     }
 
     func rotateModelWithTappedLocation(location: CGPoint) {
+        if animationProgress < 1.0 {
+            return
+        }
+
         let locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(worldMatrix, nil), GLKVector3Make(Float(location.x), Float(location.y), 0))
 
         var nearestDistance = FLT_MAX
@@ -139,8 +147,6 @@ class Renderer: NSObject, GLKViewDelegate {
 
         prevQuaternion = currentQuaternion
         currentQuaternion = GLKQuaternionMultiply(currentQuaternion, relativeQuaternion)
-
-        delegate?.didChangeIcosahedronPoint(currentVertex.point)
     }
 
     func renderModels() {
