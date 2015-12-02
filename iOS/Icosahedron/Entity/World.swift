@@ -13,6 +13,7 @@ class World {
                 items.removeAtIndex(itemIndex)
 
                 print(catchedItem.kind)
+                putNewItemWithIgnore(currentPoint)
             }
         }
     }
@@ -22,7 +23,6 @@ class World {
         items = [
             Item(point: .A, kind: .Red),
             Item(point: .B, kind: .Green),
-            Item(point: .C, kind: .Blue),
             Item(point: .D, kind: .Red),
             Item(point: .E, kind: .Green),
             Item(point: .F, kind: .Blue),
@@ -66,5 +66,16 @@ class World {
             Road(side: .JL, kind: .Green),
             Road(side: .KL, kind: .Blue),
         ]
+    }
+
+    func putNewItemWithIgnore(ignore: Icosahedron.Point) {
+        var candidate = Icosahedron.Point.values
+        let ignoreIndex = candidate.indexOf(ignore)
+        candidate.removeAtIndex(ignoreIndex!)
+
+        let nextPoint = candidate[randomSource.nextIntWithUpperBound(candidate.count)]
+        if !items.contains({ $0.point == nextPoint }) {
+            items.append(Item(point: nextPoint, kind: .Green))
+        }
     }
 }
