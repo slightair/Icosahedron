@@ -1,4 +1,5 @@
 import Foundation
+import GameplayKit
 
 class World {
     let icosahedron = Icosahedron()
@@ -15,6 +16,7 @@ class World {
             }
         }
     }
+    let randomSource = GKMersenneTwisterRandomSource(seed: 6239)
 
     init() {
         items = [
