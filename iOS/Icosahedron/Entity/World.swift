@@ -13,8 +13,8 @@ class World {
                 items.removeAtIndex(itemIndex)
 
                 print(catchedItem.kind)
-                putNewItemWithIgnore(currentPoint)
             }
+            putNewItemWithIgnore(currentPoint)
         }
     }
     let randomSource = GKMersenneTwisterRandomSource(seed: 6239)
