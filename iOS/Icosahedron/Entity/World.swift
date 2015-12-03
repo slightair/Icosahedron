@@ -17,7 +17,8 @@ class World {
             putNewItemWithIgnore(currentPoint)
         }
     }
-    let randomSource = GKMersenneTwisterRandomSource(seed: 6239)
+    let pointRandomSource = GKMersenneTwisterRandomSource(seed: 6239)
+    let colorRandomSource = GKMersenneTwisterRandomSource(seed: 3962)
 
     init() {
         items = [
@@ -73,9 +74,11 @@ class World {
         let ignoreIndex = candidate.indexOf(ignore)
         candidate.removeAtIndex(ignoreIndex!)
 
-        let nextPoint = candidate[randomSource.nextIntWithUpperBound(candidate.count)]
+        let nextPoint = candidate[pointRandomSource.nextIntWithUpperBound(candidate.count)]
         if !items.contains({ $0.point == nextPoint }) {
-            items.append(Item(point: nextPoint, kind: .Green))
+            let colors: [Item.Kind] = [.Red, .Green, .Blue]
+            let color = colors[colorRandomSource.nextIntWithUpperBound(colors.count)]
+            items.append(Item(point: nextPoint, kind: color))
         }
     }
 }
