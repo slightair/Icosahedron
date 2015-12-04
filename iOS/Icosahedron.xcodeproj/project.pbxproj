@@ -38,7 +38,6 @@
 		57D866CF1BF2EF190034DEDE /* BlurShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866CE1BF2EF190034DEDE /* BlurShaderProgram.swift */; };
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
 		57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC9511BD7D180009423EA /* SpriteKit.framework */; };
-		57DDC9581BDB326B009423EA /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DDC9571BDB326B009423EA /* GameScene.swift */; };
 		57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */; };
 		98811DB37D5721A1862FEB21 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2418BDBEB5F57607DCBC1690 /* Pods.framework */; };
 /* End PBXBuildFile section */
@@ -80,7 +79,6 @@
 		57D866CE1BF2EF190034DEDE /* BlurShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurShaderProgram.swift; sourceTree = "<group>"; };
 		57DDC94F1BD7D173009423EA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		57DDC9511BD7D180009423EA /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
-		57DDC9571BDB326B009423EA /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -137,7 +135,6 @@
 				579AD5F71C01EE1100218D38 /* Model */,
 				57D866B91BEA381B0034DEDE /* Texture */,
 				573132321BDCBF3200824EA5 /* Shader */,
-				57DDC9561BDB320F009423EA /* Scene */,
 				57DDC9531BDB2E70009423EA /* Entity */,
 				579013A21BC1083400ADAE3E /* AppDelegate.swift */,
 				57D866C21BEE3AA30034DEDE /* GameViewController.swift */,
@@ -193,14 +190,6 @@
 				57CDCD741C0300E000A4E085 /* Road.swift */,
 			);
 			path = Entity;
-			sourceTree = "<group>";
-		};
-		57DDC9561BDB320F009423EA /* Scene */ = {
-			isa = PBXGroup;
-			children = (
-				57DDC9571BDB326B009423EA /* GameScene.swift */,
-			);
-			path = Scene;
 			sourceTree = "<group>";
 		};
 		57E2FA131C0AB86500DF1796 /* Utility */ = {
@@ -375,7 +364,6 @@
 				57D866CD1BF2EF0C0034DEDE /* ModelShaderProgram.swift in Sources */,
 				579AD60C1C02F92700218D38 /* MotherIcosahedronModel.swift in Sources */,
 				579AD5F41C01ECA100218D38 /* World.swift in Sources */,
-				57DDC9581BDB326B009423EA /* GameScene.swift in Sources */,
 				579AD6051C01EEB900218D38 /* ModelVertex.swift in Sources */,
 				579AD6021C01EEB900218D38 /* IcosahedronVertex.swift in Sources */,
 				579AD6061C01EEB900218D38 /* Renderable.swift in Sources */,

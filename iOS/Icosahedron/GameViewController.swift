@@ -2,8 +2,6 @@ import GLKit
 import SpriteKit
 
 class GameViewController: GLKViewController, RendererDelegate {
-    @IBOutlet var infoView: SKView!
-    var gameScene: GameScene!
     var renderer: Renderer!
     let world = World()
 
@@ -19,10 +17,6 @@ class GameViewController: GLKViewController, RendererDelegate {
         glkView.context = context
         glkView.drawableColorFormat = .SRGBA8888
         glkView.drawableDepthFormat = .Format24
-
-        gameScene = GameScene(size: view.bounds.size, world: world)
-        infoView.presentScene(gameScene)
-        gameScene.updateInfo()
     }
 
     func update() {
@@ -42,6 +36,5 @@ class GameViewController: GLKViewController, RendererDelegate {
 
     func didChangeIcosahedronPoint(point: Icosahedron.Point) {
         world.currentPoint = point
-        gameScene.updateInfo()
     }
 }
