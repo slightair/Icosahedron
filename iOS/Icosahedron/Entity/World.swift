@@ -2,7 +2,15 @@ import Foundation
 import GameplayKit
 
 class World {
+    enum MarkerStatus {
+        case None
+        case Red
+        case Green
+        case Blue
+    }
+
     let icosahedron = Icosahedron()
+    var markerStatus: MarkerStatus = .None
     var items: [Item] = []
     var roads: [Road] = []
     var currentPoint = Icosahedron.Point.C {
@@ -12,7 +20,14 @@ class World {
                 let catchedItem = items[itemIndex]
                 items.removeAtIndex(itemIndex)
 
-                print(catchedItem.kind)
+                switch catchedItem.kind {
+                case .Red:
+                    markerStatus = .Red
+                case .Green:
+                    markerStatus = .Green
+                case .Blue:
+                    markerStatus = .Blue
+                }
             }
             putNewItemWithIgnore(currentPoint)
         }

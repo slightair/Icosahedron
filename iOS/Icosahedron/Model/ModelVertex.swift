@@ -29,4 +29,8 @@ struct ModelVertex {
     func addVector3(vector: GLKVector3) -> ModelVertex {
         return ModelVertex(position: GLKVector3Add(position, vector), normal: GLKVector3Add(normal, vector), color: color)
     }
+
+    func changeColor(color: GLKVector4) -> ModelVertex {
+        return ModelVertex(position: position, normal: normal, color: color)
+    }
 }

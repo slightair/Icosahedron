@@ -5,6 +5,7 @@ class IcosahedronModel: Renderable {
     let quaternion = GLKQuaternionIdentity
     let localModelVertices: [ModelVertex]
     let icosahedronVertices: [IcosahedronVertex]
+    var customColor: GLKVector4? = nil
 
     class var scale: Float {
         return 1.0
