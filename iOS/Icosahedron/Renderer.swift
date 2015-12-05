@@ -31,6 +31,7 @@ class Renderer: NSObject, GLKViewDelegate {
     let context: EAGLContext
     let world: World
     var delegate: RendererDelegate?
+    let font: Font = Font.Default
 
     var modelVertexArray: GLuint = 0
     var modelVertexBuffer: GLuint = 0

@@ -30,12 +30,14 @@
 		57CDCD711C02FDF300A4E085 /* LeadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CDCD701C02FDF300A4E085 /* LeadModel.swift */; };
 		57CDCD731C03002C00A4E085 /* RoadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CDCD721C03002C00A4E085 /* RoadModel.swift */; };
 		57CDCD751C0300E000A4E085 /* Road.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CDCD741C0300E000A4E085 /* Road.swift */; };
-		57D866BB1BEA384D0034DEDE /* vertex.png in Resources */ = {isa = PBXBuildFile; fileRef = 57D866BA1BEA384D0034DEDE /* vertex.png */; };
 		57D866C31BEE3AA30034DEDE /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C21BEE3AA30034DEDE /* GameViewController.swift */; };
 		57D866C51BEF66F90034DEDE /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C41BEF66F90034DEDE /* Renderer.swift */; };
 		57D866CB1BF2ED5E0034DEDE /* ShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866CA1BF2ED5E0034DEDE /* ShaderProgram.swift */; };
 		57D866CD1BF2EF0C0034DEDE /* ModelShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866CC1BF2EF0C0034DEDE /* ModelShaderProgram.swift */; };
 		57D866CF1BF2EF190034DEDE /* BlurShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866CE1BF2EF190034DEDE /* BlurShaderProgram.swift */; };
+		57DC98091C1325690004B107 /* font.json in Resources */ = {isa = PBXBuildFile; fileRef = 57DC98071C1325690004B107 /* font.json */; };
+		57DC980A1C1325690004B107 /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 57DC98081C1325690004B107 /* font.png */; };
+		57DC980C1C1325C90004B107 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DC980B1C1325C90004B107 /* Font.swift */; };
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
 		57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC9511BD7D180009423EA /* SpriteKit.framework */; };
 		57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */; };
@@ -71,12 +73,14 @@
 		57CDCD701C02FDF300A4E085 /* LeadModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeadModel.swift; sourceTree = "<group>"; };
 		57CDCD721C03002C00A4E085 /* RoadModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoadModel.swift; sourceTree = "<group>"; };
 		57CDCD741C0300E000A4E085 /* Road.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Road.swift; sourceTree = "<group>"; };
-		57D866BA1BEA384D0034DEDE /* vertex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vertex.png; sourceTree = "<group>"; };
 		57D866C21BEE3AA30034DEDE /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		57D866C41BEF66F90034DEDE /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		57D866CA1BF2ED5E0034DEDE /* ShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShaderProgram.swift; sourceTree = "<group>"; };
 		57D866CC1BF2EF0C0034DEDE /* ModelShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelShaderProgram.swift; sourceTree = "<group>"; };
 		57D866CE1BF2EF190034DEDE /* BlurShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurShaderProgram.swift; sourceTree = "<group>"; };
+		57DC98071C1325690004B107 /* font.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = font.json; sourceTree = "<group>"; };
+		57DC98081C1325690004B107 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = font.png; sourceTree = "<group>"; };
+		57DC980B1C1325C90004B107 /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		57DDC94F1BD7D173009423EA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		57DDC9511BD7D180009423EA /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
@@ -176,7 +180,9 @@
 		57D866B91BEA381B0034DEDE /* Texture */ = {
 			isa = PBXGroup;
 			children = (
-				57D866BA1BEA384D0034DEDE /* vertex.png */,
+				57DC98071C1325690004B107 /* font.json */,
+				57DC98081C1325690004B107 /* font.png */,
+				57DC980B1C1325C90004B107 /* Font.swift */,
 			);
 			path = Texture;
 			sourceTree = "<group>";
@@ -283,8 +289,9 @@
 				573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */,
 				579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */,
 				579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */,
-				57D866BB1BEA384D0034DEDE /* vertex.png in Resources */,
+				57DC98091C1325690004B107 /* font.json in Resources */,
 				579013B11BC1083400ADAE3E /* LaunchScreen.storyboard in Resources */,
+				57DC980A1C1325690004B107 /* font.png in Resources */,
 				574A2B5F1BE89BD400CFA4B4 /* BlurShader.fsh in Resources */,
 				574A2B601BE89BD400CFA4B4 /* BlurShader.vsh in Resources */,
 				573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */,
@@ -349,6 +356,7 @@
 				57CDCD731C03002C00A4E085 /* RoadModel.swift in Sources */,
 				57D866C51BEF66F90034DEDE /* Renderer.swift in Sources */,
 				579AD6011C01EEB900218D38 /* IcosahedronModel.swift in Sources */,
+				57DC980C1C1325C90004B107 /* Font.swift in Sources */,
 				579AD6031C01EEB900218D38 /* ItemModel.swift in Sources */,
 				57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */,
 				579AD5F61C01EE0500218D38 /* Icosahedron.swift in Sources */,
