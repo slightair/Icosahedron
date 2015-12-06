@@ -28,10 +28,16 @@ protocol RendererDelegate {
 }
 
 class Renderer: NSObject, GLKViewDelegate {
+    static var aspect: Float {
+        let width = GLsizei(CGRectGetHeight(UIScreen.mainScreen().nativeBounds)) // long side
+        let height = GLsizei(CGRectGetWidth(UIScreen.mainScreen().nativeBounds)) // short side
+
+        return Float(fabs(Double(width) / Double(height)))
+    }
+
     let context: EAGLContext
     let world: World
     var delegate: RendererDelegate?
-    let font: Font = Font.Default
 
     var modelVertexArray: GLuint = 0
     var modelVertexBuffer: GLuint = 0
@@ -55,7 +61,14 @@ class Renderer: NSObject, GLKViewDelegate {
 
         return requiredModels + items + roads
     }
-    var uiElements: [Renderable] = []
+
+    let testLabel = LabelModel(text: "hoge")
+    var uiElements: [Renderable] {
+        return [testLabel]
+    }
+
+    let font: Font = Font.Default
+    var whiteTextureInfo: GLKTextureInfo!
 
     var prevVertex: IcosahedronVertex!
     var currentVertex: IcosahedronVertex!
@@ -98,12 +111,8 @@ class Renderer: NSObject, GLKViewDelegate {
 
         modelShaderProgram = ModelShaderProgram()
 
-        let width = GLsizei(CGRectGetHeight(UIScreen.mainScreen().nativeBounds)) // long side
-        let height = GLsizei(CGRectGetWidth(UIScreen.mainScreen().nativeBounds)) // short side
-
-        let aspect = Float(fabs(Double(width) / Double(height)))
         let projectionWidth: Float = 1.0
-        let projectionHeight = projectionWidth / aspect
+        let projectionHeight = projectionWidth / Renderer.aspect
         projectionMatrix = GLKMatrix4MakeOrtho(-projectionWidth / 2, projectionWidth / 2, -projectionHeight / 2, projectionHeight / 2, 0.1, 100)
 
         glGenVertexArrays(1, &modelVertexArray)
@@ -112,6 +121,12 @@ class Renderer: NSObject, GLKViewDelegate {
         glGenBuffers(1, &modelVertexBuffer)
 
         glBindVertexArray(0)
+
+        guard let whiteTextureFilePath = NSBundle.mainBundle().pathForResource("white", ofType: "png") else {
+            fatalError("file not found white.png")
+        }
+        whiteTextureInfo = try! GLKTextureLoader.textureWithContentsOfFile(whiteTextureFilePath, options: nil)
+        font.loadTexture()
     }
 
     func tearDownGL() {
@@ -207,7 +222,14 @@ class Renderer: NSObject, GLKViewDelegate {
         modelShaderProgram.worldMatrix = worldMatrix
         modelShaderProgram.normalMatrix = normalMatrix
 
-        renderModels(objects)
+        glActiveTexture(GLenum(GL_TEXTURE0))
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
+        modelShaderProgram.texture = whiteTextureInfo.name
+//        renderModels(objects)
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), font.textureInfo.name)
+        modelShaderProgram.texture = font.textureInfo.name
         renderModels(uiElements)
     }
 }

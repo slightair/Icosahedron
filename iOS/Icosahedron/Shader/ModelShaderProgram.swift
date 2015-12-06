@@ -6,11 +6,10 @@ class ModelShaderProgram: ShaderProgram {
         case ProjectionMatrix
         case WorldMatrix
         case NormalMatrix
-        case VertexTexture
-        case UseTexture
+        case Texture
 
         static var count: Int {
-            return [ProjectionMatrix, WorldMatrix, NormalMatrix, VertexTexture, UseTexture].count
+            return [ProjectionMatrix, WorldMatrix, NormalMatrix, Texture].count
         }
     }
 
@@ -38,16 +37,9 @@ class ModelShaderProgram: ShaderProgram {
         }
     }
 
-    var vertexTexture: GLint = 0 {
+    var texture: GLuint = 0 {
         didSet {
-            glUniform1i(uniforms[Uniform.VertexTexture.rawValue], 0)
-        }
-    }
-
-    var useTexture: Bool = false {
-        didSet {
-            let boolParam = useTexture ? GLint(GL_TRUE) : GLint(GL_FALSE)
-            glUniform1i(uniforms[Uniform.UseTexture.rawValue], boolParam)
+            glUniform1ui(uniforms[Uniform.Texture.rawValue], texture)
         }
     }
 
@@ -55,10 +47,9 @@ class ModelShaderProgram: ShaderProgram {
         super.init(shaderName: "ModelShader")
 
         uniforms = [GLint](count: Uniform.count, repeatedValue: 0)
-        uniforms[Uniform.ProjectionMatrix.rawValue] = glGetUniformLocation(programID, "projectionMatrix")
-        uniforms[Uniform.WorldMatrix.rawValue] = glGetUniformLocation(programID, "worldMatrix")
-        uniforms[Uniform.NormalMatrix.rawValue] = glGetUniformLocation(programID, "normalMatrix")
-        uniforms[Uniform.VertexTexture.rawValue] = glGetUniformLocation(programID, "vertexTexture")
-        uniforms[Uniform.UseTexture.rawValue] = glGetUniformLocation(programID, "useTexture")
+        uniforms[Uniform.ProjectionMatrix.rawValue] = glGetUniformLocation(programID, "uProjectionMatrix")
+        uniforms[Uniform.WorldMatrix.rawValue] = glGetUniformLocation(programID, "uWorldMatrix")
+        uniforms[Uniform.NormalMatrix.rawValue] = glGetUniformLocation(programID, "uNormalMatrix")
+        uniforms[Uniform.Texture.rawValue] = glGetUniformLocation(programID, "uTexture")
     }
 }

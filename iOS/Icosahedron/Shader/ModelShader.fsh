@@ -1,22 +1,17 @@
 #version 300 es
 
-in lowp vec4 colorVarying;
+in lowp vec4 vColor;
+in lowp vec2 vTexCoord;
 
 out mediump vec4 outputColor;
 
-uniform sampler2D vertexTexture;
-uniform bool useTexture;
+uniform sampler2D uTexture;
 
 void main()
 {
-    if (!useTexture) {
-        outputColor = colorVarying;
-        return;
-    }
-
-    mediump vec4 textureColor = texture(vertexTexture, gl_PointCoord);
+    mediump vec4 textureColor = texture(uTexture, vTexCoord);
     if (textureColor.a < 0.1) {
         discard;
     }
-    outputColor = colorVarying * textureColor;
+    outputColor = vColor * textureColor;
 }
