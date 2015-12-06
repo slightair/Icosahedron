@@ -38,6 +38,9 @@
 		57DC98091C1325690004B107 /* font.json in Resources */ = {isa = PBXBuildFile; fileRef = 57DC98071C1325690004B107 /* font.json */; };
 		57DC980A1C1325690004B107 /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 57DC98081C1325690004B107 /* font.png */; };
 		57DC980C1C1325C90004B107 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DC980B1C1325C90004B107 /* Font.swift */; };
+		57DC980E1C141A350004B107 /* LabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DC980D1C141A350004B107 /* LabelModel.swift */; };
+		57DC98111C1428040004B107 /* debug.png in Resources */ = {isa = PBXBuildFile; fileRef = 57DC980F1C1428040004B107 /* debug.png */; };
+		57DC98121C1428040004B107 /* white.png in Resources */ = {isa = PBXBuildFile; fileRef = 57DC98101C1428040004B107 /* white.png */; };
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
 		57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC9511BD7D180009423EA /* SpriteKit.framework */; };
 		57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */; };
@@ -81,6 +84,9 @@
 		57DC98071C1325690004B107 /* font.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = font.json; sourceTree = "<group>"; };
 		57DC98081C1325690004B107 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = font.png; sourceTree = "<group>"; };
 		57DC980B1C1325C90004B107 /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		57DC980D1C141A350004B107 /* LabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelModel.swift; sourceTree = "<group>"; };
+		57DC980F1C1428040004B107 /* debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = debug.png; sourceTree = "<group>"; };
+		57DC98101C1428040004B107 /* white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white.png; sourceTree = "<group>"; };
 		57DDC94F1BD7D173009423EA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		57DDC9511BD7D180009423EA /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
@@ -173,6 +179,7 @@
 				579AD5F91C01EEB900218D38 /* IcosahedronModel.swift */,
 				579AD5FF1C01EEB900218D38 /* TetrahedronModel.swift */,
 				57CDCD701C02FDF300A4E085 /* LeadModel.swift */,
+				57DC980D1C141A350004B107 /* LabelModel.swift */,
 			);
 			name = BaseModel;
 			sourceTree = "<group>";
@@ -183,6 +190,8 @@
 				57DC98071C1325690004B107 /* font.json */,
 				57DC98081C1325690004B107 /* font.png */,
 				57DC980B1C1325C90004B107 /* Font.swift */,
+				57DC980F1C1428040004B107 /* debug.png */,
+				57DC98101C1428040004B107 /* white.png */,
 			);
 			path = Texture;
 			sourceTree = "<group>";
@@ -287,11 +296,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */,
+				57DC98111C1428040004B107 /* debug.png in Resources */,
 				579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */,
 				579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */,
 				57DC98091C1325690004B107 /* font.json in Resources */,
 				579013B11BC1083400ADAE3E /* LaunchScreen.storyboard in Resources */,
 				57DC980A1C1325690004B107 /* font.png in Resources */,
+				57DC98121C1428040004B107 /* white.png in Resources */,
 				574A2B5F1BE89BD400CFA4B4 /* BlurShader.fsh in Resources */,
 				574A2B601BE89BD400CFA4B4 /* BlurShader.vsh in Resources */,
 				573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */,
@@ -373,6 +384,7 @@
 				579AD60C1C02F92700218D38 /* MotherIcosahedronModel.swift in Sources */,
 				579AD5F41C01ECA100218D38 /* World.swift in Sources */,
 				579AD6051C01EEB900218D38 /* ModelVertex.swift in Sources */,
+				57DC980E1C141A350004B107 /* LabelModel.swift in Sources */,
 				579AD6021C01EEB900218D38 /* IcosahedronVertex.swift in Sources */,
 				579AD6061C01EEB900218D38 /* Renderable.swift in Sources */,
 				579AD6071C01EEB900218D38 /* TetrahedronModel.swift in Sources */,

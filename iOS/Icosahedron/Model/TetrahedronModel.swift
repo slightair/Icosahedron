@@ -23,22 +23,24 @@ class TetrahedronModel: Renderable {
         let normalCDA = createFaceNormal(coordC, y: coordD, z: coordA)
         let normalBAD = createFaceNormal(coordB, y: coordA, z: coordD)
 
+        let texCoord = GLKVector2Make(0, 0)
+
         localModelVertices = [
-            ModelVertex(position: coordD, normal: normalDCB, color: color),
-            ModelVertex(position: coordC, normal: normalDCB, color: color),
-            ModelVertex(position: coordB, normal: normalDCB, color: color),
+            ModelVertex(position: coordD, normal: normalDCB, color: color, texCoord: texCoord),
+            ModelVertex(position: coordC, normal: normalDCB, color: color, texCoord: texCoord),
+            ModelVertex(position: coordB, normal: normalDCB, color: color, texCoord: texCoord),
 
-            ModelVertex(position: coordC, normal: normalCAB, color: color),
-            ModelVertex(position: coordA, normal: normalCAB, color: color),
-            ModelVertex(position: coordB, normal: normalCAB, color: color),
+            ModelVertex(position: coordC, normal: normalCAB, color: color, texCoord: texCoord),
+            ModelVertex(position: coordA, normal: normalCAB, color: color, texCoord: texCoord),
+            ModelVertex(position: coordB, normal: normalCAB, color: color, texCoord: texCoord),
 
-            ModelVertex(position: coordC, normal: normalCDA, color: color),
-            ModelVertex(position: coordD, normal: normalCDA, color: color),
-            ModelVertex(position: coordA, normal: normalCDA, color: color),
+            ModelVertex(position: coordC, normal: normalCDA, color: color, texCoord: texCoord),
+            ModelVertex(position: coordD, normal: normalCDA, color: color, texCoord: texCoord),
+            ModelVertex(position: coordA, normal: normalCDA, color: color, texCoord: texCoord),
 
-            ModelVertex(position: coordB, normal: normalBAD, color: color),
-            ModelVertex(position: coordA, normal: normalBAD, color: color),
-            ModelVertex(position: coordD, normal: normalBAD, color: color),
+            ModelVertex(position: coordB, normal: normalBAD, color: color, texCoord: texCoord),
+            ModelVertex(position: coordA, normal: normalBAD, color: color, texCoord: texCoord),
+            ModelVertex(position: coordD, normal: normalBAD, color: color, texCoord: texCoord),
         ]
 
         topCoordinate = GLKVector3Make(-1, -1, -1)

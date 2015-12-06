@@ -23,14 +23,16 @@ class LeadModel: Renderable {
         let normalACB = createFaceNormal(coordA, y: coordC, z: coordB)
         let normalCDB = createFaceNormal(coordC, y: coordD, z: coordB)
 
-        localModelVertices = [
-            ModelVertex(position: coordA, normal: normalACB, color: leftColor),
-            ModelVertex(position: coordC, normal: normalACB, color: rightColor),
-            ModelVertex(position: coordB, normal: normalACB, color: leftColor),
+        let texCoord = GLKVector2Make(0, 0)
 
-            ModelVertex(position: coordC, normal: normalCDB, color: rightColor),
-            ModelVertex(position: coordD, normal: normalCDB, color: rightColor),
-            ModelVertex(position: coordB, normal: normalCDB, color: leftColor),
+        localModelVertices = [
+            ModelVertex(position: coordA, normal: normalACB, color: leftColor, texCoord: texCoord),
+            ModelVertex(position: coordC, normal: normalACB, color: rightColor, texCoord: texCoord),
+            ModelVertex(position: coordB, normal: normalACB, color: leftColor, texCoord: texCoord),
+
+            ModelVertex(position: coordC, normal: normalCDB, color: rightColor, texCoord: texCoord),
+            ModelVertex(position: coordD, normal: normalCDB, color: rightColor, texCoord: texCoord),
+            ModelVertex(position: coordB, normal: normalCDB, color: leftColor, texCoord: texCoord),
         ]
 
         topCoordinate = GLKVector3Make(0, 0, 1)

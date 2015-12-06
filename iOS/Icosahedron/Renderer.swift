@@ -43,7 +43,7 @@ class Renderer: NSObject, GLKViewDelegate {
 
     let icosahedronModel = MotherIcosahedronModel()
     let markerModel = MarkerModel()
-    var models: [Renderable] {
+    var objects: [Renderable] {
         func coord(point: Icosahedron.Point) -> GLKVector3 {
             return icosahedronModel.coordinateOfPoint(point)
         }
@@ -55,6 +55,7 @@ class Renderer: NSObject, GLKViewDelegate {
 
         return requiredModels + items + roads
     }
+    var uiElements: [Renderable] = []
 
     var prevVertex: IcosahedronVertex!
     var currentVertex: IcosahedronVertex!
@@ -151,15 +152,7 @@ class Renderer: NSObject, GLKViewDelegate {
         currentQuaternion = GLKQuaternionMultiply(currentQuaternion, relativeQuaternion)
     }
 
-    func renderModels() {
-        glEnable(GLenum(GL_DEPTH_TEST))
-
-        glUseProgram(modelShaderProgram.programID)
-
-        modelShaderProgram.projectionMatrix = projectionMatrix
-        modelShaderProgram.worldMatrix = worldMatrix
-        modelShaderProgram.normalMatrix = normalMatrix
-
+    func renderModels(models: [Renderable]) {
         let modelVertices = models.flatMap { $0.modelVertices }
         let vertices: [Float] = modelVertices.flatMap { $0.v }
 
@@ -177,6 +170,9 @@ class Renderer: NSObject, GLKViewDelegate {
 
         glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
         glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 6))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.TexCoord0.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.TexCoord0.rawValue), 2, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 10))
 
         glDrawArrays(GLenum(GL_TRIANGLES), 0, GLsizei(modelVertices.count))
 
@@ -203,6 +199,15 @@ class Renderer: NSObject, GLKViewDelegate {
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT) | GLbitfield(GL_DEPTH_BUFFER_BIT))
 
-        renderModels()
+        glEnable(GLenum(GL_DEPTH_TEST))
+
+        glUseProgram(modelShaderProgram.programID)
+
+        modelShaderProgram.projectionMatrix = projectionMatrix
+        modelShaderProgram.worldMatrix = worldMatrix
+        modelShaderProgram.normalMatrix = normalMatrix
+
+        renderModels(objects)
+        renderModels(uiElements)
     }
 }

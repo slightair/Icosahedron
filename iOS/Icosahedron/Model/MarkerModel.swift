@@ -53,54 +53,56 @@ class MarkerModel: Renderable {
         let normalDEC = createFaceNormal(coordD, y: coordE, z: coordC)
         let normalFED = createFaceNormal(coordF, y: coordE, z: coordD)
 
+        let texCoord = GLKVector2Make(0, 0)
+
         localModelVertices = [
-            ModelVertex(position: coordC, normal: normalCGA, color: faceColor),
-            ModelVertex(position: coordG, normal: normalCGA, color: faceColor),
-            ModelVertex(position: coordA, normal: normalCGA, color: faceColor),
+            ModelVertex(position: coordC, normal: normalCGA, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordG, normal: normalCGA, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordA, normal: normalCGA, color: faceColor, texCoord: texCoord),
 
-            ModelVertex(position: coordE, normal: normalEGC, color: faceColor),
-            ModelVertex(position: coordG, normal: normalEGC, color: faceColor),
-            ModelVertex(position: coordC, normal: normalEGC, color: faceColor),
+            ModelVertex(position: coordE, normal: normalEGC, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordG, normal: normalEGC, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordC, normal: normalEGC, color: faceColor, texCoord: texCoord),
 
-            ModelVertex(position: coordH, normal: normalHGE, color: faceColor),
-            ModelVertex(position: coordG, normal: normalHGE, color: faceColor),
-            ModelVertex(position: coordE, normal: normalHGE, color: faceColor),
+            ModelVertex(position: coordH, normal: normalHGE, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordG, normal: normalHGE, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordE, normal: normalHGE, color: faceColor, texCoord: texCoord),
 
-            ModelVertex(position: coordF, normal: normalFHE, color: faceColor),
-            ModelVertex(position: coordH, normal: normalFHE, color: faceColor),
-            ModelVertex(position: coordE, normal: normalFHE, color: faceColor),
+            ModelVertex(position: coordF, normal: normalFHE, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordH, normal: normalFHE, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordE, normal: normalFHE, color: faceColor, texCoord: texCoord),
 
-            ModelVertex(position: coordB, normal: normalBHD, color: faceColor),
-            ModelVertex(position: coordH, normal: normalBHD, color: faceColor),
-            ModelVertex(position: coordD, normal: normalBHD, color: faceColor),
+            ModelVertex(position: coordB, normal: normalBHD, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordH, normal: normalBHD, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordD, normal: normalBHD, color: faceColor, texCoord: texCoord),
 
-            ModelVertex(position: coordD, normal: normalDHF, color: faceColor),
-            ModelVertex(position: coordH, normal: normalDHF, color: faceColor),
-            ModelVertex(position: coordF, normal: normalDHF, color: faceColor),
+            ModelVertex(position: coordD, normal: normalDHF, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordH, normal: normalDHF, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordF, normal: normalDHF, color: faceColor, texCoord: texCoord),
 
-            ModelVertex(position: coordB, normal: normalBAG, color: faceColor),
-            ModelVertex(position: coordA, normal: normalBAG, color: faceColor),
-            ModelVertex(position: coordG, normal: normalBAG, color: faceColor),
+            ModelVertex(position: coordB, normal: normalBAG, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordA, normal: normalBAG, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordG, normal: normalBAG, color: faceColor, texCoord: texCoord),
 
-            ModelVertex(position: coordH, normal: normalHBG, color: faceColor),
-            ModelVertex(position: coordB, normal: normalHBG, color: faceColor),
-            ModelVertex(position: coordG, normal: normalHBG, color: faceColor),
+            ModelVertex(position: coordH, normal: normalHBG, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordB, normal: normalHBG, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordG, normal: normalHBG, color: faceColor, texCoord: texCoord),
 
-            ModelVertex(position: coordB, normal: normalBCA, color: faceColor),
-            ModelVertex(position: coordC, normal: normalBCA, color: faceColor),
-            ModelVertex(position: coordA, normal: normalBCA, color: faceColor),
+            ModelVertex(position: coordB, normal: normalBCA, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordC, normal: normalBCA, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordA, normal: normalBCA, color: faceColor, texCoord: texCoord),
 
-            ModelVertex(position: coordD, normal: normalDCB, color: faceColor),
-            ModelVertex(position: coordC, normal: normalDCB, color: faceColor),
-            ModelVertex(position: coordB, normal: normalDCB, color: faceColor),
+            ModelVertex(position: coordD, normal: normalDCB, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordC, normal: normalDCB, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordB, normal: normalDCB, color: faceColor, texCoord: texCoord),
             
-            ModelVertex(position: coordD, normal: normalDEC, color: faceColor),
-            ModelVertex(position: coordE, normal: normalDEC, color: faceColor),
-            ModelVertex(position: coordC, normal: normalDEC, color: faceColor),
+            ModelVertex(position: coordD, normal: normalDEC, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordE, normal: normalDEC, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordC, normal: normalDEC, color: faceColor, texCoord: texCoord),
             
-            ModelVertex(position: coordF, normal: normalFED, color: faceColor),
-            ModelVertex(position: coordE, normal: normalFED, color: faceColor),
-            ModelVertex(position: coordD, normal: normalFED, color: faceColor),
+            ModelVertex(position: coordF, normal: normalFED, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordE, normal: normalFED, color: faceColor, texCoord: texCoord),
+            ModelVertex(position: coordD, normal: normalFED, color: faceColor, texCoord: texCoord),
         ]
 
         topCoordinate = GLKVector3Make(0, 1, 0)
