@@ -3,15 +3,15 @@ import Himotoki
 
 class Font {
     struct Char: Decodable {
-        let offset: GLKVector2
+        let canvas: GLKVector4
         let rect: GLKVector4
 
         static func decode(e: Extractor) throws -> Char {
-            let offset: [Float] = try e <|| "offset"
+            let canvas: [Float] = try e <|| "canvas"
             let rect: [Float] = try e <|| "rect"
 
             return Char(
-                offset: GLKVector2Make(offset[0], offset[1]),
+                canvas: GLKVector4Make(canvas[0], canvas[1], canvas[2], canvas[3]),
                 rect: GLKVector4Make(rect[0], rect[1], rect[2], rect[3])
             )
         }
@@ -19,6 +19,7 @@ class Font {
 
     let name: String
     let map: [String: Char]
+    let ratio: Float
     var textureInfo: GLKTextureInfo!
 
     init(name: String) {
@@ -31,6 +32,7 @@ class Font {
         guard let JSONObject = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0)) as? [String: AnyObject] else {
             fatalError("invalid json file")
         }
+        ratio = Float(JSONObject["ratio"] as! NSNumber)
         map = Font.parseMapFile(JSONObject)
     }
 

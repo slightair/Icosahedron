@@ -7,27 +7,37 @@ class LabelModel: Renderable {
         let normal = GLKVector3Make(0, 0, -1)
         let color = GLKVector4Make(1, 1, 1, 1)
 
-        let glyphWidth = glyphSize * (30.0 / 63.0) // tentative
+        let glyphWidth = glyphSize * Font.Default.ratio
         let glyphHeight = glyphSize
         var vertices: [ModelVertex] = []
-        var posX: Float = 0.0
+        var baseX: Float = 0.0
         for char in self.chars {
-            let posA = GLKVector3Make(posX, 0, 0)
-            let posB = GLKVector3Make(posX, glyphHeight, 0)
-            let posC = GLKVector3Make(posX + glyphWidth, 0, 0)
-            let posD = GLKVector3Make(posX + glyphWidth, glyphHeight, 0)
+            let localX = glyphWidth * char.canvas.s
+            let localY = glyphHeight * char.canvas.t
+            let localW = glyphWidth * char.canvas.p
+            let localH = glyphHeight * char.canvas.q
+
+            let posA = GLKVector3Make(baseX + localX, localY, 0)
+            let posB = GLKVector3Make(baseX + localX, localY + localH, 0)
+            let posC = GLKVector3Make(baseX + localX + localW, localY, 0)
+            let posD = GLKVector3Make(baseX + localX + localW, localY + localH, 0)
+
+            let texCoordA = GLKVector2Make(char.rect.s, char.rect.t)
+            let texCoordB = GLKVector2Make(char.rect.s, char.rect.t + char.rect.q)
+            let texCoordC = GLKVector2Make(char.rect.s + char.rect.p, char.rect.t)
+            let texCoordD = GLKVector2Make(char.rect.s + char.rect.p, char.rect.t + char.rect.q)
 
             vertices.appendContentsOf([
-                ModelVertex(position: posA, normal: normal, color: GLKVector4Make(1, 0, 0, 0), texCoord: GLKVector2Make(0, 0)),
-                ModelVertex(position: posB, normal: normal, color: color, texCoord: GLKVector2Make(0, 1)),
-                ModelVertex(position: posC, normal: normal, color: color, texCoord: GLKVector2Make(1, 0)),
+                ModelVertex(position: posA, normal: normal, color: color, texCoord: texCoordA),
+                ModelVertex(position: posB, normal: normal, color: color, texCoord: texCoordB),
+                ModelVertex(position: posC, normal: normal, color: color, texCoord: texCoordC),
 
-                ModelVertex(position: posB, normal: normal, color: color, texCoord: GLKVector2Make(0, 1)),
-                ModelVertex(position: posC, normal: normal, color: color, texCoord: GLKVector2Make(1, 0)),
-                ModelVertex(position: posD, normal: normal, color: color, texCoord: GLKVector2Make(1, 1)),
+                ModelVertex(position: posB, normal: normal, color: color, texCoord: texCoordB),
+                ModelVertex(position: posC, normal: normal, color: color, texCoord: texCoordC),
+                ModelVertex(position: posD, normal: normal, color: color, texCoord: texCoordD),
             ])
 
-            posX += glyphWidth
+            baseX += glyphWidth
         }
         return vertices
     }
@@ -35,7 +45,7 @@ class LabelModel: Renderable {
     let text: String
     let chars: [Font.Char]
 
-    let glyphSize: Float = 0.2
+    let glyphSize: Float = 0.05
 
     class var scale: Float {
         return 1.0

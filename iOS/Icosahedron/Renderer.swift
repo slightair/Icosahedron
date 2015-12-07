@@ -62,7 +62,7 @@ class Renderer: NSObject, GLKViewDelegate {
         return requiredModels + items + roads
     }
 
-    let testLabel = LabelModel(text: "hoge")
+    let testLabel = LabelModel(text: "ABCDEFG~+!:{|}',")
     var uiElements: [Renderable] {
         return [testLabel]
     }
