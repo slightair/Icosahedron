@@ -106,6 +106,7 @@ class Renderer: NSObject, GLKViewDelegate {
             let point = Icosahedron.Point(rawValue: label.text)!
             if let vertex = icosahedronModel.pointDict[point] {
                 label.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.2)
+                label.size = 0.5
             }
             label.customColor = UIColor.flatWhiteColor().glColor
         }
