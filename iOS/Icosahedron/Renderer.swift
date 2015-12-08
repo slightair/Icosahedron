@@ -62,9 +62,9 @@ class Renderer: NSObject, GLKViewDelegate {
         return requiredModels + items + roads
     }
 
-    let testLabel = LabelModel(text: "ABCDEFG~+!:{|}',")
+    let pointLabels: [Renderable] = Icosahedron.Point.values.map { LabelModel(text: $0.rawValue) }
     var uiElements: [Renderable] {
-        return [testLabel]
+        return pointLabels
     }
 
     let font: Font = Font.Default
@@ -100,6 +100,14 @@ class Renderer: NSObject, GLKViewDelegate {
         currentVertex = icosahedronModel.pointDict[.C]
         let dummyVertex = icosahedronModel.pointDict[.F]!
         markerModel.setPosition(currentVertex.coordinate, prevPosition: dummyVertex.coordinate)
+
+        for element in pointLabels {
+            let label = element as! LabelModel
+            let point = Icosahedron.Point(rawValue: label.text)!
+            if let vertex = icosahedronModel.pointDict[point] {
+                label.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.2)
+            }
+        }
 
         setUpGL()
 
@@ -226,7 +234,7 @@ class Renderer: NSObject, GLKViewDelegate {
 
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
         modelShaderProgram.texture = whiteTextureInfo.name
-//        renderModels(objects)
+        renderModels(objects)
 
         glBindTexture(GLenum(GL_TEXTURE_2D), font.textureInfo.name)
         modelShaderProgram.texture = font.textureInfo.name
