@@ -37,9 +37,9 @@ class ModelShaderProgram: ShaderProgram {
         }
     }
 
-    var texture: GLuint = 0 {
+    var texture: GLint = 0 {
         didSet {
-            glUniform1ui(uniforms[Uniform.Texture.rawValue], texture)
+            glUniform1i(uniforms[Uniform.Texture.rawValue], texture)
         }
     }
 

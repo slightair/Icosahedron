@@ -238,11 +238,9 @@ class Renderer: NSObject, GLKViewDelegate {
         glActiveTexture(GLenum(GL_TEXTURE0))
 
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
-        modelShaderProgram.texture = whiteTextureInfo.name
         renderModels(objects)
 
         glBindTexture(GLenum(GL_TEXTURE_2D), font.textureInfo.name)
-        modelShaderProgram.texture = font.textureInfo.name
         renderModels(uiElements)
     }
 }
