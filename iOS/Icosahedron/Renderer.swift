@@ -224,6 +224,9 @@ class Renderer: NSObject, GLKViewDelegate {
 
         glEnable(GLenum(GL_DEPTH_TEST))
 
+        glEnable(GLenum(GL_BLEND))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
+
         glUseProgram(modelShaderProgram.programID)
 
         modelShaderProgram.projectionMatrix = projectionMatrix
