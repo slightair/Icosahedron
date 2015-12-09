@@ -10,17 +10,18 @@ class LabelModel: Renderable {
         let glyphWidth = size / 10 * Font.Default.ratio
         let glyphHeight = size / 10
         var vertices: [ModelVertex] = []
-        var baseX: Float = 0.0
+        var baseX: Float = -glyphWidth * Float(self.chars.count) / 2.0
+        let baseY: Float = -glyphHeight / 2.0
         for char in self.chars {
             let localX = glyphWidth * char.canvas.s
             let localY = glyphHeight * char.canvas.t
             let localW = glyphWidth * char.canvas.p
             let localH = glyphHeight * char.canvas.q
 
-            let posA = GLKVector3Make(baseX + localX, localY, 0)
-            let posB = GLKVector3Make(baseX + localX, localY + localH, 0)
-            let posC = GLKVector3Make(baseX + localX + localW, localY, 0)
-            let posD = GLKVector3Make(baseX + localX + localW, localY + localH, 0)
+            let posA = GLKVector3Make(baseX + localX, baseY + localY, 0)
+            let posB = GLKVector3Make(baseX + localX, baseY + localY + localH, 0)
+            let posC = GLKVector3Make(baseX + localX + localW, baseY + localY, 0)
+            let posD = GLKVector3Make(baseX + localX + localW, baseY + localY + localH, 0)
 
             let texCoordA = GLKVector2Make(char.rect.s, char.rect.t)
             let texCoordB = GLKVector2Make(char.rect.s, char.rect.t + char.rect.q)
