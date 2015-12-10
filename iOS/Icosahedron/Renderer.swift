@@ -63,7 +63,12 @@ class Renderer: NSObject, GLKViewDelegate {
     }
 
     let pointLabels: [Renderable] = Icosahedron.Point.values.map { LabelModel(text: $0.rawValue) }
-    var uiElements: [Renderable] {
+    var labelObjects: [Renderable] {
+        for model in pointLabels {
+            if let label = model as? LabelModel {
+                label.quaternion = billboardQuaternion
+            }
+        }
         return pointLabels
     }
 
@@ -86,6 +91,7 @@ class Renderer: NSObject, GLKViewDelegate {
             }
         }
     }
+    var billboardQuaternion = GLKQuaternionIdentity
 
     deinit {
         tearDownGL()
@@ -105,7 +111,7 @@ class Renderer: NSObject, GLKViewDelegate {
             let label = element as! LabelModel
             let point = Icosahedron.Point(rawValue: label.text)!
             if let vertex = icosahedronModel.pointDict[point] {
-                label.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.0)
+                label.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.1)
                 label.size = 0.5
             }
             label.customColor = UIColor.flatWhiteColor().glColor
@@ -212,6 +218,7 @@ class Renderer: NSObject, GLKViewDelegate {
         let baseQuaternion = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0)
         let movingQuaternion = GLKQuaternionSlerp(prevQuaternion, currentQuaternion, animationProgress)
         let worldQuaternion = GLKQuaternionMultiply(baseQuaternion, movingQuaternion)
+        billboardQuaternion = GLKQuaternionInvert(movingQuaternion)
 
         let baseMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -1.0)
         worldMatrix = GLKMatrix4Multiply(baseMatrix, GLKMatrix4MakeWithQuaternion(worldQuaternion))
@@ -241,6 +248,6 @@ class Renderer: NSObject, GLKViewDelegate {
         renderModels(objects)
 
         glBindTexture(GLenum(GL_TEXTURE_2D), font.textureInfo.name)
-        renderModels(uiElements)
+        renderModels(labelObjects)
     }
 }
