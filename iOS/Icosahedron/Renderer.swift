@@ -1,6 +1,11 @@
 import GLKit
 import OpenGLES
 
+func BUFFER_OFFSET(i: Int) -> UnsafePointer<Void> {
+    let p: UnsafePointer<Void> = nil
+    return p.advancedBy(i)
+}
+
 func quaternionForRotate(from from: GLKVector3, to: GLKVector3) -> GLKQuaternion {
     let normalizedFrom = GLKVector3Normalize(from)
     let normalizedTo = GLKVector3Normalize(to)
