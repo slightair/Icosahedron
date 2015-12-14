@@ -77,6 +77,20 @@ class Renderer: NSObject, GLKViewDelegate {
         return pointLabels
     }
 
+    let gaugeModels: [Renderable] = [
+        GaugeModel(color: UIColor.flatRedColor().glColor),
+        GaugeModel(color: UIColor.flatGreenColor().glColor),
+        GaugeModel(color: UIColor.flatBlueColor().glColor),
+    ]
+    var gaugeObjects: [Renderable] {
+        for model in gaugeModels {
+            if let gauge = model as? GaugeModel {
+                gauge.quaternion = billboardQuaternion
+            }
+        }
+        return gaugeModels
+    }
+
     let font: Font = Font.Default
     var whiteTextureInfo: GLKTextureInfo!
 
@@ -120,6 +134,12 @@ class Renderer: NSObject, GLKViewDelegate {
                 label.size = 0.5
             }
             label.customColor = UIColor.flatWhiteColor().glColor
+        }
+
+        for (index, model) in gaugeModels.enumerate() {
+            if let gauge = model as? GaugeModel {
+                gauge.position = GLKVector3Add(markerModel.position, GLKVector3Make(0, 0.02 * Float(index + 1) + 0.03, 0))
+            }
         }
 
         setUpGL()
@@ -251,6 +271,7 @@ class Renderer: NSObject, GLKViewDelegate {
 
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
         renderModels(objects)
+        renderModels(gaugeObjects)
 
         glBindTexture(GLenum(GL_TEXTURE_2D), font.textureInfo.name)
         renderModels(labelObjects)
