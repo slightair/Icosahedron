@@ -30,10 +30,12 @@ class World {
                 }
             }
             putNewItemWithIgnore(currentPoint)
+            moveCount += 1
         }
     }
     let pointRandomSource = GKMersenneTwisterRandomSource(seed: 6239)
     let colorRandomSource = GKMersenneTwisterRandomSource(seed: 3962)
+    var moveCount = 0
 
     init() {
         items = [

@@ -87,6 +87,11 @@ class Renderer: NSObject, GLKViewDelegate {
         return gaugeModels
     }
 
+    let countLabelModel = LabelModel(text: "Count:0")
+    var uiLabelObjects: [Renderable] {
+        return [countLabelModel]
+    }
+
     let font: Font = Font.Default
     var whiteTextureInfo: GLKTextureInfo!
 
@@ -102,6 +107,8 @@ class Renderer: NSObject, GLKViewDelegate {
 
                 if animationProgress == 1.0 {
                     delegate?.didChangeIcosahedronPoint(currentVertex.point)
+
+                    countLabelModel.text = "Count:\(world.moveCount)"
                 }
             }
         }
@@ -134,9 +141,14 @@ class Renderer: NSObject, GLKViewDelegate {
 
         for (index, model) in gaugeModels.enumerate() {
             if let gauge = model as? GaugeModel {
-                gauge.position = GLKVector3Add(GLKVector3Make(0, -0.2, 0), GLKVector3Make(0, -0.04 * Float(index + 1) + 0.03, 0))
+                gauge.position = GLKVector3Add(GLKVector3Make(0, 0.2, 0), GLKVector3Make(0, 0.04 * Float(index + 1) + 0.03, 0))
             }
         }
+
+        countLabelModel.position = GLKVector3Make(-0.98, 0.98, 0)
+        countLabelModel.size = 1.0
+        countLabelModel.horizontalAlign = .Left
+        countLabelModel.verticalAlign = .Bottom
 
         setUpGL()
 
@@ -278,5 +290,8 @@ class Renderer: NSObject, GLKViewDelegate {
 
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
         renderModels(uiObjects)
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), font.textureInfo.name)
+        renderModels(uiLabelObjects)
     }
 }
