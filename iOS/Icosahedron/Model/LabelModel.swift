@@ -1,6 +1,18 @@
 import GLKit
 
 class LabelModel: Renderable {
+    enum HorizontalAlign {
+        case Left
+        case Center
+        case Right
+    }
+
+    enum VerticalAlign {
+        case Top
+        case Center
+        case Bottom
+    }
+
     var position = GLKVector3Make(0.0, 0.0, 0.0)
     var quaternion = GLKQuaternionIdentity
     var localModelVertices: [ModelVertex] {
@@ -10,8 +22,27 @@ class LabelModel: Renderable {
         let glyphWidth = size / 10 * Font.Default.ratio
         let glyphHeight = size / 10
         var vertices: [ModelVertex] = []
-        var baseX: Float = -glyphWidth * Float(self.chars.count) / 2.0
-        let baseY: Float = -glyphHeight / 2.0
+        var baseX: Float
+        let baseY: Float
+
+        switch horizontalAlign {
+        case .Left:
+            baseX = 0
+        case .Center:
+            baseX = -glyphWidth * Float(self.chars.count) / 2.0
+        case .Right:
+            baseX = -glyphWidth * Float(self.chars.count)
+        }
+
+        switch verticalAlign {
+        case .Top:
+            baseY = glyphHeight
+        case .Center:
+            baseY = -glyphHeight / 2.0
+        case .Bottom:
+            baseY = -glyphHeight
+        }
+
         for char in self.chars {
             let localX = glyphWidth * char.canvas.s
             let localY = glyphHeight * char.canvas.t
@@ -51,6 +82,9 @@ class LabelModel: Renderable {
     var chars: [Font.Char] = []
 
     var size: Float = 0.2
+
+    var horizontalAlign: HorizontalAlign = .Center
+    var verticalAlign: VerticalAlign = .Center
 
     class var scale: Float {
         return 1.0
