@@ -38,8 +38,8 @@ class GaugeModel: Renderable {
 
     let baseColor: GLKVector4
     var progress: Float = 0.5
-    var width: Float = 0.15
-    let height: Float = 0.01
+    var width: Float = 0.3
+    let height: Float = 0.02
 
     init(color: GLKVector4) {
         baseColor = color

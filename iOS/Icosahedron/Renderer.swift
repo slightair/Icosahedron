@@ -47,6 +47,7 @@ class Renderer: NSObject, GLKViewDelegate {
     var modelVertexArray: GLuint = 0
     var modelVertexBuffer: GLuint = 0
     var modelShaderProgram: ModelShaderProgram!
+    var uiShaderProgram: UIShaderProgram!
 
     var projectionMatrix = GLKMatrix4Identity
     var worldMatrix = GLKMatrix4Identity
@@ -82,12 +83,7 @@ class Renderer: NSObject, GLKViewDelegate {
         GaugeModel(color: UIColor.flatGreenColor().glColor),
         GaugeModel(color: UIColor.flatBlueColor().glColor),
     ]
-    var gaugeObjects: [Renderable] {
-        for model in gaugeModels {
-            if let gauge = model as? GaugeModel {
-                gauge.quaternion = billboardQuaternion
-            }
-        }
+    var uiObjects: [Renderable] {
         return gaugeModels
     }
 
@@ -138,7 +134,7 @@ class Renderer: NSObject, GLKViewDelegate {
 
         for (index, model) in gaugeModels.enumerate() {
             if let gauge = model as? GaugeModel {
-                gauge.position = GLKVector3Add(markerModel.position, GLKVector3Make(0, 0.02 * Float(index + 1) + 0.03, 0))
+                gauge.position = GLKVector3Add(GLKVector3Make(0, -0.2, 0), GLKVector3Make(0, -0.04 * Float(index + 1) + 0.03, 0))
             }
         }
 
@@ -151,6 +147,7 @@ class Renderer: NSObject, GLKViewDelegate {
         EAGLContext.setCurrentContext(context)
 
         modelShaderProgram = ModelShaderProgram()
+        uiShaderProgram = UIShaderProgram()
 
         let projectionWidth: Float = 1.0
         let projectionHeight = projectionWidth / Renderer.aspect
@@ -271,9 +268,15 @@ class Renderer: NSObject, GLKViewDelegate {
 
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
         renderModels(objects)
-        renderModels(gaugeObjects)
 
         glBindTexture(GLenum(GL_TEXTURE_2D), font.textureInfo.name)
         renderModels(labelObjects)
+
+        glDisable(GLenum(GL_DEPTH_TEST))
+
+        glUseProgram(uiShaderProgram.programID)
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
+        renderModels(uiObjects)
     }
 }
