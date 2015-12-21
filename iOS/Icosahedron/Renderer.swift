@@ -141,12 +141,12 @@ class Renderer: NSObject, GLKViewDelegate {
 
         for (index, model) in gaugeModels.enumerate() {
             if let gauge = model as? GaugeModel {
-                gauge.position = GLKVector3Add(GLKVector3Make(0, 0.2, 0), GLKVector3Make(0, 0.04 * Float(index + 1) + 0.03, 0))
+                gauge.position = GLKVector3Add(GLKVector3Make(0, 0.075, 0), GLKVector3Make(0, 0.015 * Float(index + 1), 0))
             }
         }
 
-        countLabelModel.position = GLKVector3Make(-0.98, 0.98, 0)
-        countLabelModel.size = 1.0
+        countLabelModel.position = GLKVector3Make(-0.495, 0.28, 0)
+        countLabelModel.size = 0.35
         countLabelModel.horizontalAlign = .Left
         countLabelModel.verticalAlign = .Bottom
 
@@ -287,6 +287,8 @@ class Renderer: NSObject, GLKViewDelegate {
         glDisable(GLenum(GL_DEPTH_TEST))
 
         glUseProgram(uiShaderProgram.programID)
+
+        uiShaderProgram.projectionMatrix = projectionMatrix
 
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
         renderModels(uiObjects)
