@@ -1,5 +1,6 @@
 import GLKit
 import OpenGLES
+import RxSwift
 
 protocol RendererDelegate {
     func didChangeIcosahedronPoint(point: Icosahedron.Point)
@@ -51,11 +52,14 @@ class Renderer: NSObject, GLKViewDelegate {
         return pointLabels
     }
 
-    let gaugeModels: [Renderable] = [
-        GaugeModel(color: UIColor.flatRedColor().glColor),
-        GaugeModel(color: UIColor.flatGreenColor().glColor),
-        GaugeModel(color: UIColor.flatBlueColor().glColor),
-    ]
+    let redGauge = GaugeModel(color: UIColor.flatRedColor().glColor)
+    let greenGauge = GaugeModel(color: UIColor.flatGreenColor().glColor)
+    let blueGauge = GaugeModel(color: UIColor.flatBlueColor().glColor)
+
+    var gaugeModels: [Renderable] {
+        return [redGauge, greenGauge, blueGauge]
+    }
+
     var uiObjects: [Renderable] {
         return gaugeModels
     }
@@ -80,13 +84,12 @@ class Renderer: NSObject, GLKViewDelegate {
 
                 if animationProgress == 1.0 {
                     delegate?.didChangeIcosahedronPoint(currentVertex.point)
-
-                    countLabelModel.text = "Count:\(world.moveCount)"
                 }
             }
         }
     }
     var billboardQuaternion = GLKQuaternionIdentity
+    let disposeBag = DisposeBag()
 
     deinit {
         tearDownGL()
@@ -129,6 +132,22 @@ class Renderer: NSObject, GLKViewDelegate {
         countLabelModel.size = 0.35
         countLabelModel.horizontalAlign = .Left
         countLabelModel.verticalAlign = .Bottom
+
+        world.currentPointChanged.subscribeNext { point in
+            self.countLabelModel.text = "Count:\(self.world.moveCount)"
+        }.addDisposableTo(disposeBag)
+
+        world.redCountChanged.subscribeNext { count in
+            self.redGauge.progress = 0.1 * Float(count)
+        }.addDisposableTo(disposeBag)
+
+        world.greenCountChanged.subscribeNext { count in
+            self.greenGauge.progress = 0.1 * Float(count)
+        }.addDisposableTo(disposeBag)
+
+        world.blueCountChanged.subscribeNext { count in
+            self.blueGauge.progress = 0.1 * Float(count)
+        }.addDisposableTo(disposeBag)
     }
 
     func setUpGL() {

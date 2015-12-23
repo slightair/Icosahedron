@@ -1,5 +1,6 @@
 import Foundation
 import GameplayKit
+import RxSwift
 
 class World {
     enum MarkerStatus {
@@ -13,6 +14,7 @@ class World {
     var markerStatus: MarkerStatus = .None
     var items: [Item] = []
     var roads: [Road] = []
+
     var currentPoint = Icosahedron.Point.C {
         didSet {
             let itemPoints = items.map { $0.point }
@@ -23,16 +25,44 @@ class World {
                 switch catchedItem.kind {
                 case .Red:
                     markerStatus = .Red
+                    redCount += 1
                 case .Green:
                     markerStatus = .Green
+                    greenCount += 1
                 case .Blue:
                     markerStatus = .Blue
+                    blueCount += 1
                 }
             }
             putNewItemWithIgnore(currentPoint)
             moveCount += 1
+
+            currentPointChanged.onNext(currentPoint)
         }
     }
+    let currentPointChanged = PublishSubject<Icosahedron.Point>()
+
+    var redCount = 0 {
+        didSet {
+            redCountChanged.onNext(redCount)
+        }
+    }
+    let redCountChanged = PublishSubject<Int>()
+
+    var greenCount = 0 {
+        didSet {
+            greenCountChanged.onNext(greenCount)
+        }
+    }
+    let greenCountChanged = PublishSubject<Int>()
+
+    var blueCount = 0 {
+        didSet {
+            blueCountChanged.onNext(blueCount)
+        }
+    }
+    let blueCountChanged = PublishSubject<Int>()
+
     let pointRandomSource = GKMersenneTwisterRandomSource(seed: 6239)
     let colorRandomSource = GKMersenneTwisterRandomSource(seed: 3962)
     var moveCount = 0
