@@ -12,6 +12,7 @@
 		5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778A5471C25382B0019FF99 /* UIShaderProgram.swift */; };
 		5778A54A1C25384F0019FF99 /* UIShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5778A5491C25384F0019FF99 /* UIShader.fsh */; };
 		5778A54C1C25385B0019FF99 /* UIShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5778A54B1C25385B0019FF99 /* UIShader.vsh */; };
+		5778A5781C2A588B0019FF99 /* RendererSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778A5771C2A588B0019FF99 /* RendererSupport.swift */; };
 		579013A31BC1083400ADAE3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579013A21BC1083400ADAE3E /* AppDelegate.swift */; };
 		579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 579013AA1BC1083400ADAE3E /* Main.storyboard */; };
 		579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 579013AD1BC1083400ADAE3E /* Assets.xcassets */; };
@@ -56,6 +57,7 @@
 		5778A5471C25382B0019FF99 /* UIShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIShaderProgram.swift; sourceTree = "<group>"; };
 		5778A5491C25384F0019FF99 /* UIShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UIShader.fsh; sourceTree = "<group>"; };
 		5778A54B1C25385B0019FF99 /* UIShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UIShader.vsh; sourceTree = "<group>"; };
+		5778A5771C2A588B0019FF99 /* RendererSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererSupport.swift; sourceTree = "<group>"; };
 		5790139F1BC1083400ADAE3E /* Icosahedron.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Icosahedron.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		579013A21BC1083400ADAE3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		579013AB1BC1083400ADAE3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */,
+				5778A5771C2A588B0019FF99 /* RendererSupport.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 				579013A31BC1083400ADAE3E /* AppDelegate.swift in Sources */,
 				57D866CB1BF2ED5E0034DEDE /* ShaderProgram.swift in Sources */,
 				579AD6091C01F35300218D38 /* Item.swift in Sources */,
+				5778A5781C2A588B0019FF99 /* RendererSupport.swift in Sources */,
 				57D866CD1BF2EF0C0034DEDE /* ModelShaderProgram.swift in Sources */,
 				579AD60C1C02F92700218D38 /* MotherIcosahedronModel.swift in Sources */,
 				579AD5F41C01ECA100218D38 /* World.swift in Sources */,
