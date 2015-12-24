@@ -37,9 +37,8 @@ class Renderer: NSObject, GLKViewDelegate {
         markerModel.status = world.markerStatus
         let requiredModels: [Renderable] = [icosahedronModel, markerModel]
         let items: [Renderable] = world.items.map { ItemModel(initialPosition: coord($0.point), kind: $0.kind) }
-        let roads: [Renderable] = world.roads.map { RoadModel(leftPosition: coord($0.left), rightPosition: coord($0.right), kind: $0.kind)}
 
-        return requiredModels + items + roads
+        return requiredModels + items
     }
 
     let pointLabels: [Renderable] = Icosahedron.Point.values.map { LabelModel(text: $0.rawValue) }
