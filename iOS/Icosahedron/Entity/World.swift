@@ -8,6 +8,7 @@ class World {
         case Red
         case Green
         case Blue
+        case Magenta
     }
 
     let icosahedron = Icosahedron()
@@ -31,6 +32,9 @@ class World {
                 case .Blue:
                     markerStatus = .Blue
                     blueCount += 1
+                case .Magenta:
+                    markerStatus = .Magenta
+                    magentaCount += 1
                 }
             }
             putNewItemWithIgnore(currentPoint)
@@ -62,6 +66,13 @@ class World {
     }
     let blueCountChanged = PublishSubject<Int>()
 
+    var magentaCount = 0 {
+        didSet {
+            magentaCountChanged.onNext(magentaCount)
+        }
+    }
+    let magentaCountChanged = PublishSubject<Int>()
+
     let pointRandomSource = GKMersenneTwisterRandomSource(seed: 6239)
     let colorRandomSource = GKMersenneTwisterRandomSource(seed: 3962)
     var moveCount = 0
@@ -70,15 +81,15 @@ class World {
         items = [
             Item(point: .A, kind: .Red),
             Item(point: .B, kind: .Green),
-            Item(point: .D, kind: .Red),
-            Item(point: .E, kind: .Green),
-            Item(point: .F, kind: .Blue),
-            Item(point: .G, kind: .Red),
-            Item(point: .H, kind: .Green),
-            Item(point: .I, kind: .Blue),
-            Item(point: .J, kind: .Red),
-            Item(point: .K, kind: .Green),
-            Item(point: .L, kind: .Blue),
+            Item(point: .D, kind: .Magenta),
+            Item(point: .E, kind: .Red),
+            Item(point: .F, kind: .Green),
+            Item(point: .G, kind: .Blue),
+            Item(point: .H, kind: .Magenta),
+            Item(point: .I, kind: .Red),
+            Item(point: .J, kind: .Green),
+            Item(point: .K, kind: .Blue),
+            Item(point: .L, kind: .Magenta),
         ]
     }
 
@@ -89,7 +100,7 @@ class World {
 
         let nextPoint = candidate[pointRandomSource.nextIntWithUpperBound(candidate.count)]
         if !items.contains({ $0.point == nextPoint }) {
-            let colors: [Item.Kind] = [.Red, .Green, .Blue]
+            let colors: [Item.Kind] = [.Red, .Green, .Blue, .Magenta]
             let color = colors[colorRandomSource.nextIntWithUpperBound(colors.count)]
             items.append(Item(point: nextPoint, kind: color))
         }
