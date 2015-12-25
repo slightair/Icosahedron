@@ -36,7 +36,14 @@ class Renderer: NSObject, GLKViewDelegate {
 
         markerModel.status = world.markerStatus
         let requiredModels: [Renderable] = [icosahedronModel, markerModel]
-        let items: [Renderable] = world.items.map { ItemModel(initialPosition: coord($0.point), kind: $0.kind) }
+        let items: [Renderable] = world.items.map { item in
+            let coord = coord(item.point)
+            let model = ItemModel(initialPosition: coord, kind: item.kind)
+            let rotateQuaternion = GLKQuaternionMakeWithAngleAndVector3Axis(Float(2 * M_PI) * animationLoopValue, GLKVector3Normalize(coord))
+            model.quaternion = GLKQuaternionMultiply(rotateQuaternion, model.quaternion)
+
+            return model
+        }
 
         return requiredModels + items
     }
@@ -88,6 +95,7 @@ class Renderer: NSObject, GLKViewDelegate {
             }
         }
     }
+    var animationLoopValue: Float = 0.0
     var billboardQuaternion = GLKQuaternionIdentity
     let disposeBag = DisposeBag()
 
@@ -246,6 +254,11 @@ class Renderer: NSObject, GLKViewDelegate {
     func update(timeSinceLastUpdate: NSTimeInterval = 0) {
         if (animationProgress < 1.0) {
             animationProgress = min(1.0, animationProgress + Float(timeSinceLastUpdate) * 4)
+        }
+
+        animationLoopValue += Float(timeSinceLastUpdate / 4)
+        if (animationLoopValue > 1.0) {
+            animationLoopValue -= 1.0
         }
 
         let baseQuaternion = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0)
