@@ -3,7 +3,7 @@ import GLKit
 class IcosahedronModel: Renderable {
     let position = GLKVector3Make(0.0, 0.0, 0.0)
     let quaternion = GLKQuaternionIdentity
-    let localModelVertices: [ModelVertex]
+    var localModelVertices: [ModelVertex]
     let icosahedronVertices: [IcosahedronVertex]
     var customColor: GLKVector4? = nil
 

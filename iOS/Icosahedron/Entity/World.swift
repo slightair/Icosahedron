@@ -94,4 +94,11 @@ class World {
             items.append(Item(point: nextPoint, kind: color))
         }
     }
+
+    func itemOfPoint(point: Icosahedron.Point) -> Item? {
+        if let index = items.indexOf({ $0.point == point }) {
+            return items[index]
+        }
+        return nil
+    }
 }

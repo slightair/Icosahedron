@@ -6,6 +6,7 @@ class MotherIcosahedronModel: IcosahedronModel {
     }
 
     var pointDict: [Icosahedron.Point: IcosahedronVertex] = [:]
+    var vertexDict: [GLKVector3: Icosahedron.Point] = [:]
 
     func coordinateOfPoint(point: Icosahedron.Point) -> GLKVector3 {
         guard let vertex = pointDict[point] else {
@@ -14,11 +15,19 @@ class MotherIcosahedronModel: IcosahedronModel {
         return vertex.coordinate
     }
 
+    func pointOfCoordinate(coordinate: GLKVector3) -> Icosahedron.Point {
+        guard let point = vertexDict[coordinate] else {
+            fatalError("unexpected coordinate")
+        }
+        return point
+    }
+
     override init() {
         super.init()
 
         for vertex in icosahedronVertices {
             pointDict[vertex.point] = vertex
+            vertexDict[vertex.coordinate] = vertex.point
         }
 
         pointDict[.C]!.head      = pointDict[.I]
