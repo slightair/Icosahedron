@@ -14,8 +14,6 @@ class ItemModel: TetrahedronModel {
             return UIColor.flatGreenColor().glColor
         case .Blue:
             return UIColor.flatBlueColor().glColor
-        case .Magenta:
-            return UIColor.flatMagentaColor().glColor
         }
     }
 

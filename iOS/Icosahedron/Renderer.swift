@@ -62,10 +62,9 @@ class Renderer: NSObject, GLKViewDelegate {
     let redGauge = GaugeModel(color: UIColor.flatRedColor().glColor)
     let greenGauge = GaugeModel(color: UIColor.flatGreenColor().glColor)
     let blueGauge = GaugeModel(color: UIColor.flatBlueColor().glColor)
-    let magentaGauge = GaugeModel(color: UIColor.flatMagentaColor().glColor)
 
     var gaugeModels: [Renderable] {
-        return [redGauge, greenGauge, blueGauge, magentaGauge]
+        return [redGauge, greenGauge, blueGauge]
     }
 
     var uiObjects: [Renderable] {
@@ -156,10 +155,6 @@ class Renderer: NSObject, GLKViewDelegate {
 
         world.blueCountChanged.subscribeNext { count in
             self.blueGauge.progress = 0.1 * Float(count)
-        }.addDisposableTo(disposeBag)
-
-        world.magentaCountChanged.subscribeNext { count in
-            self.magentaGauge.progress = 0.1 * Float(count)
         }.addDisposableTo(disposeBag)
     }
 

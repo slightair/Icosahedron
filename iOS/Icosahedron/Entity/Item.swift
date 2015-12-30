@@ -5,7 +5,6 @@ struct Item {
         case Red
         case Green
         case Blue
-        case Magenta
     }
 
     let point: Icosahedron.Point
