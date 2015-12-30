@@ -1,4 +1,5 @@
 import GLKit
+import Chameleon
 
 class MarkerModel: Renderable {
     var position = GLKVector3Make(0.0, 0.0, 0.0)

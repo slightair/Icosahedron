@@ -40,15 +40,38 @@
 		57DC98111C1428040004B107 /* debug.png in Resources */ = {isa = PBXBuildFile; fileRef = 57DC980F1C1428040004B107 /* debug.png */; };
 		57DC98121C1428040004B107 /* white.png in Resources */ = {isa = PBXBuildFile; fileRef = 57DC98101C1428040004B107 /* white.png */; };
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
-		57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC9511BD7D180009423EA /* SpriteKit.framework */; };
 		57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */; };
-		98811DB37D5721A1862FEB21 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2418BDBEB5F57607DCBC1690 /* Pods.framework */; };
+		57F5FB611C33BCD600817824 /* Chameleon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB401C33BC2B00817824 /* Chameleon.framework */; };
+		57F5FB621C33BCD600817824 /* Himotoki.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB411C33BC2B00817824 /* Himotoki.framework */; };
+		57F5FB631C33BCD600817824 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB421C33BC2B00817824 /* RxBlocking.framework */; };
+		57F5FB641C33BCD600817824 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB431C33BC2B00817824 /* RxCocoa.framework */; };
+		57F5FB651C33BCD600817824 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB441C33BC2B00817824 /* RxSwift.framework */; };
+		57F5FB6D1C33BDE300817824 /* Chameleon.framework.dSYM in Carthage Copy dSYMs */ = {isa = PBXBuildFile; fileRef = 57F5FB681C33BDE300817824 /* Chameleon.framework.dSYM */; };
+		57F5FB6E1C33BDE300817824 /* Himotoki.framework.dSYM in Carthage Copy dSYMs */ = {isa = PBXBuildFile; fileRef = 57F5FB691C33BDE300817824 /* Himotoki.framework.dSYM */; };
+		57F5FB6F1C33BDE300817824 /* RxBlocking.framework.dSYM in Carthage Copy dSYMs */ = {isa = PBXBuildFile; fileRef = 57F5FB6A1C33BDE300817824 /* RxBlocking.framework.dSYM */; };
+		57F5FB701C33BDE300817824 /* RxCocoa.framework.dSYM in Carthage Copy dSYMs */ = {isa = PBXBuildFile; fileRef = 57F5FB6B1C33BDE300817824 /* RxCocoa.framework.dSYM */; };
+		57F5FB711C33BDE300817824 /* RxSwift.framework.dSYM in Carthage Copy dSYMs */ = {isa = PBXBuildFile; fileRef = 57F5FB6C1C33BDE300817824 /* RxSwift.framework.dSYM */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		57F5FB671C33BD9000817824 /* Carthage Copy dSYMs */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				57F5FB6D1C33BDE300817824 /* Chameleon.framework.dSYM in Carthage Copy dSYMs */,
+				57F5FB6E1C33BDE300817824 /* Himotoki.framework.dSYM in Carthage Copy dSYMs */,
+				57F5FB6F1C33BDE300817824 /* RxBlocking.framework.dSYM in Carthage Copy dSYMs */,
+				57F5FB701C33BDE300817824 /* RxCocoa.framework.dSYM in Carthage Copy dSYMs */,
+				57F5FB711C33BDE300817824 /* RxSwift.framework.dSYM in Carthage Copy dSYMs */,
+			);
+			name = "Carthage Copy dSYMs";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		2418BDBEB5F57607DCBC1690 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		38FED04CDB28B30F908D55EE /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		4BA79710F87EB83A01083056 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		573132331BDCBF5200824EA5 /* ModelShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.fsh; sourceTree = "<group>"; };
 		573132341BDCBF5200824EA5 /* ModelShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.vsh; sourceTree = "<group>"; };
 		5778A5471C25382B0019FF99 /* UIShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIShaderProgram.swift; sourceTree = "<group>"; };
@@ -84,8 +107,17 @@
 		57DC980F1C1428040004B107 /* debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = debug.png; sourceTree = "<group>"; };
 		57DC98101C1428040004B107 /* white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white.png; sourceTree = "<group>"; };
 		57DDC94F1BD7D173009423EA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		57DDC9511BD7D180009423EA /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
+		57F5FB401C33BC2B00817824 /* Chameleon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Chameleon.framework; path = Carthage/Build/iOS/Chameleon.framework; sourceTree = "<group>"; };
+		57F5FB411C33BC2B00817824 /* Himotoki.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Himotoki.framework; path = Carthage/Build/iOS/Himotoki.framework; sourceTree = "<group>"; };
+		57F5FB421C33BC2B00817824 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
+		57F5FB431C33BC2B00817824 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		57F5FB441C33BC2B00817824 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		57F5FB681C33BDE300817824 /* Chameleon.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Chameleon.framework.dSYM; path = Carthage/Build/iOS/Chameleon.framework.dSYM; sourceTree = "<group>"; };
+		57F5FB691C33BDE300817824 /* Himotoki.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Himotoki.framework.dSYM; path = Carthage/Build/iOS/Himotoki.framework.dSYM; sourceTree = "<group>"; };
+		57F5FB6A1C33BDE300817824 /* RxBlocking.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxBlocking.framework.dSYM; path = Carthage/Build/iOS/RxBlocking.framework.dSYM; sourceTree = "<group>"; };
+		57F5FB6B1C33BDE300817824 /* RxCocoa.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxCocoa.framework.dSYM; path = Carthage/Build/iOS/RxCocoa.framework.dSYM; sourceTree = "<group>"; };
+		57F5FB6C1C33BDE300817824 /* RxSwift.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxSwift.framework.dSYM; path = Carthage/Build/iOS/RxSwift.framework.dSYM; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,9 +125,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57DDC9521BD7D180009423EA /* SpriteKit.framework in Frameworks */,
+				57F5FB611C33BCD600817824 /* Chameleon.framework in Frameworks */,
+				57F5FB621C33BCD600817824 /* Himotoki.framework in Frameworks */,
+				57F5FB631C33BCD600817824 /* RxBlocking.framework in Frameworks */,
+				57F5FB641C33BCD600817824 /* RxCocoa.framework in Frameworks */,
+				57F5FB651C33BCD600817824 /* RxSwift.framework in Frameworks */,
 				57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */,
-				98811DB37D5721A1862FEB21 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,7 +156,6 @@
 			children = (
 				579013A11BC1083400ADAE3E /* Icosahedron */,
 				579013A01BC1083400ADAE3E /* Products */,
-				CF23D3D0BEEF2BA621C93C49 /* Pods */,
 				F753C31B6DC8F86ABE5A2331 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -209,21 +243,28 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
-		CF23D3D0BEEF2BA621C93C49 /* Pods */ = {
+		57F5FB601C33BC8C00817824 /* dSYMs */ = {
 			isa = PBXGroup;
 			children = (
-				38FED04CDB28B30F908D55EE /* Pods.debug.xcconfig */,
-				4BA79710F87EB83A01083056 /* Pods.release.xcconfig */,
+				57F5FB681C33BDE300817824 /* Chameleon.framework.dSYM */,
+				57F5FB691C33BDE300817824 /* Himotoki.framework.dSYM */,
+				57F5FB6A1C33BDE300817824 /* RxBlocking.framework.dSYM */,
+				57F5FB6B1C33BDE300817824 /* RxCocoa.framework.dSYM */,
+				57F5FB6C1C33BDE300817824 /* RxSwift.framework.dSYM */,
 			);
-			name = Pods;
+			name = dSYMs;
 			sourceTree = "<group>";
 		};
 		F753C31B6DC8F86ABE5A2331 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				57DDC9511BD7D180009423EA /* SpriteKit.framework */,
+				57F5FB601C33BC8C00817824 /* dSYMs */,
+				57F5FB401C33BC2B00817824 /* Chameleon.framework */,
+				57F5FB411C33BC2B00817824 /* Himotoki.framework */,
+				57F5FB421C33BC2B00817824 /* RxBlocking.framework */,
+				57F5FB431C33BC2B00817824 /* RxCocoa.framework */,
+				57F5FB441C33BC2B00817824 /* RxSwift.framework */,
 				57DDC94F1BD7D173009423EA /* GLKit.framework */,
-				2418BDBEB5F57607DCBC1690 /* Pods.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -235,12 +276,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 579013B51BC1083400ADAE3E /* Build configuration list for PBXNativeTarget "Icosahedron" */;
 			buildPhases = (
-				EB7796BCD53E3FA12CF89254 /* Check Pods Manifest.lock */,
 				5790139B1BC1083400ADAE3E /* Sources */,
 				5790139C1BC1083400ADAE3E /* Frameworks */,
 				5790139D1BC1083400ADAE3E /* Resources */,
-				591691D22B204B591C1FA38B /* Embed Pods Frameworks */,
-				70CDE13C8C9CBB0CCE4F8FEA /* Copy Pods Resources */,
+				57F5FB661C33BCF200817824 /* Carthage copy-framework */,
+				57F5FB671C33BD9000817824 /* Carthage Copy dSYMs */,
 			);
 			buildRules = (
 			);
@@ -306,50 +346,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		591691D22B204B591C1FA38B /* Embed Pods Frameworks */ = {
+		57F5FB661C33BCF200817824 /* Carthage copy-framework */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Chameleon.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Himotoki.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxBlocking.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
 			);
-			name = "Embed Pods Frameworks";
+			name = "Carthage copy-framework";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		70CDE13C8C9CBB0CCE4F8FEA /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EB7796BCD53E3FA12CF89254 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
+			shellScript = "/opt/brew/bin/carthage copy-frameworks";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -490,11 +504,13 @@
 		};
 		579013B61BC1083400ADAE3E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 38FED04CDB28B30F908D55EE /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Icosahedron/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cc.clv.ios.Icosahedron;
@@ -507,11 +523,13 @@
 		};
 		579013B71BC1083400ADAE3E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4BA79710F87EB83A01083056 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Icosahedron/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cc.clv.ios.Icosahedron;

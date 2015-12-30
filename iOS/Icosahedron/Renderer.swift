@@ -1,6 +1,7 @@
 import GLKit
 import OpenGLES
 import RxSwift
+import Chameleon
 
 protocol RendererDelegate {
     func didChangeIcosahedronPoint(point: Icosahedron.Point)
