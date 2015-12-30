@@ -1,7 +1,7 @@
 import GLKit
 import Himotoki
 
-class Font {
+class FontData {
     struct Char: Decodable {
         let canvas: GLKVector4
         let rect: GLKVector4
@@ -24,16 +24,14 @@ class Font {
 
     init(name: String) {
         self.name = name
-        guard let mapFilePath = NSBundle.mainBundle().pathForResource(name, ofType: "json") else {
-            fatalError("file not found \(name).json")
+        guard let mapAsset = NSDataAsset(name: "\(name)Map") else {
+            fatalError("map file not found")
         }
-
-        let data = NSData(contentsOfFile: mapFilePath)
-        guard let JSONObject = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0)) as? [String: AnyObject] else {
+        guard let JSONObject = try! NSJSONSerialization.JSONObjectWithData(mapAsset.data, options: NSJSONReadingOptions(rawValue: 0)) as? [String: AnyObject] else {
             fatalError("invalid json file")
         }
         ratio = Float(JSONObject["ratio"] as! NSNumber)
-        map = Font.parseMapFile(JSONObject)
+        map = FontData.parseMapFile(JSONObject)
     }
 
     static func parseMapFile(object: [String: AnyObject]) -> [String: Char] {
@@ -44,11 +42,11 @@ class Font {
     }
 
     func loadTexture() {
-        guard let textureFilePath = NSBundle.mainBundle().pathForResource(name, ofType: "png") else {
-            fatalError("file not found \(name).png")
+        guard let asset = NSDataAsset(name: name) else {
+            fatalError("texture file not found")
         }
-        textureInfo = try! GLKTextureLoader.textureWithContentsOfFile(textureFilePath, options: nil)
+        textureInfo = try! GLKTextureLoader.textureWithContentsOfData(asset.data, options: nil)
     }
 
-    static let Default = Font(name: "font")
+    static let defaultData = FontData(name: "Font")
 }

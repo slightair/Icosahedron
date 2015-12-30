@@ -19,7 +19,7 @@ class LabelModel: Renderable {
         let normal = GLKVector3Make(0, 0, -1)
         let color = GLKVector4Make(1, 1, 1, 1)
 
-        let glyphWidth = size / 10 * Font.Default.ratio
+        let glyphWidth = size / 10 * FontData.defaultData.ratio
         let glyphHeight = size / 10
         var vertices: [ModelVertex] = []
         var baseX: Float
@@ -76,10 +76,10 @@ class LabelModel: Renderable {
     var customColor: GLKVector4? = nil
     var text: String {
         didSet {
-            chars = text.characters.map { Font.Default.map[String($0)]! }
+            chars = text.characters.map { FontData.defaultData.map[String($0)]! }
         }
     }
-    var chars: [Font.Char] = []
+    var chars: [FontData.Char] = []
 
     var size: Float = 0.2
 
@@ -94,6 +94,6 @@ class LabelModel: Renderable {
 
     init(text: String) {
         self.text = text
-        chars = text.characters.map { Font.Default.map[String($0)]! }
+        chars = text.characters.map { FontData.defaultData.map[String($0)]! }
     }
 }

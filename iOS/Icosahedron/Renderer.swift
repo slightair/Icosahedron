@@ -77,7 +77,7 @@ class Renderer: NSObject, GLKViewDelegate {
         return [countLabelModel]
     }
 
-    let font: Font = Font.Default
+    let fontData: FontData = FontData.defaultData
     var whiteTextureInfo: GLKTextureInfo!
 
     var prevVertex: IcosahedronVertex!
@@ -180,11 +180,11 @@ class Renderer: NSObject, GLKViewDelegate {
 
         glBindVertexArray(0)
 
-        guard let whiteTextureFilePath = NSBundle.mainBundle().pathForResource("white", ofType: "png") else {
-            fatalError("file not found white.png")
+        guard let whiteTextureAsset = NSDataAsset(name: "White") else {
+            fatalError("white texture file not found")
         }
-        whiteTextureInfo = try! GLKTextureLoader.textureWithContentsOfFile(whiteTextureFilePath, options: nil)
-        font.loadTexture()
+        whiteTextureInfo = try! GLKTextureLoader.textureWithContentsOfData(whiteTextureAsset.data, options: nil)
+        fontData.loadTexture()
     }
 
     func tearDownGL() {
@@ -293,7 +293,7 @@ class Renderer: NSObject, GLKViewDelegate {
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
         renderModels(objects)
 
-        glBindTexture(GLenum(GL_TEXTURE_2D), font.textureInfo.name)
+        glBindTexture(GLenum(GL_TEXTURE_2D), fontData.textureInfo.name)
         renderModels(labelObjects)
 
         glDisable(GLenum(GL_DEPTH_TEST))
@@ -305,7 +305,7 @@ class Renderer: NSObject, GLKViewDelegate {
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
         renderModels(uiObjects)
 
-        glBindTexture(GLenum(GL_TEXTURE_2D), font.textureInfo.name)
+        glBindTexture(GLenum(GL_TEXTURE_2D), fontData.textureInfo.name)
         renderModels(uiLabelObjects)
     }
 }
