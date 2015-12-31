@@ -1,9 +1,9 @@
 import GLKit
 import Chameleon
 
-class ItemModel: TetrahedronModel {
+class ItemModel: OctahedronModel {
     override class var scale: Float {
-        return 0.01
+        return 0.015
     }
 
     static func colorOfKind(kind: Item.Kind) -> GLKVector4 {

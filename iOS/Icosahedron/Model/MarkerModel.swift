@@ -24,7 +24,7 @@ class MarkerModel: Renderable {
         case .Blue:
             return UIColor.flatBlueColor().glColor
         case .None:
-            return UIColor.flatGrayColor().glColor
+            return UIColor.flatSandColor().glColor
         }
     }
 

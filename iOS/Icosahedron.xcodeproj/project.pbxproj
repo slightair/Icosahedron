@@ -48,6 +48,7 @@
 		57F5FB701C33BDE300817824 /* RxCocoa.framework.dSYM in Carthage Copy dSYMs */ = {isa = PBXBuildFile; fileRef = 57F5FB6B1C33BDE300817824 /* RxCocoa.framework.dSYM */; };
 		57F5FB711C33BDE300817824 /* RxSwift.framework.dSYM in Carthage Copy dSYMs */ = {isa = PBXBuildFile; fileRef = 57F5FB6C1C33BDE300817824 /* RxSwift.framework.dSYM */; };
 		57F5FB731C34150A00817824 /* VectorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5FB721C34150A00817824 /* VectorExtensions.swift */; };
+		57F5FB751C34DC1E00817824 /* OctahedronModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5FB741C34DC1E00817824 /* OctahedronModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -112,6 +113,7 @@
 		57F5FB6B1C33BDE300817824 /* RxCocoa.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxCocoa.framework.dSYM; path = Carthage/Build/iOS/RxCocoa.framework.dSYM; sourceTree = "<group>"; };
 		57F5FB6C1C33BDE300817824 /* RxSwift.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxSwift.framework.dSYM; path = Carthage/Build/iOS/RxSwift.framework.dSYM; sourceTree = "<group>"; };
 		57F5FB721C34150A00817824 /* VectorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VectorExtensions.swift; sourceTree = "<group>"; };
+		57F5FB741C34DC1E00817824 /* OctahedronModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OctahedronModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +203,7 @@
 				579AD5FF1C01EEB900218D38 /* TetrahedronModel.swift */,
 				57DC980D1C141A350004B107 /* LabelModel.swift */,
 				57C58F061C1F18B600840B56 /* GaugeModel.swift */,
+				57F5FB741C34DC1E00817824 /* OctahedronModel.swift */,
 			);
 			name = BaseModel;
 			sourceTree = "<group>";
@@ -357,6 +360,7 @@
 				579AD6031C01EEB900218D38 /* ItemModel.swift in Sources */,
 				5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */,
 				57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */,
+				57F5FB751C34DC1E00817824 /* OctahedronModel.swift in Sources */,
 				57F5FB731C34150A00817824 /* VectorExtensions.swift in Sources */,
 				579AD5F61C01EE0500218D38 /* Icosahedron.swift in Sources */,
 				579AD6041C01EEB900218D38 /* MarkerModel.swift in Sources */,
