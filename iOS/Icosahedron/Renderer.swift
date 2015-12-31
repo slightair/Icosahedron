@@ -71,9 +71,17 @@ class Renderer: NSObject, GLKViewDelegate {
         return gaugeModels
     }
 
-    let countLabelModel = LabelModel(text: "Count:0")
+    let redLevelLabel = LabelModel(text: "Lv1")
+    let greenLevelLabel = LabelModel(text: "Lv1")
+    let blueLevelLabel = LabelModel(text: "Lv1")
+
+    var levelLabels: [Renderable] {
+        return [redLevelLabel, greenLevelLabel, blueLevelLabel]
+    }
+
+    let turnLabelModel = LabelModel(text: "Turn:0")
     var uiLabelObjects: [Renderable] {
-        return [countLabelModel]
+        return [turnLabelModel] + levelLabels
     }
 
     let fontData: FontData = FontData.defaultData
@@ -132,17 +140,23 @@ class Renderer: NSObject, GLKViewDelegate {
 
         for (index, model) in gaugeModels.enumerate() {
             if let gauge = model as? GaugeModel {
-                gauge.position = GLKVector3Add(GLKVector3Make(0, 0.075, 0), GLKVector3Make(0, 0.015 * Float(index + 1), 0))
+                gauge.position = GLKVector3Add(GLKVector3Make(0, 0.075, 0), GLKVector3Make(0, 0.025 * Float(index + 1), 0))
             }
         }
 
-        countLabelModel.position = GLKVector3Make(-0.495, 0.28, 0)
-        countLabelModel.size = 0.35
-        countLabelModel.horizontalAlign = .Left
-        countLabelModel.verticalAlign = .Bottom
+        for (index, model) in levelLabels.enumerate() {
+            if let label = model as? LabelModel {
+                label.position = GLKVector3Add(GLKVector3Make(0, 0.075, 0), GLKVector3Make(0, 0.025 * Float(index + 1), 0))
+            }
+        }
+
+        turnLabelModel.position = GLKVector3Make(-0.495, 0.28, 0)
+        turnLabelModel.size = 0.35
+        turnLabelModel.horizontalAlign = .Left
+        turnLabelModel.verticalAlign = .Bottom
 
         world.currentPointChanged.subscribeNext { point in
-            self.countLabelModel.text = "Count:\(self.world.moveCount)"
+            self.turnLabelModel.text = "Turn:\(self.world.turn)"
         }.addDisposableTo(disposeBag)
 
         world.redCountChanged.subscribeNext { count in
