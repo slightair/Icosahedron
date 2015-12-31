@@ -160,15 +160,39 @@ class Renderer: NSObject, GLKViewDelegate {
         }.addDisposableTo(disposeBag)
 
         world.redCountChanged.subscribeNext { count in
-            self.redGauge.progress = 0.1 * Float(count)
+            self.redGauge.progress = self.world.progressOfColor(.Red)
+        }.addDisposableTo(disposeBag)
+
+        world.redLevelChanged.subscribeNext { level in
+            if self.world.isMaxLevelColor(.Red) {
+                self.redLevelLabel.text = "LvMax"
+            } else {
+                self.redLevelLabel.text = "Lv\(level)"
+            }
         }.addDisposableTo(disposeBag)
 
         world.greenCountChanged.subscribeNext { count in
-            self.greenGauge.progress = 0.1 * Float(count)
+            self.greenGauge.progress = self.world.progressOfColor(.Green)
+        }.addDisposableTo(disposeBag)
+
+        world.greenLevelChanged.subscribeNext { level in
+            if self.world.isMaxLevelColor(.Green) {
+                self.greenLevelLabel.text = "LvMax"
+            } else {
+                self.greenLevelLabel.text = "Lv\(level)"
+            }
         }.addDisposableTo(disposeBag)
 
         world.blueCountChanged.subscribeNext { count in
-            self.blueGauge.progress = 0.1 * Float(count)
+            self.blueGauge.progress = self.world.progressOfColor(.Blue)
+        }.addDisposableTo(disposeBag)
+
+        world.blueLevelChanged.subscribeNext { level in
+            if self.world.isMaxLevelColor(.Blue) {
+                self.blueLevelLabel.text = "LvMax"
+            } else {
+                self.blueLevelLabel.text = "Lv\(level)"
+            }
         }.addDisposableTo(disposeBag)
     }
 
