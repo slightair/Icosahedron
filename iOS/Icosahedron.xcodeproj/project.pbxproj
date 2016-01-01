@@ -49,6 +49,7 @@
 		57F5FB711C33BDE300817824 /* RxSwift.framework.dSYM in Carthage Copy dSYMs */ = {isa = PBXBuildFile; fileRef = 57F5FB6C1C33BDE300817824 /* RxSwift.framework.dSYM */; };
 		57F5FB731C34150A00817824 /* VectorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5FB721C34150A00817824 /* VectorExtensions.swift */; };
 		57F5FB751C34DC1E00817824 /* OctahedronModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5FB741C34DC1E00817824 /* OctahedronModel.swift */; };
+		57F5FB771C36702700817824 /* LevelLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5FB761C36702600817824 /* LevelLabelModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -114,6 +115,7 @@
 		57F5FB6C1C33BDE300817824 /* RxSwift.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxSwift.framework.dSYM; path = Carthage/Build/iOS/RxSwift.framework.dSYM; sourceTree = "<group>"; };
 		57F5FB721C34150A00817824 /* VectorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VectorExtensions.swift; sourceTree = "<group>"; };
 		57F5FB741C34DC1E00817824 /* OctahedronModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OctahedronModel.swift; sourceTree = "<group>"; };
+		57F5FB761C36702600817824 /* LevelLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelLabelModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +194,7 @@
 				579AD5FB1C01EEB900218D38 /* ItemModel.swift */,
 				579AD5FC1C01EEB900218D38 /* MarkerModel.swift */,
 				579AD60B1C02F92700218D38 /* MotherIcosahedronModel.swift */,
+				57F5FB761C36702600817824 /* LevelLabelModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 				57D866CD1BF2EF0C0034DEDE /* ModelShaderProgram.swift in Sources */,
 				579AD60C1C02F92700218D38 /* MotherIcosahedronModel.swift in Sources */,
 				579AD5F41C01ECA100218D38 /* World.swift in Sources */,
+				57F5FB771C36702700817824 /* LevelLabelModel.swift in Sources */,
 				579AD6051C01EEB900218D38 /* ModelVertex.swift in Sources */,
 				57C58F071C1F18B600840B56 /* GaugeModel.swift in Sources */,
 				57DC980E1C141A350004B107 /* LabelModel.swift in Sources */,

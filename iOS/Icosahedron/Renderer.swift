@@ -1,6 +1,7 @@
 import GLKit
 import OpenGLES
 import RxSwift
+import RxCocoa
 import Chameleon
 
 protocol RendererDelegate {
@@ -71,9 +72,9 @@ class Renderer: NSObject, GLKViewDelegate {
         return gaugeModels
     }
 
-    let redLevelLabel = LabelModel(text: "Lv1")
-    let greenLevelLabel = LabelModel(text: "Lv1")
-    let blueLevelLabel = LabelModel(text: "Lv1")
+    let redLevelLabel = LevelLabelModel()
+    let greenLevelLabel = LevelLabelModel()
+    let blueLevelLabel = LevelLabelModel()
 
     var levelLabels: [Renderable] {
         return [redLevelLabel, greenLevelLabel, blueLevelLabel]
@@ -187,37 +188,19 @@ class Renderer: NSObject, GLKViewDelegate {
             self.redGauge.progress = self.world.progressOfColor(.Red)
         }.addDisposableTo(disposeBag)
 
-        world.redLevelChanged.subscribeNext { level in
-            if self.world.isMaxLevelColor(.Red) {
-                self.redLevelLabel.text = "LvMax"
-            } else {
-                self.redLevelLabel.text = "Lv\(level)"
-            }
-        }.addDisposableTo(disposeBag)
+        world.redLevel.bindTo(redLevelLabel.rx_level).addDisposableTo(disposeBag)
 
         world.greenCountChanged.subscribeNext { count in
             self.greenGauge.progress = self.world.progressOfColor(.Green)
         }.addDisposableTo(disposeBag)
 
-        world.greenLevelChanged.subscribeNext { level in
-            if self.world.isMaxLevelColor(.Green) {
-                self.greenLevelLabel.text = "LvMax"
-            } else {
-                self.greenLevelLabel.text = "Lv\(level)"
-            }
-        }.addDisposableTo(disposeBag)
+        world.greenLevel.bindTo(greenLevelLabel.rx_level).addDisposableTo(disposeBag)
 
         world.blueCountChanged.subscribeNext { count in
             self.blueGauge.progress = self.world.progressOfColor(.Blue)
         }.addDisposableTo(disposeBag)
 
-        world.blueLevelChanged.subscribeNext { level in
-            if self.world.isMaxLevelColor(.Blue) {
-                self.blueLevelLabel.text = "LvMax"
-            } else {
-                self.blueLevelLabel.text = "Lv\(level)"
-            }
-        }.addDisposableTo(disposeBag)
+        world.blueLevel.bindTo(blueLevelLabel.rx_level).addDisposableTo(disposeBag)
 
         world.timeChanged.subscribeNext { time in
             self.timeLabelModel.text = String(format: "Time %.3f", arguments: [time])

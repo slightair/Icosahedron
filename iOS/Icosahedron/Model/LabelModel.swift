@@ -1,4 +1,5 @@
 import GLKit
+import RxSwift
 
 class LabelModel: Renderable {
     enum HorizontalAlign {
@@ -79,6 +80,23 @@ class LabelModel: Renderable {
             chars = text.characters.map { FontData.defaultData.map[String($0)]! }
         }
     }
+
+    var rx_text: AnyObserver<String> {
+        return AnyObserver { [weak self] event in
+            MainScheduler.ensureExecutingOnScheduler()
+
+            switch event {
+            case .Next(let value):
+                self?.text = value
+            case .Error(let error):
+                fatalError("Binding error to UI: \(error)")
+                break
+            case .Completed:
+                break
+            }
+        }
+    }
+
     var chars: [FontData.Char] = []
 
     var size: Float = 0.2

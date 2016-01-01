@@ -48,12 +48,12 @@ class World {
 
     var redCount = 0 {
         didSet {
-            guard redLevel <= World.needExpList.count - 2 else {
+            guard redLevel.value <= World.needExpList.count - 2 else {
                 return
             }
 
-            if redCount >= World.needExpList[redLevel] {
-                redLevel += 1
+            if redCount >= World.needExpList[redLevel.value] {
+                redLevel.value += 1
             }
 
             redCountChanged.onNext(redCount)
@@ -61,21 +61,16 @@ class World {
     }
     let redCountChanged = PublishSubject<Int>()
 
-    var redLevel = 1 {
-        didSet {
-            redLevelChanged.onNext(redLevel)
-        }
-    }
-    let redLevelChanged = PublishSubject<Int>()
+    var redLevel = Variable<Int>(1)
 
     var greenCount = 0 {
         didSet {
-            guard greenLevel <= World.needExpList.count - 2 else {
+            guard greenLevel.value <= World.needExpList.count - 2 else {
                 return
             }
 
-            if greenCount >= World.needExpList[greenLevel] {
-                greenLevel += 1
+            if greenCount >= World.needExpList[greenLevel.value] {
+                greenLevel.value += 1
             }
 
             greenCountChanged.onNext(greenCount)
@@ -83,21 +78,16 @@ class World {
     }
     let greenCountChanged = PublishSubject<Int>()
 
-    var greenLevel = 1 {
-        didSet {
-            greenLevelChanged.onNext(greenLevel)
-        }
-    }
-    let greenLevelChanged = PublishSubject<Int>()
+    var greenLevel = Variable<Int>(1)
 
     var blueCount = 0 {
         didSet {
-            guard blueLevel <= World.needExpList.count - 2 else {
+            guard blueLevel.value <= World.needExpList.count - 2 else {
                 return
             }
 
-            if blueCount >= World.needExpList[blueLevel] {
-                blueLevel += 1
+            if blueCount >= World.needExpList[blueLevel.value] {
+                blueLevel.value += 1
             }
 
             blueCountChanged.onNext(blueCount)
@@ -105,12 +95,7 @@ class World {
     }
     let blueCountChanged = PublishSubject<Int>()
 
-    var blueLevel = 1 {
-        didSet {
-            blueLevelChanged.onNext(blueLevel)
-        }
-    }
-    let blueLevelChanged = PublishSubject<Int>()
+    var blueLevel = Variable<Int>(1)
 
     let pointRandomSource = GKMersenneTwisterRandomSource(seed: 6239)
     let colorRandomSource = GKMersenneTwisterRandomSource(seed: 3962)
@@ -173,16 +158,16 @@ class World {
 
         switch color {
         case .Red:
-            let prev = World.needExpList[redLevel - 1]
-            let next = World.needExpList[redLevel]
+            let prev = World.needExpList[redLevel.value - 1]
+            let next = World.needExpList[redLevel.value]
             return Float(redCount - prev) / Float(next - prev)
         case .Green:
-            let prev = World.needExpList[greenLevel - 1]
-            let next = World.needExpList[greenLevel]
+            let prev = World.needExpList[greenLevel.value - 1]
+            let next = World.needExpList[greenLevel.value]
             return Float(greenCount - prev) / Float(next - prev)
         case .Blue:
-            let prev = World.needExpList[blueLevel - 1]
-            let next = World.needExpList[blueLevel]
+            let prev = World.needExpList[blueLevel.value - 1]
+            let next = World.needExpList[blueLevel.value]
             return Float(blueCount - prev) / Float(next - prev)
         }
     }
@@ -190,15 +175,15 @@ class World {
     func isMaxLevelColor(color: Color) -> Bool {
         switch color {
         case .Red:
-            if redLevel == World.needExpList.count - 1 {
+            if redLevel.value == World.needExpList.count - 1 {
                 return true
             }
         case .Green:
-            if greenLevel == World.needExpList.count - 1 {
+            if greenLevel.value == World.needExpList.count - 1 {
                 return true
             }
         case .Blue:
-            if blueLevel == World.needExpList.count - 1 {
+            if blueLevel.value == World.needExpList.count - 1 {
                 return true
             }
         }
