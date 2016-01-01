@@ -79,9 +79,12 @@ class Renderer: NSObject, GLKViewDelegate {
         return [redLevelLabel, greenLevelLabel, blueLevelLabel]
     }
 
-    let turnLabelModel = LabelModel(text: "Turn:0")
+    let turnLabelModel = LabelModel(text: "Turn 0")
+    let scoreLabelModel = LabelModel(text: "Score 0")
+    let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.defaultTimeLeft]))
+
     var uiLabelObjects: [Renderable] {
-        return [turnLabelModel] + levelLabels
+        return [turnLabelModel, scoreLabelModel, timeLabelModel] + levelLabels
     }
 
     let fontData: FontData = FontData.defaultData
@@ -118,6 +121,7 @@ class Renderer: NSObject, GLKViewDelegate {
         super.init()
 
         setUpModels()
+        setUpSubscribers()
         setUpGL()
 
         update()
@@ -150,13 +154,33 @@ class Renderer: NSObject, GLKViewDelegate {
             }
         }
 
-        turnLabelModel.position = GLKVector3Make(-0.495, 0.28, 0)
-        turnLabelModel.size = 0.35
+        let maxWidthRatio: Float = 1.0
+        let maxHeightRatio: Float = maxWidthRatio / Renderer.aspect
+
+        let leftEdge = -maxWidthRatio / 2 * 0.98
+        let rightEdge = maxWidthRatio / 2 * 0.98
+        let topEdge = -maxHeightRatio / 2 * 0.98
+        let bottomEdge = maxHeightRatio / 2 * 0.98
+
+        turnLabelModel.position = GLKVector3Make(leftEdge, bottomEdge, 0)
+        turnLabelModel.size = 0.25
         turnLabelModel.horizontalAlign = .Left
         turnLabelModel.verticalAlign = .Bottom
 
+        scoreLabelModel.position = GLKVector3Make(leftEdge, topEdge, 0)
+        scoreLabelModel.size = 0.25
+        scoreLabelModel.horizontalAlign = .Left
+        scoreLabelModel.verticalAlign = .Top
+
+        timeLabelModel.position = GLKVector3Make(rightEdge, topEdge, 0)
+        timeLabelModel.size = 0.25
+        timeLabelModel.horizontalAlign = .Right
+        timeLabelModel.verticalAlign = .Top
+    }
+
+    func setUpSubscribers() {
         world.currentPointChanged.subscribeNext { point in
-            self.turnLabelModel.text = "Turn:\(self.world.turn)"
+            self.turnLabelModel.text = "Turn \(self.world.turn)"
         }.addDisposableTo(disposeBag)
 
         world.redCountChanged.subscribeNext { count in
@@ -193,6 +217,10 @@ class Renderer: NSObject, GLKViewDelegate {
             } else {
                 self.blueLevelLabel.text = "Lv\(level)"
             }
+        }.addDisposableTo(disposeBag)
+
+        world.timeChanged.subscribeNext { time in
+            self.timeLabelModel.text = String(format: "Time %.3f", arguments: [time])
         }.addDisposableTo(disposeBag)
     }
 

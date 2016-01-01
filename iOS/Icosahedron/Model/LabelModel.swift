@@ -36,7 +36,7 @@ class LabelModel: Renderable {
 
         switch verticalAlign {
         case .Top:
-            baseY = glyphHeight
+            baseY = 0
         case .Center:
             baseY = -glyphHeight / 2.0
         case .Bottom:

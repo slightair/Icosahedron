@@ -20,6 +20,7 @@ class GameViewController: GLKViewController, RendererDelegate {
     }
 
     func update() {
+        world.update(timeSinceLastUpdate)
         renderer.update(timeSinceLastUpdate)
     }
 
