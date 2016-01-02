@@ -24,3 +24,15 @@ extension Renderable {
         }
     }
 }
+
+enum RenderableHorizontalAlign {
+    case Left, Center, Right
+}
+
+enum RenderableVerticalAlign {
+    case Top, Center, Bottom
+}
+
+enum RenderableDirection {
+    case LeftToRight, RightToLeft
+}

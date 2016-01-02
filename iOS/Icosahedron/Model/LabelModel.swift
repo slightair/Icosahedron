@@ -2,26 +2,12 @@ import GLKit
 import RxSwift
 
 class LabelModel: Renderable {
-    enum HorizontalAlign {
-        case Left
-        case Center
-        case Right
-    }
-
-    enum VerticalAlign {
-        case Top
-        case Center
-        case Bottom
-    }
-
     var position = GLKVector3Make(0.0, 0.0, 0.0)
     var quaternion = GLKQuaternionIdentity
     var localModelVertices: [ModelVertex] {
         let normal = GLKVector3Make(0, 0, -1)
         let color = GLKVector4Make(1, 1, 1, 1)
 
-        let glyphWidth = size / 10 * FontData.defaultData.ratio
-        let glyphHeight = size / 10
         var vertices: [ModelVertex] = []
         var baseX: Float
         let baseY: Float
@@ -101,8 +87,16 @@ class LabelModel: Renderable {
 
     var size: Float = 0.2
 
-    var horizontalAlign: HorizontalAlign = .Center
-    var verticalAlign: VerticalAlign = .Center
+    var glyphWidth: Float {
+        return size / 10 * FontData.defaultData.ratio
+    }
+
+    var glyphHeight: Float {
+        return size / 10
+    }
+
+    var horizontalAlign: RenderableHorizontalAlign = .Center
+    var verticalAlign: RenderableVerticalAlign = .Center
 
     class var scale: Float {
         return 1.0

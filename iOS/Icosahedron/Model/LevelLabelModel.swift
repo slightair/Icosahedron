@@ -3,7 +3,7 @@ import RxSwift
 
 class LevelLabelModel: LabelModel {
     init() {
-        super.init(text: "Lv1")
+        super.init(text: "Lv 1")
     }
 
     var rx_level: AnyObserver<Int> {
@@ -13,9 +13,9 @@ class LevelLabelModel: LabelModel {
             switch event {
             case .Next(let value):
                 if value >= World.needExpList.count - 1 {
-                    self?.text = "LvMax"
+                    self?.text = "Lv Max"
                 } else {
-                    self?.text = "Lv\(value)"
+                    self?.text = "Lv \(value)"
                 }
             case .Error(let error):
                 fatalError("Binding error to UI: \(error)")

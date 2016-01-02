@@ -63,9 +63,10 @@ class Renderer: NSObject, GLKViewDelegate {
     let redGauge = GaugeModel(color: UIColor.flatRedColor().glColor)
     let greenGauge = GaugeModel(color: UIColor.flatGreenColor().glColor)
     let blueGauge = GaugeModel(color: UIColor.flatBlueColor().glColor)
+    let timeGauge = GaugeModel(color: UIColor.flatWhiteColor().glColor)
 
     var gaugeModels: [Renderable] {
-        return [redGauge, greenGauge, blueGauge]
+        return [redGauge, greenGauge, blueGauge, timeGauge]
     }
 
     var uiObjects: [Renderable] {
@@ -143,15 +144,15 @@ class Renderer: NSObject, GLKViewDelegate {
             label.customColor = UIColor.flatWhiteColor().glColor
         }
 
-        for (index, model) in gaugeModels.enumerate() {
-            if let gauge = model as? GaugeModel {
-                gauge.position = GLKVector3Add(GLKVector3Make(0, 0.075, 0), GLKVector3Make(0, 0.025 * Float(index + 1), 0))
-            }
+        let itemGaugeModels = [redGauge, greenGauge, blueGauge]
+        for (index, gauge) in itemGaugeModels.enumerate() {
+            gauge.position = GLKVector3Add(GLKVector3Make(0, 0.075, 0), GLKVector3Make(0, 0.025 * Float(index + 1), 0))
         }
 
         for (index, model) in levelLabels.enumerate() {
             if let label = model as? LabelModel {
                 label.position = GLKVector3Add(GLKVector3Make(0, 0.075, 0), GLKVector3Make(0, 0.025 * Float(index + 1), 0))
+                label.size = 0.25
             }
         }
 
@@ -163,20 +164,27 @@ class Renderer: NSObject, GLKViewDelegate {
         let topEdge = -maxHeightRatio / 2 * 0.98
         let bottomEdge = maxHeightRatio / 2 * 0.98
 
+        let infoLabelSize: Float = 0.25
         turnLabelModel.position = GLKVector3Make(leftEdge, bottomEdge, 0)
-        turnLabelModel.size = 0.25
+        turnLabelModel.size = infoLabelSize
         turnLabelModel.horizontalAlign = .Left
         turnLabelModel.verticalAlign = .Bottom
 
         scoreLabelModel.position = GLKVector3Make(leftEdge, topEdge, 0)
-        scoreLabelModel.size = 0.25
+        scoreLabelModel.size = infoLabelSize
         scoreLabelModel.horizontalAlign = .Left
         scoreLabelModel.verticalAlign = .Top
 
         timeLabelModel.position = GLKVector3Make(rightEdge, topEdge, 0)
-        timeLabelModel.size = 0.25
+        timeLabelModel.size = infoLabelSize
         timeLabelModel.horizontalAlign = .Right
         timeLabelModel.verticalAlign = .Top
+
+        timeGauge.position = GLKVector3Make(rightEdge, topEdge + timeLabelModel.glyphHeight * 1.2, 0)
+        timeGauge.width = 0.15
+        timeGauge.direction = .RightToLeft
+        timeGauge.horizontalAlign = .Right
+        timeGauge.verticalAlign = .Top
     }
 
     func setUpSubscriptions() {
@@ -190,6 +198,9 @@ class Renderer: NSObject, GLKViewDelegate {
 
         world.turn.map { "Turn \($0)" }.bindTo(turnLabelModel.rx_text).addDisposableTo(disposeBag)
         world.time.map { String(format: "Time %.3f", arguments: [$0]) }.bindTo(timeLabelModel.rx_text).addDisposableTo(disposeBag)
+
+        let timeGaugeMax: Float = 30.0
+        world.time.map { 1.0 - (timeGaugeMax - min(timeGaugeMax, Float($0))) / timeGaugeMax }.bindTo(timeGauge.rx_progress).addDisposableTo(disposeBag)
     }
 
     func setUpGL() {
