@@ -19,94 +19,27 @@ class World {
     var markerStatus: MarkerStatus = .None
     var items: [Item] = []
 
-    var currentPoint = Icosahedron.Point.C {
-        didSet {
-            let itemPoints = items.map { $0.point }
-            if let itemIndex = itemPoints.indexOf(currentPoint) {
-                let catchedItem = items[itemIndex]
-                items.removeAtIndex(itemIndex)
+    var currentPoint = Variable<Icosahedron.Point>(.C)
 
-                switch catchedItem.kind {
-                case .Red:
-                    markerStatus = .Red
-                    redCount += 1
-                case .Green:
-                    markerStatus = .Green
-                    greenCount += 1
-                case .Blue:
-                    markerStatus = .Blue
-                    blueCount += 1
-                }
-            }
-            putNewItemWithIgnore(currentPoint)
-            turn += 1
+    let redCount = Variable<Int>(0)
+    let greenCount = Variable<Int>(0)
+    let blueCount = Variable<Int>(0)
 
-            currentPointChanged.onNext(currentPoint)
-        }
-    }
-    let currentPointChanged = PublishSubject<Icosahedron.Point>()
+    let redLevel = Variable<Int>(1)
+    let greenLevel = Variable<Int>(1)
+    let blueLevel = Variable<Int>(1)
 
-    var redCount = 0 {
-        didSet {
-            guard redLevel.value <= World.needExpList.count - 2 else {
-                return
-            }
+    var redProgress: Observable<Float>!
+    var greenProgress: Observable<Float>!
+    var blueProgress: Observable<Float>!
 
-            if redCount >= World.needExpList[redLevel.value] {
-                redLevel.value += 1
-            }
-
-            redCountChanged.onNext(redCount)
-        }
-    }
-    let redCountChanged = PublishSubject<Int>()
-
-    var redLevel = Variable<Int>(1)
-
-    var greenCount = 0 {
-        didSet {
-            guard greenLevel.value <= World.needExpList.count - 2 else {
-                return
-            }
-
-            if greenCount >= World.needExpList[greenLevel.value] {
-                greenLevel.value += 1
-            }
-
-            greenCountChanged.onNext(greenCount)
-        }
-    }
-    let greenCountChanged = PublishSubject<Int>()
-
-    var greenLevel = Variable<Int>(1)
-
-    var blueCount = 0 {
-        didSet {
-            guard blueLevel.value <= World.needExpList.count - 2 else {
-                return
-            }
-
-            if blueCount >= World.needExpList[blueLevel.value] {
-                blueLevel.value += 1
-            }
-
-            blueCountChanged.onNext(blueCount)
-        }
-    }
-    let blueCountChanged = PublishSubject<Int>()
-
-    var blueLevel = Variable<Int>(1)
+    let turn = Variable<Int>(0)
+    let time = Variable<Double>(World.defaultTimeLeft)
 
     let pointRandomSource = GKMersenneTwisterRandomSource(seed: 6239)
     let colorRandomSource = GKMersenneTwisterRandomSource(seed: 3962)
-    var turn = 0
 
-    var time = World.defaultTimeLeft {
-        didSet {
-            timeChanged.onNext(time)
-        }
-    }
-    let timeChanged = PublishSubject<Double>()
+    let disposeBag = DisposeBag()
 
     init() {
         items = [
@@ -122,6 +55,69 @@ class World {
             Item(point: .K, kind: .Green),
             Item(point: .L, kind: .Blue),
         ]
+
+        setUpObservables()
+        setUpSubscriptions()
+    }
+
+    func setUpObservables() {
+        func convertToProgress(level: Variable<Int>) -> (Int -> Float) {
+            return { count in
+                if count == 0 {
+                    return 0.0
+                }
+                if level.value == World.needExpList.count - 1 {
+                    return 1.0
+                }
+                let prev = World.needExpList[level.value - 1]
+                let next = World.needExpList[level.value]
+                return Float(count - prev) / Float(next - prev)
+            }
+        }
+
+        redProgress = redCount.asObservable().map(convertToProgress(redLevel))
+        greenProgress = greenCount.asObservable().map(convertToProgress(greenLevel))
+        blueProgress = blueCount.asObservable().map(convertToProgress(blueLevel))
+    }
+
+    func setUpSubscriptions() {
+        currentPoint.subscribeNext { point in
+            let itemPoints = self.items.map { $0.point }
+
+            if let itemIndex = itemPoints.indexOf(point) {
+                let catchedItem = self.items[itemIndex]
+                self.items.removeAtIndex(itemIndex)
+
+                switch catchedItem.kind {
+                case .Red:
+                    self.markerStatus = .Red
+                    self.redCount.value += 1
+                case .Green:
+                    self.markerStatus = .Green
+                    self.greenCount.value += 1
+                case .Blue:
+                    self.markerStatus = .Blue
+                    self.blueCount.value += 1
+                }
+            }
+            self.putNewItemWithIgnore(point)
+            self.turn.value += 1
+        }.addDisposableTo(disposeBag)
+
+        func levelUp(level: Variable<Int>) -> (Int -> Void) {
+            return { count in
+                guard level.value <= World.needExpList.count - 2 else {
+                    return
+                }
+                if count >= World.needExpList[level.value] {
+                    level.value += 1
+                }
+            }
+        }
+
+        redCount.subscribeNext(levelUp(redLevel)).addDisposableTo(disposeBag)
+        greenCount.subscribeNext(levelUp(greenLevel)).addDisposableTo(disposeBag)
+        blueCount.subscribeNext(levelUp(blueLevel)).addDisposableTo(disposeBag)
     }
 
     func putNewItemWithIgnore(ignore: Icosahedron.Point) {
@@ -138,9 +134,9 @@ class World {
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval = 0) {
-        if time > 0 {
-            let nextTime = max(0, time - timeSinceLastUpdate)
-            time = nextTime
+        if time.value > 0 {
+            let nextTime = max(0, time.value - timeSinceLastUpdate)
+            time.value = nextTime
         }
     }
 
@@ -149,44 +145,5 @@ class World {
             return items[index]
         }
         return nil
-    }
-
-    func progressOfColor(color: Color) -> Float {
-        if isMaxLevelColor(color) {
-            return 1.0
-        }
-
-        switch color {
-        case .Red:
-            let prev = World.needExpList[redLevel.value - 1]
-            let next = World.needExpList[redLevel.value]
-            return Float(redCount - prev) / Float(next - prev)
-        case .Green:
-            let prev = World.needExpList[greenLevel.value - 1]
-            let next = World.needExpList[greenLevel.value]
-            return Float(greenCount - prev) / Float(next - prev)
-        case .Blue:
-            let prev = World.needExpList[blueLevel.value - 1]
-            let next = World.needExpList[blueLevel.value]
-            return Float(blueCount - prev) / Float(next - prev)
-        }
-    }
-
-    func isMaxLevelColor(color: Color) -> Bool {
-        switch color {
-        case .Red:
-            if redLevel.value == World.needExpList.count - 1 {
-                return true
-            }
-        case .Green:
-            if greenLevel.value == World.needExpList.count - 1 {
-                return true
-            }
-        case .Blue:
-            if blueLevel.value == World.needExpList.count - 1 {
-                return true
-            }
-        }
-        return false
     }
 }

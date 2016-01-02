@@ -36,6 +36,6 @@ class GameViewController: GLKViewController, RendererDelegate {
     }
 
     func didChangeIcosahedronPoint(point: Icosahedron.Point) {
-        world.currentPoint = point
+        world.currentPoint.value = point
     }
 }

@@ -122,7 +122,7 @@ class Renderer: NSObject, GLKViewDelegate {
         super.init()
 
         setUpModels()
-        setUpSubscribers()
+        setUpSubscriptions()
         setUpGL()
 
         update()
@@ -179,32 +179,17 @@ class Renderer: NSObject, GLKViewDelegate {
         timeLabelModel.verticalAlign = .Top
     }
 
-    func setUpSubscribers() {
-        world.currentPointChanged.subscribeNext { point in
-            self.turnLabelModel.text = "Turn \(self.world.turn)"
-        }.addDisposableTo(disposeBag)
-
-        world.redCountChanged.subscribeNext { count in
-            self.redGauge.progress = self.world.progressOfColor(.Red)
-        }.addDisposableTo(disposeBag)
+    func setUpSubscriptions() {
+        world.redProgress.bindTo(redGauge.rx_progress).addDisposableTo(disposeBag)
+        world.greenProgress.bindTo(greenGauge.rx_progress).addDisposableTo(disposeBag)
+        world.blueProgress.bindTo(blueGauge.rx_progress).addDisposableTo(disposeBag)
 
         world.redLevel.bindTo(redLevelLabel.rx_level).addDisposableTo(disposeBag)
-
-        world.greenCountChanged.subscribeNext { count in
-            self.greenGauge.progress = self.world.progressOfColor(.Green)
-        }.addDisposableTo(disposeBag)
-
         world.greenLevel.bindTo(greenLevelLabel.rx_level).addDisposableTo(disposeBag)
-
-        world.blueCountChanged.subscribeNext { count in
-            self.blueGauge.progress = self.world.progressOfColor(.Blue)
-        }.addDisposableTo(disposeBag)
-
         world.blueLevel.bindTo(blueLevelLabel.rx_level).addDisposableTo(disposeBag)
 
-        world.timeChanged.subscribeNext { time in
-            self.timeLabelModel.text = String(format: "Time %.3f", arguments: [time])
-        }.addDisposableTo(disposeBag)
+        world.turn.map { "Turn \($0)" }.bindTo(turnLabelModel.rx_text).addDisposableTo(disposeBag)
+        world.time.map { String(format: "Time %.3f", arguments: [$0]) }.bindTo(timeLabelModel.rx_text).addDisposableTo(disposeBag)
     }
 
     func setUpGL() {

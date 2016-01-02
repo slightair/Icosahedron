@@ -1,4 +1,5 @@
 import GLKit
+import RxSwift
 
 class GaugeModel: Renderable {
     var position = GLKVector3Make(0.0, 0.0, 0.0)
@@ -37,11 +38,29 @@ class GaugeModel: Renderable {
     var customColor: GLKVector4? = nil
 
     let baseColor: GLKVector4
+
     var progress: Float = 0.0 {
         didSet {
             progress = min(1.0, max(0.0, progress))
         }
     }
+
+    var rx_progress: AnyObserver<Float> {
+        return AnyObserver { [weak self] event in
+            MainScheduler.ensureExecutingOnScheduler()
+
+            switch event {
+            case .Next(let value):
+                self?.progress = value
+            case .Error(let error):
+                fatalError("Binding error to UI: \(error)")
+                break
+            case .Completed:
+                break
+            }
+        }
+    }
+
     var width: Float = 0.12
     let height: Float = 0.0075
 
