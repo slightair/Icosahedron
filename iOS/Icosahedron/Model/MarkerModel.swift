@@ -6,7 +6,7 @@ class MarkerModel: Renderable {
     var quaternion = GLKQuaternionIdentity
     var localModelVertices: [ModelVertex]
     var customColor: GLKVector4? = nil
-    var status: World.MarkerStatus = .None {
+    var status: World.MarkerStatus = .Neutral {
         didSet {
             customColor = MarkerModel.colorOfStatus(status)
         }
@@ -17,20 +17,16 @@ class MarkerModel: Renderable {
 
     static func colorOfStatus(status: World.MarkerStatus) -> GLKVector4 {
         switch status {
-        case .Red:
-            return UIColor.flatRedColor().glColor
-        case .Green:
-            return UIColor.flatGreenColor().glColor
-        case .Blue:
-            return UIColor.flatBlueColor().glColor
-        case .None:
+        case .Marked(let color):
+            return color.modelColor()
+        case .Neutral:
             return UIColor.flatSandColor().glColor
         }
     }
 
     init() {
         let scale: Float = 0.02
-        let faceColor = MarkerModel.colorOfStatus(.None)
+        let faceColor = MarkerModel.colorOfStatus(.Neutral)
 
         let coordA = GLKVector3MultiplyScalar(GLKVector3Make(-1.0,  0.3, -1.0), scale)
         let coordB = GLKVector3MultiplyScalar(GLKVector3Make(-1.0, -0.3, -1.0), scale)

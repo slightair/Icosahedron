@@ -15,9 +15,7 @@ class Icosahedron {
         case K = "K"
         case L = "L"
 
-        static var values: [Point] {
-            return [A, B, C, D, E, F, G, H, I, J, K, L]
-        }
+        static let values: [Point] = [A, B, C, D, E, F, G, H, I, J, K, L]
     }
 
     enum Side: String {
@@ -52,8 +50,6 @@ class Icosahedron {
         case JL = "JL"
         case KL = "KL"
 
-        static var values: [Side] {
-            return [AB, AC, AE, AF, AG, BC, BD, BF, BH, CD, CE, CI, DH, DI, DJ, EI, EK, FG, FH, FL, GE, GK, GL, HJ, HL, IJ, IK, JK, JL, KL]
-        }
+        static let values: [Side] = [AB, AC, AE, AF, AG, BC, BD, BF, BH, CD, CE, CI, DH, DI, DJ, EI, EK, FG, FH, FL, GE, GK, GL, HJ, HL, IJ, IK, JK, JL, KL]
     }
 }

@@ -2,9 +2,9 @@ import Foundation
 
 struct Item {
     enum Kind {
-        case Red
-        case Green
-        case Blue
+        case Stone(color: World.Color)
+
+        static let values: [Kind] = [.Stone(color: .Red), .Stone(color: .Green), .Stone(color: .Blue)]
     }
 
     let point: Icosahedron.Point

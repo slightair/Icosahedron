@@ -27,3 +27,16 @@ func quaternionForRotate(from from: GLKVector3, to: GLKVector3) -> GLKQuaternion
 
     return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5)
 }
+
+extension World.Color {
+    func modelColor() -> GLKVector4 {
+        switch (self) {
+        case .Red:
+            return UIColor.flatRedColor().glColor
+        case .Green:
+            return UIColor.flatGreenColor().glColor
+        case .Blue:
+            return UIColor.flatBlueColor().glColor
+        }
+    }
+}

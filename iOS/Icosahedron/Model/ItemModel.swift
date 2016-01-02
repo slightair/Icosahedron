@@ -8,12 +8,8 @@ class ItemModel: OctahedronModel {
 
     static func colorOfKind(kind: Item.Kind) -> GLKVector4 {
         switch kind {
-        case .Red:
-            return UIColor.flatRedColor().glColor
-        case .Green:
-            return UIColor.flatGreenColor().glColor
-        case .Blue:
-            return UIColor.flatBlueColor().glColor
+        case .Stone(let color):
+            return color.modelColor()
         }
     }
 

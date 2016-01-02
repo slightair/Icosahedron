@@ -4,7 +4,7 @@ import RxSwift
 
 class World {
     enum MarkerStatus {
-        case None, Red, Green, Blue
+        case Neutral, Marked(color: Color)
     }
 
     enum Color {
@@ -16,7 +16,7 @@ class World {
     static let defaultTimeLeft = 15.0
 
     let icosahedron = Icosahedron()
-    var markerStatus: MarkerStatus = .None
+    var markerStatus: MarkerStatus = .Neutral
     var items: [Item] = []
 
     var currentPoint = Variable<Icosahedron.Point>(.C)
@@ -43,17 +43,17 @@ class World {
 
     init() {
         items = [
-            Item(point: .A, kind: .Red),
-            Item(point: .B, kind: .Green),
-            Item(point: .D, kind: .Red),
-            Item(point: .E, kind: .Green),
-            Item(point: .F, kind: .Blue),
-            Item(point: .G, kind: .Red),
-            Item(point: .H, kind: .Green),
-            Item(point: .I, kind: .Blue),
-            Item(point: .J, kind: .Red),
-            Item(point: .K, kind: .Green),
-            Item(point: .L, kind: .Blue),
+            Item(point: .A, kind: .Stone(color: .Red)),
+            Item(point: .B, kind: .Stone(color: .Green)),
+            Item(point: .D, kind: .Stone(color: .Red)),
+            Item(point: .E, kind: .Stone(color: .Green)),
+            Item(point: .F, kind: .Stone(color: .Blue)),
+            Item(point: .G, kind: .Stone(color: .Red)),
+            Item(point: .H, kind: .Stone(color: .Green)),
+            Item(point: .I, kind: .Stone(color: .Blue)),
+            Item(point: .J, kind: .Stone(color: .Red)),
+            Item(point: .K, kind: .Stone(color: .Green)),
+            Item(point: .L, kind: .Stone(color: .Blue)),
         ]
 
         setUpObservables()
@@ -89,15 +89,16 @@ class World {
                 self.items.removeAtIndex(itemIndex)
 
                 switch catchedItem.kind {
-                case .Red:
-                    self.markerStatus = .Red
-                    self.redCount.value += 1
-                case .Green:
-                    self.markerStatus = .Green
-                    self.greenCount.value += 1
-                case .Blue:
-                    self.markerStatus = .Blue
-                    self.blueCount.value += 1
+                case .Stone(let color):
+                    self.markerStatus = .Marked(color: color)
+                    switch color {
+                    case .Red:
+                        self.redCount.value += 1
+                    case .Green:
+                        self.greenCount.value += 1
+                    case .Blue:
+                        self.blueCount.value += 1
+                    }
                 }
             }
             self.putNewItemWithIgnore(point)
@@ -127,8 +128,7 @@ class World {
 
         let nextPoint = candidate[pointRandomSource.nextIntWithUpperBound(candidate.count)]
         if !items.contains({ $0.point == nextPoint }) {
-            let colors: [Item.Kind] = [.Red, .Green, .Blue]
-            let color = colors[colorRandomSource.nextIntWithUpperBound(colors.count)]
+            let color = Item.Kind.values[colorRandomSource.nextIntWithUpperBound(Item.Kind.values.count)]
             items.append(Item(point: nextPoint, kind: color))
         }
     }
