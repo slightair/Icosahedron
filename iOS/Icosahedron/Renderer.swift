@@ -192,15 +192,40 @@ class Renderer: NSObject, GLKViewDelegate {
         world.greenProgress.bindTo(greenGauge.rx_progress).addDisposableTo(disposeBag)
         world.blueProgress.bindTo(blueGauge.rx_progress).addDisposableTo(disposeBag)
 
-        world.redLevel.asObservable().bindTo(redLevelLabel.rx_level).addDisposableTo(disposeBag)
-        world.greenLevel.asObservable().bindTo(greenLevelLabel.rx_level).addDisposableTo(disposeBag)
-        world.blueLevel.asObservable().bindTo(blueLevelLabel.rx_level).addDisposableTo(disposeBag)
+//        world.redLevel.asObservable().bindTo(redLevelLabel.rx_level).addDisposableTo(disposeBag)
+//        world.greenLevel.asObservable().bindTo(greenLevelLabel.rx_level).addDisposableTo(disposeBag)
+//        world.blueLevel.asObservable().bindTo(blueLevelLabel.rx_level).addDisposableTo(disposeBag)
 
         world.turn.asObservable().map { "Turn \($0)" }.bindTo(turnLabelModel.rx_text).addDisposableTo(disposeBag)
         world.time.asObservable().map { String(format: "Time %.3f", arguments: [$0]) }.bindTo(timeLabelModel.rx_text).addDisposableTo(disposeBag)
 
         let timeGaugeMax: Float = 30.0
         world.time.asObservable().map { 1.0 - (timeGaugeMax - min(timeGaugeMax, Float($0))) / timeGaugeMax }.bindTo(timeGauge.rx_progress).addDisposableTo(disposeBag)
+
+        // for Debug
+
+        let debugLevelText: (Int, Int, Int) -> String = { (level, count, nextExp) in
+            return "Lv \(level)(\(count)/\(nextExp))"
+        }
+
+        Observable.combineLatest(world.redLevel.asObservable(),
+            world.redCount.asObservable(),
+            world.redNextExp.asObservable(),
+            resultSelector: debugLevelText)
+            .bindTo(redLevelLabel.rx_text)
+            .addDisposableTo(disposeBag)
+        Observable.combineLatest(world.greenLevel.asObservable(),
+            world.greenCount.asObservable(),
+            world.greenNextExp.asObservable(),
+            resultSelector: debugLevelText)
+            .bindTo(greenLevelLabel.rx_text)
+            .addDisposableTo(disposeBag)
+        Observable.combineLatest(world.blueLevel.asObservable(),
+            world.blueCount.asObservable(),
+            world.blueNextExp.asObservable(),
+            resultSelector: debugLevelText)
+            .bindTo(blueLevelLabel.rx_text)
+            .addDisposableTo(disposeBag)
     }
 
     func setUpGL() {

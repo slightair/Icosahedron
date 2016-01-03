@@ -33,6 +33,10 @@ class World {
     var greenProgress: Observable<Float>!
     var blueProgress: Observable<Float>!
 
+    var redNextExp: Observable<Int>!
+    var greenNextExp: Observable<Int>!
+    var blueNextExp: Observable<Int>!
+
     let turn = Variable<Int>(0)
     let time = Variable<Double>(World.defaultTimeLeft)
 
@@ -81,6 +85,14 @@ class World {
         redProgress = redCount.asObservable().map(convertToProgress(redLevel))
         greenProgress = greenCount.asObservable().map(convertToProgress(greenLevel))
         blueProgress = blueCount.asObservable().map(convertToProgress(blueLevel))
+
+        let convertToNextExp: Int -> Int = { level in
+            World.needExpList[level]
+        }
+
+        redNextExp = redLevel.asObservable().map(convertToNextExp)
+        greenNextExp = greenLevel.asObservable().map(convertToNextExp)
+        blueNextExp = blueLevel.asObservable().map(convertToNextExp)
     }
 
     func setUpSubscriptions() {
