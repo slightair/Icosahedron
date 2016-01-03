@@ -36,6 +36,9 @@ class World {
     let turn = Variable<Int>(0)
     let time = Variable<Double>(World.defaultTimeLeft)
 
+    typealias ChainedItem = (kind: Item.Kind, count: Int)
+    var chainedItem = Variable<ChainedItem?>(nil)
+
     let pointRandomSource = GKMersenneTwisterRandomSource(seed: 6239)
     let colorRandomSource = GKMersenneTwisterRandomSource(seed: 3962)
 
@@ -99,6 +102,12 @@ class World {
                     case .Blue:
                         self.blueCount.value += 1
                     }
+
+                    if let chained = self.chainedItem.value where chained.kind == catchedItem.kind {
+                        self.chainedItem.value = ChainedItem(catchedItem.kind, chained.count + 1)
+                    } else {
+                        self.chainedItem.value = ChainedItem(catchedItem.kind, 1)
+                    }
                 }
             }
             self.putNewItemWithIgnore(point)
@@ -119,6 +128,14 @@ class World {
         redCount.subscribeNext(levelUp(redLevel)).addDisposableTo(disposeBag)
         greenCount.subscribeNext(levelUp(greenLevel)).addDisposableTo(disposeBag)
         blueCount.subscribeNext(levelUp(blueLevel)).addDisposableTo(disposeBag)
+
+        chainedItem.subscribeNext { chainedItem in
+            guard let kind = chainedItem?.kind, count = chainedItem?.count else {
+                return
+            }
+
+            print(kind, count)
+        }.addDisposableTo(disposeBag)
     }
 
     func putNewItemWithIgnore(ignore: Icosahedron.Point) {
