@@ -192,15 +192,15 @@ class Renderer: NSObject, GLKViewDelegate {
         world.greenProgress.bindTo(greenGauge.rx_progress).addDisposableTo(disposeBag)
         world.blueProgress.bindTo(blueGauge.rx_progress).addDisposableTo(disposeBag)
 
-        world.redLevel.bindTo(redLevelLabel.rx_level).addDisposableTo(disposeBag)
-        world.greenLevel.bindTo(greenLevelLabel.rx_level).addDisposableTo(disposeBag)
-        world.blueLevel.bindTo(blueLevelLabel.rx_level).addDisposableTo(disposeBag)
+        world.redLevel.asObservable().bindTo(redLevelLabel.rx_level).addDisposableTo(disposeBag)
+        world.greenLevel.asObservable().bindTo(greenLevelLabel.rx_level).addDisposableTo(disposeBag)
+        world.blueLevel.asObservable().bindTo(blueLevelLabel.rx_level).addDisposableTo(disposeBag)
 
-        world.turn.map { "Turn \($0)" }.bindTo(turnLabelModel.rx_text).addDisposableTo(disposeBag)
-        world.time.map { String(format: "Time %.3f", arguments: [$0]) }.bindTo(timeLabelModel.rx_text).addDisposableTo(disposeBag)
+        world.turn.asObservable().map { "Turn \($0)" }.bindTo(turnLabelModel.rx_text).addDisposableTo(disposeBag)
+        world.time.asObservable().map { String(format: "Time %.3f", arguments: [$0]) }.bindTo(timeLabelModel.rx_text).addDisposableTo(disposeBag)
 
         let timeGaugeMax: Float = 30.0
-        world.time.map { 1.0 - (timeGaugeMax - min(timeGaugeMax, Float($0))) / timeGaugeMax }.bindTo(timeGauge.rx_progress).addDisposableTo(disposeBag)
+        world.time.asObservable().map { 1.0 - (timeGaugeMax - min(timeGaugeMax, Float($0))) / timeGaugeMax }.bindTo(timeGauge.rx_progress).addDisposableTo(disposeBag)
     }
 
     func setUpGL() {

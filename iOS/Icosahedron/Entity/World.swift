@@ -84,7 +84,7 @@ class World {
     }
 
     func setUpSubscriptions() {
-        currentPoint.subscribeNext { point in
+        currentPoint.asObservable().subscribeNext { point in
             let itemPoints = self.items.map { $0.point }
 
             if let itemIndex = itemPoints.indexOf(point) {
@@ -125,11 +125,11 @@ class World {
             }
         }
 
-        redCount.subscribeNext(levelUp(redLevel)).addDisposableTo(disposeBag)
-        greenCount.subscribeNext(levelUp(greenLevel)).addDisposableTo(disposeBag)
-        blueCount.subscribeNext(levelUp(blueLevel)).addDisposableTo(disposeBag)
+        redCount.asObservable().subscribeNext(levelUp(redLevel)).addDisposableTo(disposeBag)
+        greenCount.asObservable().subscribeNext(levelUp(greenLevel)).addDisposableTo(disposeBag)
+        blueCount.asObservable().subscribeNext(levelUp(blueLevel)).addDisposableTo(disposeBag)
 
-        chainedItem.subscribeNext { chainedItem in
+        chainedItem.asObservable().subscribeNext { chainedItem in
             guard let kind = chainedItem?.kind, count = chainedItem?.count else {
                 return
             }
