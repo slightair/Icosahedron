@@ -204,7 +204,7 @@ class Renderer: NSObject, GLKViewDelegate {
 
         // for Debug
 
-        let debugLevelText: (Int, Int, Int) -> String = { (level, count, nextExp) in
+        let debugLevelText: (Int, Int64, Int64) -> String = { (level, count, nextExp) in
             return "Lv \(level)(\(count)/\(nextExp))"
         }
 

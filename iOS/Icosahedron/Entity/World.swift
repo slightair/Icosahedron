@@ -11,7 +11,7 @@ class World {
         case Red, Green, Blue
     }
 
-    static let needExpList = [Int.min, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, 514229, 832040, 1346269, 2178309, 3524578, 5702887, 9227465, 14930352, 24157816, 39088168, 63245984, 102334152, 165580128, 267914304, 433494464, 701408768, 1134903168, 1836311936, Int.max]
+    static let needExpList = [Int64.min, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, 514229, 832040, 1346269, 2178309, 3524578, 5702887, 9227465, 14930352, 24157816, 39088168, 63245984, 102334152, 165580128, 267914304, 433494464, 701408768, 1134903168, 1836311936, 2971215104, 4807526912, 7778741760, 12586268672, 20365010944, Int64.max]
 
     static let defaultTimeLeft = 15.0
 
@@ -21,9 +21,9 @@ class World {
 
     var currentPoint = Variable<Icosahedron.Point>(.C)
 
-    let redCount = Variable<Int>(0)
-    let greenCount = Variable<Int>(0)
-    let blueCount = Variable<Int>(0)
+    let redCount = Variable<Int64>(0)
+    let greenCount = Variable<Int64>(0)
+    let blueCount = Variable<Int64>(0)
 
     let redLevel = Variable<Int>(1)
     let greenLevel = Variable<Int>(1)
@@ -33,9 +33,9 @@ class World {
     var greenProgress: Observable<Float>!
     var blueProgress: Observable<Float>!
 
-    var redNextExp: Observable<Int>!
-    var greenNextExp: Observable<Int>!
-    var blueNextExp: Observable<Int>!
+    var redNextExp: Observable<Int64>!
+    var greenNextExp: Observable<Int64>!
+    var blueNextExp: Observable<Int64>!
 
     let turn = Variable<Int>(0)
     let time = Variable<Double>(World.defaultTimeLeft)
@@ -68,7 +68,7 @@ class World {
     }
 
     func setUpObservables() {
-        func convertToProgress(level: Variable<Int>) -> (Int -> Float) {
+        func convertToProgress(level: Variable<Int>) -> (Int64 -> Float) {
             return { count in
                 if count == 0 {
                     return 0.0
@@ -86,7 +86,7 @@ class World {
         greenProgress = greenCount.asObservable().map(convertToProgress(greenLevel))
         blueProgress = blueCount.asObservable().map(convertToProgress(blueLevel))
 
-        let convertToNextExp: Int -> Int = { level in
+        let convertToNextExp: Int -> Int64 = { level in
             World.needExpList[level]
         }
 
@@ -106,19 +106,22 @@ class World {
                 switch catchedItem.kind {
                 case .Stone(let color):
                     self.markerStatus = .Marked(color: color)
-                    switch color {
-                    case .Red:
-                        self.redCount.value += 1
-                    case .Green:
-                        self.greenCount.value += 1
-                    case .Blue:
-                        self.blueCount.value += 1
-                    }
 
                     if let chained = self.chainedItem.value where chained.kind == catchedItem.kind {
                         self.chainedItem.value = ChainedItem(catchedItem.kind, chained.count + 1)
                     } else {
                         self.chainedItem.value = ChainedItem(catchedItem.kind, 1)
+                    }
+
+                    let colorPoint = Int64(2 ** (self.chainedItem.value!.count - 1))
+
+                    switch color {
+                    case .Red:
+                        self.redCount.value += colorPoint
+                    case .Green:
+                        self.greenCount.value += colorPoint
+                    case .Blue:
+                        self.blueCount.value += colorPoint
                     }
                 }
             }
@@ -126,12 +129,13 @@ class World {
             self.turn.value += 1
         }.addDisposableTo(disposeBag)
 
-        func levelUp(level: Variable<Int>) -> (Int -> Void) {
+        func levelUp(level: Variable<Int>) -> (Int64 -> Void) {
             return { count in
                 guard level.value <= World.needExpList.count - 2 else {
                     return
                 }
-                if count >= World.needExpList[level.value] {
+
+                while count >= World.needExpList[level.value] {
                     level.value += 1
                 }
             }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		571416B31C3A9C2A00CF6F7D /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571416B21C3A9C2A00CF6F7D /* Math.swift */; };
 		573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132331BDCBF5200824EA5 /* ModelShader.fsh */; };
 		573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132341BDCBF5200824EA5 /* ModelShader.vsh */; };
 		5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778A5471C25382B0019FF99 /* UIShaderProgram.swift */; };
@@ -68,6 +69,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		571416B21C3A9C2A00CF6F7D /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		573132331BDCBF5200824EA5 /* ModelShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.fsh; sourceTree = "<group>"; };
 		573132341BDCBF5200824EA5 /* ModelShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.vsh; sourceTree = "<group>"; };
 		5778A5471C25382B0019FF99 /* UIShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIShaderProgram.swift; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 				57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */,
 				5778A5771C2A588B0019FF99 /* RendererSupport.swift */,
 				57F5FB721C34150A00817824 /* VectorExtensions.swift */,
+				571416B21C3A9C2A00CF6F7D /* Math.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -349,6 +352,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57D866C51BEF66F90034DEDE /* Renderer.swift in Sources */,
+				571416B31C3A9C2A00CF6F7D /* Math.swift in Sources */,
 				579AD6011C01EEB900218D38 /* IcosahedronModel.swift in Sources */,
 				57DC980C1C1325C90004B107 /* FontData.swift in Sources */,
 				579AD6031C01EEB900218D38 /* ItemModel.swift in Sources */,
