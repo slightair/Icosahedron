@@ -39,6 +39,7 @@ class World {
 
     let turn = Variable<Int>(0)
     let time = Variable<Double>(World.defaultTimeLeft)
+    let score = Variable<Int64>(0)
 
     typealias ChainedItem = (kind: Item.Kind, count: Int)
     var chainedItem = Variable<ChainedItem?>(nil)
@@ -114,15 +115,21 @@ class World {
                     }
 
                     let colorPoint = Int64(2 ** (self.chainedItem.value!.count - 1))
+                    let obtainedScore: Int64
 
                     switch color {
                     case .Red:
                         self.redCount.value += colorPoint
+                        obtainedScore = Int64(self.redLevel.value) * colorPoint
                     case .Green:
                         self.greenCount.value += colorPoint
+                        obtainedScore = Int64(self.greenLevel.value) * colorPoint
                     case .Blue:
                         self.blueCount.value += colorPoint
+                        obtainedScore = Int64(self.blueLevel.value) * colorPoint
                     }
+
+                    self.score.value += obtainedScore
                 }
             }
             self.putNewItemWithIgnore(point)
