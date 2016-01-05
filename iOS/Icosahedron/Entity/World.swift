@@ -152,6 +152,14 @@ class World {
         greenCount.asObservable().subscribeNext(levelUp(greenLevel)).addDisposableTo(disposeBag)
         blueCount.asObservable().subscribeNext(levelUp(blueLevel)).addDisposableTo(disposeBag)
 
+        let extendTime: (Int -> Void) = { level in
+            self.time.value += Double(level) / 3.0
+        }
+
+        redLevel.asObservable().subscribeNext(extendTime).addDisposableTo(disposeBag)
+        greenLevel.asObservable().subscribeNext(extendTime).addDisposableTo(disposeBag)
+        blueLevel.asObservable().subscribeNext(extendTime).addDisposableTo(disposeBag)
+
         chainedItem.asObservable().subscribeNext { chainedItem in
             guard let kind = chainedItem?.kind, count = chainedItem?.count else {
                 return
