@@ -13,10 +13,10 @@ class TetrahedronModel: Renderable {
     let topCoordinate: GLKVector3
 
     init(color: GLKVector4 = GLKVector4Make(1.0, 1.0, 1.0, 1.0)) {
-        let coordA = GLKVector3MultiplyScalar(GLKVector3Make( 1, 1, 1), self.dynamicType.scale)
-        let coordB = GLKVector3MultiplyScalar(GLKVector3Make( 1,-1,-1), self.dynamicType.scale)
-        let coordC = GLKVector3MultiplyScalar(GLKVector3Make(-1, 1,-1), self.dynamicType.scale)
-        let coordD = GLKVector3MultiplyScalar(GLKVector3Make(-1,-1, 1), self.dynamicType.scale)
+        let coordA = GLKVector3MultiplyScalar(GLKVector3Make( 1,  1,  1), self.dynamicType.scale)
+        let coordB = GLKVector3MultiplyScalar(GLKVector3Make( 1, -1, -1), self.dynamicType.scale)
+        let coordC = GLKVector3MultiplyScalar(GLKVector3Make(-1,  1, -1), self.dynamicType.scale)
+        let coordD = GLKVector3MultiplyScalar(GLKVector3Make(-1, -1,  1), self.dynamicType.scale)
 
         let normalDCB = createFaceNormal(coordD, y: coordC, z: coordB)
         let normalCAB = createFaceNormal(coordC, y: coordA, z: coordB)

@@ -30,7 +30,7 @@ func quaternionForRotate(from from: GLKVector3, to: GLKVector3) -> GLKQuaternion
 
 extension World.Color {
     func modelColor() -> GLKVector4 {
-        switch (self) {
+        switch self {
         case .Red:
             return UIColor.flatRedColor().glColor
         case .Green:

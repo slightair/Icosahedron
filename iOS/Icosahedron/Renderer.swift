@@ -318,12 +318,12 @@ class Renderer: NSObject, GLKViewDelegate {
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval = 0) {
-        if (animationProgress < 1.0) {
+        if animationProgress < 1.0 {
             animationProgress = min(1.0, animationProgress + Float(timeSinceLastUpdate) * 4)
         }
 
         animationLoopValue += Float(timeSinceLastUpdate / 4)
-        if (animationLoopValue > 1.0) {
+        if animationLoopValue > 1.0 {
             animationLoopValue -= 1.0
         }
 

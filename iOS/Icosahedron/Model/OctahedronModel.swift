@@ -13,12 +13,12 @@ class OctahedronModel: Renderable {
     let topCoordinate: GLKVector3
 
     init(color: GLKVector4 = GLKVector4Make(1.0, 1.0, 1.0, 1.0)) {
-        let coordA = GLKVector3MultiplyScalar(GLKVector3Make( 0, 1, 0), self.dynamicType.scale)
-        let coordB = GLKVector3MultiplyScalar(GLKVector3Make( 0, 0,-1), self.dynamicType.scale)
-        let coordC = GLKVector3MultiplyScalar(GLKVector3Make( 1, 0, 0), self.dynamicType.scale)
-        let coordD = GLKVector3MultiplyScalar(GLKVector3Make( 0, 0, 1), self.dynamicType.scale)
-        let coordE = GLKVector3MultiplyScalar(GLKVector3Make(-1, 0, 0), self.dynamicType.scale)
-        let coordF = GLKVector3MultiplyScalar(GLKVector3Make( 0,-1, 0), self.dynamicType.scale)
+        let coordA = GLKVector3MultiplyScalar(GLKVector3Make( 0,  1,  0), self.dynamicType.scale)
+        let coordB = GLKVector3MultiplyScalar(GLKVector3Make( 0,  0, -1), self.dynamicType.scale)
+        let coordC = GLKVector3MultiplyScalar(GLKVector3Make( 1,  0,  0), self.dynamicType.scale)
+        let coordD = GLKVector3MultiplyScalar(GLKVector3Make( 0,  0,  1), self.dynamicType.scale)
+        let coordE = GLKVector3MultiplyScalar(GLKVector3Make(-1,  0,  0), self.dynamicType.scale)
+        let coordF = GLKVector3MultiplyScalar(GLKVector3Make( 0, -1,  0), self.dynamicType.scale)
 
         let normalBAC = createFaceNormal(coordB, y: coordA, z: coordC)
         let normalCAD = createFaceNormal(coordC, y: coordA, z: coordD)
@@ -64,7 +64,7 @@ class OctahedronModel: Renderable {
             ModelVertex(position: coordE, normal: normalFEB, color: color, texCoord: texCoord),
             ModelVertex(position: coordB, normal: normalFEB, color: color, texCoord: texCoord),
         ]
-        
+
         topCoordinate = GLKVector3Make(0, 1, 0)
     }
 }

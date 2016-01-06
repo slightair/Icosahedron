@@ -81,7 +81,7 @@ class ShaderProgram {
             free(log)
         }
 
-        var status:GLint = 0
+        var status: GLint = 0
         glGetShaderiv(shader, GLenum(GL_COMPILE_STATUS), &status)
         if status == 0 {
             glDeleteShader(shader)
@@ -102,7 +102,7 @@ class ShaderProgram {
             free(log)
         }
 
-        var status:GLint = 0
+        var status: GLint = 0
         glGetProgramiv(program, GLenum(GL_LINK_STATUS), &status)
         if status == 0 {
             return false
@@ -122,7 +122,7 @@ class ShaderProgram {
             free(log)
         }
 
-        var status:GLint = 0
+        var status: GLint = 0
         glGetProgramiv(program, GLenum(GL_VALIDATE_STATUS), &status)
         if status == 0 {
             return false

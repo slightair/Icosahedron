@@ -92,11 +92,11 @@ class MarkerModel: Renderable {
             ModelVertex(position: coordD, normal: normalDCB, color: faceColor, texCoord: texCoord),
             ModelVertex(position: coordC, normal: normalDCB, color: faceColor, texCoord: texCoord),
             ModelVertex(position: coordB, normal: normalDCB, color: faceColor, texCoord: texCoord),
-            
+
             ModelVertex(position: coordD, normal: normalDEC, color: faceColor, texCoord: texCoord),
             ModelVertex(position: coordE, normal: normalDEC, color: faceColor, texCoord: texCoord),
             ModelVertex(position: coordC, normal: normalDEC, color: faceColor, texCoord: texCoord),
-            
+
             ModelVertex(position: coordF, normal: normalFED, color: faceColor, texCoord: texCoord),
             ModelVertex(position: coordE, normal: normalFED, color: faceColor, texCoord: texCoord),
             ModelVertex(position: coordD, normal: normalFED, color: faceColor, texCoord: texCoord),
