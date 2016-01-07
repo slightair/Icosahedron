@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		571416B31C3A9C2A00CF6F7D /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571416B21C3A9C2A00CF6F7D /* Math.swift */; };
+		572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */; };
 		573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132331BDCBF5200824EA5 /* ModelShader.fsh */; };
 		573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132341BDCBF5200824EA5 /* ModelShader.vsh */; };
 		5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778A5471C25382B0019FF99 /* UIShaderProgram.swift */; };
@@ -71,6 +72,7 @@
 
 /* Begin PBXFileReference section */
 		571416B21C3A9C2A00CF6F7D /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingLabelModel.swift; sourceTree = "<group>"; };
 		573132331BDCBF5200824EA5 /* ModelShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.fsh; sourceTree = "<group>"; };
 		573132341BDCBF5200824EA5 /* ModelShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.vsh; sourceTree = "<group>"; };
 		5778A5471C25382B0019FF99 /* UIShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIShaderProgram.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				57DC980D1C141A350004B107 /* LabelModel.swift */,
 				57C58F061C1F18B600840B56 /* GaugeModel.swift */,
 				57F5FB741C34DC1E00817824 /* OctahedronModel.swift */,
+				572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */,
 			);
 			name = BaseModel;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */,
 				57D866C51BEF66F90034DEDE /* GameSceneRenderer.swift in Sources */,
 				571416B31C3A9C2A00CF6F7D /* Math.swift in Sources */,
 				579AD6011C01EEB900218D38 /* IcosahedronModel.swift in Sources */,

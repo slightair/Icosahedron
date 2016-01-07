@@ -9,7 +9,7 @@ class GameSceneModelProducer {
     let icosahedronModel = MotherIcosahedronModel()
     let markerModel = MarkerModel()
 
-    let pointLabels = Icosahedron.Point.values.map { LabelModel(text: $0.rawValue) }
+    let floatingPointLabels = Icosahedron.Point.values.map { FloatingLabelModel(text: $0.rawValue) }
 
     let redGaugeModel = GaugeModel(color: UIColor.flatRedColor().glColor)
     let greenGaugeModel = GaugeModel(color: UIColor.flatGreenColor().glColor)
@@ -36,13 +36,13 @@ class GameSceneModelProducer {
     }
 
     func setUpModels() {
-        for label in pointLabels {
+        for label in floatingPointLabels {
             let point = Icosahedron.Point(rawValue: label.text)!
             if let vertex = icosahedronModel.pointDict[point] {
                 label.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.1)
-                label.size = 0.5
+                label.baseSize = 0.3
             }
-            label.customColor = UIColor.flatWhiteColor().glColor
+            label.baseCustomColor = UIColor.flatWhiteColor().glColor
         }
 
         let itemGaugeModels = [redGaugeModel, greenGaugeModel, blueGaugeModel]
@@ -149,7 +149,7 @@ class GameSceneModelProducer {
     }
 
     func labelObjects() -> [LabelModel] {
-        return pointLabels
+        return floatingPointLabels.filter { $0.isActive }
     }
 
     func uiObjects() -> [Renderable] {
@@ -175,6 +175,10 @@ class GameSceneModelProducer {
         animationLoopValue += Float(timeSinceLastUpdate / 4)
         if animationLoopValue > 1.0 {
             animationLoopValue -= 1.0
+        }
+
+        for label in floatingPointLabels {
+            label.update(timeSinceLastUpdate)
         }
     }
 }
