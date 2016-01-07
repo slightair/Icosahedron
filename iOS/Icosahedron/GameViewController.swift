@@ -1,15 +1,15 @@
 import GLKit
 import SpriteKit
 
-class GameViewController: GLKViewController, RendererDelegate {
-    var renderer: Renderer!
+class GameViewController: GLKViewController, GameSceneRendererDelegate {
+    var renderer: GameSceneRenderer!
     let world = World()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let context = EAGLContext(API: .OpenGLES3)
-        renderer = Renderer(context: context, world: world)
+        renderer = GameSceneRenderer(context: context, world: world)
         renderer.delegate = self
 
         let glkView = view as! GLKView

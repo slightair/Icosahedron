@@ -1,5 +1,6 @@
 import GLKit
 import OpenGLES
+import UIKit
 
 func BUFFER_OFFSET(i: Int) -> UnsafePointer<Void> {
     let p: UnsafePointer<Void> = nil
@@ -26,6 +27,15 @@ func quaternionForRotate(from from: GLKVector3, to: GLKVector3) -> GLKQuaternion
     let inverse = 1 / s
 
     return GLKQuaternionMakeWithVector3(GLKVector3MultiplyScalar(rotationAxis, inverse), s * 0.5)
+}
+
+struct Screen {
+    static var aspect: Float {
+        let width = GLsizei(CGRectGetHeight(UIScreen.mainScreen().nativeBounds)) // long side
+        let height = GLsizei(CGRectGetWidth(UIScreen.mainScreen().nativeBounds)) // short side
+
+        return Float(fabs(Double(width) / Double(height)))
+    }
 }
 
 extension World.Color {

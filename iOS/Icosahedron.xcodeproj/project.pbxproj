@@ -29,9 +29,10 @@
 		579AD6071C01EEB900218D38 /* TetrahedronModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AD5FF1C01EEB900218D38 /* TetrahedronModel.swift */; };
 		579AD6091C01F35300218D38 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AD6081C01F35300218D38 /* Item.swift */; };
 		579AD60C1C02F92700218D38 /* MotherIcosahedronModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AD60B1C02F92700218D38 /* MotherIcosahedronModel.swift */; };
+		57C31EA91C3E8EDE00DAFCCE /* GameSceneModelProducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C31EA81C3E8EDE00DAFCCE /* GameSceneModelProducer.swift */; };
 		57C58F071C1F18B600840B56 /* GaugeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C58F061C1F18B600840B56 /* GaugeModel.swift */; };
 		57D866C31BEE3AA30034DEDE /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C21BEE3AA30034DEDE /* GameViewController.swift */; };
-		57D866C51BEF66F90034DEDE /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C41BEF66F90034DEDE /* Renderer.swift */; };
+		57D866C51BEF66F90034DEDE /* GameSceneRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866C41BEF66F90034DEDE /* GameSceneRenderer.swift */; };
 		57D866CB1BF2ED5E0034DEDE /* ShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866CA1BF2ED5E0034DEDE /* ShaderProgram.swift */; };
 		57D866CD1BF2EF0C0034DEDE /* ModelShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D866CC1BF2EF0C0034DEDE /* ModelShaderProgram.swift */; };
 		57DC980C1C1325C90004B107 /* FontData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DC980B1C1325C90004B107 /* FontData.swift */; };
@@ -93,9 +94,10 @@
 		579AD5FF1C01EEB900218D38 /* TetrahedronModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TetrahedronModel.swift; sourceTree = "<group>"; };
 		579AD6081C01F35300218D38 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		579AD60B1C02F92700218D38 /* MotherIcosahedronModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotherIcosahedronModel.swift; sourceTree = "<group>"; };
+		57C31EA81C3E8EDE00DAFCCE /* GameSceneModelProducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneModelProducer.swift; sourceTree = "<group>"; };
 		57C58F061C1F18B600840B56 /* GaugeModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GaugeModel.swift; sourceTree = "<group>"; };
 		57D866C21BEE3AA30034DEDE /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
-		57D866C41BEF66F90034DEDE /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		57D866C41BEF66F90034DEDE /* GameSceneRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneRenderer.swift; sourceTree = "<group>"; };
 		57D866CA1BF2ED5E0034DEDE /* ShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShaderProgram.swift; sourceTree = "<group>"; };
 		57D866CC1BF2EF0C0034DEDE /* ModelShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelShaderProgram.swift; sourceTree = "<group>"; };
 		57DC980B1C1325C90004B107 /* FontData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontData.swift; sourceTree = "<group>"; };
@@ -165,13 +167,13 @@
 		579013A11BC1083400ADAE3E /* Icosahedron */ = {
 			isa = PBXGroup;
 			children = (
+				57C31EAA1C3E946500DAFCCE /* Scene */,
 				57E2FA131C0AB86500DF1796 /* Utility */,
 				579AD5F71C01EE1100218D38 /* Model */,
 				573132321BDCBF3200824EA5 /* Shader */,
 				57DDC9531BDB2E70009423EA /* Entity */,
 				579013A21BC1083400ADAE3E /* AppDelegate.swift */,
 				57D866C21BEE3AA30034DEDE /* GameViewController.swift */,
-				57D866C41BEF66F90034DEDE /* Renderer.swift */,
 				579013AA1BC1083400ADAE3E /* Main.storyboard */,
 				579013AF1BC1083400ADAE3E /* LaunchScreen.storyboard */,
 				579013AD1BC1083400ADAE3E /* Assets.xcassets */,
@@ -205,6 +207,15 @@
 				57F5FB741C34DC1E00817824 /* OctahedronModel.swift */,
 			);
 			name = BaseModel;
+			sourceTree = "<group>";
+		};
+		57C31EAA1C3E946500DAFCCE /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				57D866C41BEF66F90034DEDE /* GameSceneRenderer.swift */,
+				57C31EA81C3E8EDE00DAFCCE /* GameSceneModelProducer.swift */,
+			);
+			path = Scene;
 			sourceTree = "<group>";
 		};
 		57DDC9531BDB2E70009423EA /* Entity */ = {
@@ -351,7 +362,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57D866C51BEF66F90034DEDE /* Renderer.swift in Sources */,
+				57D866C51BEF66F90034DEDE /* GameSceneRenderer.swift in Sources */,
 				571416B31C3A9C2A00CF6F7D /* Math.swift in Sources */,
 				579AD6011C01EEB900218D38 /* IcosahedronModel.swift in Sources */,
 				57DC980C1C1325C90004B107 /* FontData.swift in Sources */,
@@ -373,6 +384,7 @@
 				57F5FB771C36702700817824 /* LevelLabelModel.swift in Sources */,
 				579AD6051C01EEB900218D38 /* ModelVertex.swift in Sources */,
 				57C58F071C1F18B600840B56 /* GaugeModel.swift in Sources */,
+				57C31EA91C3E8EDE00DAFCCE /* GameSceneModelProducer.swift in Sources */,
 				57DC980E1C141A350004B107 /* LabelModel.swift in Sources */,
 				579AD6021C01EEB900218D38 /* IcosahedronVertex.swift in Sources */,
 				579AD6061C01EEB900218D38 /* Renderable.swift in Sources */,
