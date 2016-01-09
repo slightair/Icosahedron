@@ -125,14 +125,14 @@ class World {
 
                     switch color {
                     case .Red:
-                        self.redCount.value += colorPoint
                         obtainedScore = Int64(self.redLevel.value) * colorPoint
+                        self.redCount.value += colorPoint
                     case .Green:
-                        self.greenCount.value += colorPoint
                         obtainedScore = Int64(self.greenLevel.value) * colorPoint
+                        self.greenCount.value += colorPoint
                     case .Blue:
-                        self.blueCount.value += colorPoint
                         obtainedScore = Int64(self.blueLevel.value) * colorPoint
+                        self.blueCount.value += colorPoint
                     }
 
                     self.score.value += obtainedScore

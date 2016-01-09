@@ -169,6 +169,7 @@ class GameSceneModelProducer {
             redGaugeModel,
             greenGaugeModel,
             blueGaugeModel,
+            timeGaugeModel,
         ]
     }
 
