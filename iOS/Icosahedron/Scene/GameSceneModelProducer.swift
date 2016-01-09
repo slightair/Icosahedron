@@ -9,7 +9,7 @@ class GameSceneModelProducer {
     let icosahedronModel = MotherIcosahedronModel()
     let markerModel = MarkerModel()
 
-    let floatingPointLabels = Icosahedron.Point.values.map { FloatingLabelModel(text: $0.rawValue) }
+    var floatingPointLabels: [Icosahedron.Point: FloatingLabelModel] = [:]
 
     let redGaugeModel = GaugeModel(color: UIColor.flatRedColor().glColor)
     let greenGaugeModel = GaugeModel(color: UIColor.flatGreenColor().glColor)
@@ -36,13 +36,15 @@ class GameSceneModelProducer {
     }
 
     func setUpModels() {
-        for label in floatingPointLabels {
-            let point = Icosahedron.Point(rawValue: label.text)!
+        for point in Icosahedron.Point.values {
+            let label = FloatingLabelModel(text: "")
             if let vertex = icosahedronModel.pointDict[point] {
                 label.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.1)
                 label.baseSize = 0.3
             }
             label.baseCustomColor = UIColor.flatWhiteColor().glColor
+
+            floatingPointLabels[point] = label
         }
 
         let itemGaugeModels = [redGaugeModel, greenGaugeModel, blueGaugeModel]
@@ -103,6 +105,16 @@ class GameSceneModelProducer {
         let timeGaugeMax: Float = 30.0
         world.time.asObservable().map { 1.0 - (timeGaugeMax - min(timeGaugeMax, Float($0))) / timeGaugeMax }.bindTo(timeGaugeModel.rx_progress).addDisposableTo(disposeBag)
 
+        world.eventLog.subscribeNext { event in
+            switch event {
+            case .ObtainedColorStone(let point, _, let score, _):
+                if let pointLabel = self.floatingPointLabels[point] {
+                    pointLabel.text = String(score)
+                    pointLabel.animationProgress = 0.0
+                }
+            }
+        }.addDisposableTo(disposeBag)
+
         // for Debug
 
         let debugLevelText: (Int, Int64, Int64) -> String = { (level, count, nextExp) in
@@ -149,7 +161,7 @@ class GameSceneModelProducer {
     }
 
     func labelObjects() -> [LabelModel] {
-        return floatingPointLabels.filter { $0.isActive }
+        return floatingPointLabels.map { $1 }.filter { $0.isActive }
     }
 
     func uiObjects() -> [Renderable] {
@@ -177,7 +189,7 @@ class GameSceneModelProducer {
             animationLoopValue -= 1.0
         }
 
-        for label in floatingPointLabels {
+        for (_, label) in floatingPointLabels {
             label.update(timeSinceLastUpdate)
         }
     }
