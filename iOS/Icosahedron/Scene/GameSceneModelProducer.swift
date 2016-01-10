@@ -9,7 +9,8 @@ class GameSceneModelProducer {
     let icosahedronModel = MotherIcosahedronModel()
     let markerModel = MarkerModel()
 
-    var floatingPointLabels: [Icosahedron.Point: FloatingLabelModel] = [:]
+    var floatingScoreLabels: [Icosahedron.Point: FloatingLabelModel] = [:]
+    var floatingComboLabels: [Icosahedron.Point: FloatingLabelModel] = [:]
 
     let redGaugeModel = GaugeModel(color: UIColor.flatRedColor().glColor)
     let greenGaugeModel = GaugeModel(color: UIColor.flatGreenColor().glColor)
@@ -37,14 +38,23 @@ class GameSceneModelProducer {
 
     func setUpModels() {
         for point in Icosahedron.Point.values {
-            let label = FloatingLabelModel(text: "")
-            if let vertex = icosahedronModel.pointDict[point] {
-                label.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.1)
-                label.baseSize = 0.3
-            }
-            label.baseCustomColor = UIColor.flatWhiteColor().glColor
+            let scoreLabel = FloatingLabelModel(text: "")
+            scoreLabel.baseCustomColor = UIColor.flatWhiteColor().glColor
 
-            floatingPointLabels[point] = label
+            let comboLabel = FloatingLabelModel(text: "")
+            comboLabel.baseCustomColor = UIColor.flatWhiteColor().glColor
+
+            if let vertex = icosahedronModel.pointDict[point] {
+                scoreLabel.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.1)
+                scoreLabel.baseSize = 0.3
+
+                comboLabel.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.0)
+                comboLabel.baseSize = 0.2
+                comboLabel.duration = 1.0
+            }
+
+            floatingScoreLabels[point] = scoreLabel
+            floatingComboLabels[point] = comboLabel
         }
 
         let itemGaugeModels = [redGaugeModel, greenGaugeModel, blueGaugeModel]
@@ -107,10 +117,16 @@ class GameSceneModelProducer {
 
         world.eventLog.subscribeNext { event in
             switch event {
-            case .ObtainedColorStone(let point, _, let score, _):
-                if let pointLabel = self.floatingPointLabels[point] {
-                    pointLabel.text = String(score)
-                    pointLabel.animationProgress = 0.0
+            case .ObtainedColorStone(let point, let color, let score, let combo):
+                if let scoreLabel = self.floatingScoreLabels[point] {
+                    scoreLabel.text = String(score)
+                    scoreLabel.animationProgress = 0.0
+                }
+
+                if let comboLabel = self.floatingComboLabels[point] {
+                    comboLabel.text = String(combo)
+                    comboLabel.animationProgress = 0.0
+                    comboLabel.baseCustomColor = color.modelColor()
                 }
             }
         }.addDisposableTo(disposeBag)
@@ -161,7 +177,7 @@ class GameSceneModelProducer {
     }
 
     func labelObjects() -> [LabelModel] {
-        return floatingPointLabels.map { $1 }.filter { $0.isActive }
+        return floatingScoreLabels.map { $1 }.filter { $0.isActive } + floatingComboLabels.map { $1 }.filter { $0.isActive }
     }
 
     func uiObjects() -> [Renderable] {
@@ -190,7 +206,11 @@ class GameSceneModelProducer {
             animationLoopValue -= 1.0
         }
 
-        for (_, label) in floatingPointLabels {
+        for (_, label) in floatingScoreLabels {
+            label.update(timeSinceLastUpdate)
+        }
+
+        for (_, label) in floatingComboLabels {
             label.update(timeSinceLastUpdate)
         }
     }
