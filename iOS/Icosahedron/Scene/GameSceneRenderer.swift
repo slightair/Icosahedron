@@ -169,8 +169,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         worldMatrix = GLKMatrix4Multiply(baseMatrix, GLKMatrix4MakeWithQuaternion(worldQuaternion))
         normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(worldMatrix), nil)
 
-        let labelObjects = modelProducer.labelObjects()
-        for label in labelObjects {
+        for label in modelProducer.labelObjects() {
             label.quaternion = billboardQuaternion
         }
     }
