@@ -94,9 +94,9 @@ class GameSceneModelProducer {
         world.greenProgress.bindTo(greenGaugeModel.rx_progress).addDisposableTo(disposeBag)
         world.blueProgress.bindTo(blueGaugeModel.rx_progress).addDisposableTo(disposeBag)
 
-        //        world.redLevel.asObservable().bindTo(redLevelLabel.rx_level).addDisposableTo(disposeBag)
-        //        world.greenLevel.asObservable().bindTo(greenLevelLabel.rx_level).addDisposableTo(disposeBag)
-        //        world.blueLevel.asObservable().bindTo(blueLevelLabel.rx_level).addDisposableTo(disposeBag)
+//        world.redLevel.asObservable().bindTo(redLevelLabelModel.rx_level).addDisposableTo(disposeBag)
+//        world.greenLevel.asObservable().bindTo(greenLevelLabelModel.rx_level).addDisposableTo(disposeBag)
+//        world.blueLevel.asObservable().bindTo(blueLevelLabelModel.rx_level).addDisposableTo(disposeBag)
 
         world.turn.asObservable().map { "Turn \($0)" }.bindTo(turnLabelModel.rx_text).addDisposableTo(disposeBag)
         world.time.asObservable().map { String(format: "Time %.3f", arguments: [$0]) }.bindTo(timeLabelModel.rx_text).addDisposableTo(disposeBag)
