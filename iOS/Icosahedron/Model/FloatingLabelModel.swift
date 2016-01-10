@@ -2,6 +2,7 @@ import GLKit
 
 class FloatingLabelModel: LabelModel {
     var animationProgress: Float = 1.0
+    var duration: Float = 0.5
     var baseSize: Float = 1.0 {
         didSet {
             size = baseSize
@@ -18,7 +19,7 @@ class FloatingLabelModel: LabelModel {
 
     func update(timeSinceLastUpdate: NSTimeInterval) {
         if isActive {
-            animationProgress = min(1.0, animationProgress + Float(timeSinceLastUpdate * 2))
+            animationProgress = min(1.0, animationProgress + Float(timeSinceLastUpdate) * (1 / duration))
 
             self.size = baseSize * animationProgress * 5
             self.customColor = GLKVector4Multiply(self.baseCustomColor, GLKVector4Make(1, 1, 1, 1.0 - animationProgress))
