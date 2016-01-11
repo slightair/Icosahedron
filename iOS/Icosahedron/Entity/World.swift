@@ -13,6 +13,7 @@ class World {
 
     enum Event {
         case ObtainedColorStone(point: Icosahedron.Point, color: Color, score: Int64, combo: Int)
+        case ExtendTime(time: Double)
     }
 
     static let needExpList = [Int64.min, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, 514229, 832040, 1346269, 2178309, 3524578, 5702887, 9227465, 14930352, 24157816, 39088168, 63245984, 102334152, 165580128, 267914304, 433494464, 701408768, 1134903168, 1836311936, 2971215104, 4807526912, 7778741760, 12586268672, 20365010944, Int64.max]
@@ -162,7 +163,9 @@ class World {
         blueCount.asObservable().subscribeNext(levelUp(blueLevel)).addDisposableTo(disposeBag)
 
         let extendTime: (Int -> Void) = { level in
-            self.time.value += Double(level) / 3.0
+            let time = Double(level) / 3.0
+            self.time.value += time
+            self.eventLog.onNext(.ExtendTime(time: time))
         }
 
         redLevel.asObservable().subscribeNext(extendTime).addDisposableTo(disposeBag)

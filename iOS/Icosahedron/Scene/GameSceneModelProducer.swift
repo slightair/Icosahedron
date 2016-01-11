@@ -24,6 +24,7 @@ class GameSceneModelProducer {
     let turnLabelModel = LabelModel(text: "Turn 0")
     let scoreLabelModel = LabelModel(text: "Score 0")
     let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.defaultTimeLeft]))
+    let extendTimeLabelModel = LabelModel(text: "+0.0sec")
 
     var animationLoopValue: Float = 0.0
 
@@ -97,6 +98,11 @@ class GameSceneModelProducer {
         timeGaugeModel.direction = .RightToLeft
         timeGaugeModel.horizontalAlign = .Right
         timeGaugeModel.verticalAlign = .Top
+
+        extendTimeLabelModel.position = GLKVector3Make(rightEdge, timeGaugeModel.position.y + timeGaugeModel.height * 1.5, 0)
+        extendTimeLabelModel.size = infoLabelSize
+        extendTimeLabelModel.horizontalAlign = .Right
+        extendTimeLabelModel.verticalAlign = .Top
     }
 
     func setUpSubscriptions() {
@@ -128,6 +134,8 @@ class GameSceneModelProducer {
                     comboLabel.animationProgress = 0.0
                     comboLabel.baseCustomColor = color.modelColor()
                 }
+            case .ExtendTime(let time):
+                self.extendTimeLabelModel.text = String(format: "+%.1fsec", arguments: [time])
             }
         }.addDisposableTo(disposeBag)
 
@@ -197,6 +205,7 @@ class GameSceneModelProducer {
             redLevelLabelModel,
             greenLevelLabelModel,
             blueLevelLabelModel,
+            extendTimeLabelModel,
         ]
     }
 
