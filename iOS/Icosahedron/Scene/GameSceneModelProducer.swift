@@ -104,7 +104,7 @@ class GameSceneModelProducer {
         extendTimeLabelModelGroup.horizontalAlign = .Right
         extendTimeLabelModelGroup.verticalAlign = .Top
         extendTimeLabelModelGroup.baseCustomColor = UIColor.flatWhiteColor().glColor
-        extendTimeLabelModelGroup.duration = 2.0
+        extendTimeLabelModelGroup.duration = 1.5
     }
 
     func setUpSubscriptions() {
