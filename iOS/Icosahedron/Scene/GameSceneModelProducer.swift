@@ -24,7 +24,7 @@ class GameSceneModelProducer {
     let turnLabelModel = LabelModel(text: "Turn 0")
     let scoreLabelModel = LabelModel(text: "Score 0")
     let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.defaultTimeLeft]))
-    let extendTimeLabelModel = LabelModel(text: "+0.0sec")
+    let extendTimeLabelModel = FadeOutLabelModel(text: "+0.0sec")
 
     var animationLoopValue: Float = 0.0
 
@@ -103,6 +103,8 @@ class GameSceneModelProducer {
         extendTimeLabelModel.size = infoLabelSize
         extendTimeLabelModel.horizontalAlign = .Right
         extendTimeLabelModel.verticalAlign = .Top
+        extendTimeLabelModel.baseCustomColor = UIColor.flatWhiteColor().glColor
+        extendTimeLabelModel.duration = 2.0
     }
 
     func setUpSubscriptions() {
@@ -136,6 +138,7 @@ class GameSceneModelProducer {
                 }
             case .ExtendTime(let time):
                 self.extendTimeLabelModel.text = String(format: "+%.1fsec", arguments: [time])
+                self.extendTimeLabelModel.animationProgress = 0.0
             }
         }.addDisposableTo(disposeBag)
 
@@ -198,15 +201,20 @@ class GameSceneModelProducer {
     }
 
     func uiLabelObjects() -> [Renderable] {
-        return [
+        var labels: [Renderable] = [
             turnLabelModel,
             scoreLabelModel,
             timeLabelModel,
             redLevelLabelModel,
             greenLevelLabelModel,
             blueLevelLabelModel,
-            extendTimeLabelModel,
         ]
+
+        if extendTimeLabelModel.isActive {
+            labels.append(extendTimeLabelModel)
+        }
+
+        return labels
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval) {
@@ -222,5 +230,7 @@ class GameSceneModelProducer {
         for (_, label) in floatingComboLabels {
             label.update(timeSinceLastUpdate)
         }
+
+        extendTimeLabelModel.update(timeSinceLastUpdate)
     }
 }

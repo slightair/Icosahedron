@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		571416B31C3A9C2A00CF6F7D /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571416B21C3A9C2A00CF6F7D /* Math.swift */; };
 		572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */; };
+		572FCA501C45306B00778913 /* SequenceLabelModelGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */; };
+		572FCA521C45308E00778913 /* FadeOutLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA511C45308E00778913 /* FadeOutLabelModel.swift */; };
 		573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132331BDCBF5200824EA5 /* ModelShader.fsh */; };
 		573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132341BDCBF5200824EA5 /* ModelShader.vsh */; };
 		5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778A5471C25382B0019FF99 /* UIShaderProgram.swift */; };
@@ -73,6 +75,8 @@
 /* Begin PBXFileReference section */
 		571416B21C3A9C2A00CF6F7D /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingLabelModel.swift; sourceTree = "<group>"; };
+		572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SequenceLabelModelGroup.swift; sourceTree = "<group>"; };
+		572FCA511C45308E00778913 /* FadeOutLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FadeOutLabelModel.swift; sourceTree = "<group>"; };
 		573132331BDCBF5200824EA5 /* ModelShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.fsh; sourceTree = "<group>"; };
 		573132341BDCBF5200824EA5 /* ModelShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.vsh; sourceTree = "<group>"; };
 		5778A5471C25382B0019FF99 /* UIShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIShaderProgram.swift; sourceTree = "<group>"; };
@@ -195,6 +199,8 @@
 				579AD5FC1C01EEB900218D38 /* MarkerModel.swift */,
 				579AD60B1C02F92700218D38 /* MotherIcosahedronModel.swift */,
 				57F5FB761C36702600817824 /* LevelLabelModel.swift */,
+				572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */,
+				572FCA511C45308E00778913 /* FadeOutLabelModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -376,6 +382,7 @@
 				57F5FB751C34DC1E00817824 /* OctahedronModel.swift in Sources */,
 				57F5FB731C34150A00817824 /* VectorExtensions.swift in Sources */,
 				579AD5F61C01EE0500218D38 /* Icosahedron.swift in Sources */,
+				572FCA501C45306B00778913 /* SequenceLabelModelGroup.swift in Sources */,
 				579AD6041C01EEB900218D38 /* MarkerModel.swift in Sources */,
 				57D866C31BEE3AA30034DEDE /* GameViewController.swift in Sources */,
 				579013A31BC1083400ADAE3E /* AppDelegate.swift in Sources */,
@@ -387,6 +394,7 @@
 				579AD5F41C01ECA100218D38 /* World.swift in Sources */,
 				57F5FB771C36702700817824 /* LevelLabelModel.swift in Sources */,
 				579AD6051C01EEB900218D38 /* ModelVertex.swift in Sources */,
+				572FCA521C45308E00778913 /* FadeOutLabelModel.swift in Sources */,
 				57C58F071C1F18B600840B56 /* GaugeModel.swift in Sources */,
 				57C31EA91C3E8EDE00DAFCCE /* GameSceneModelProducer.swift in Sources */,
 				57DC980E1C141A350004B107 /* LabelModel.swift in Sources */,
