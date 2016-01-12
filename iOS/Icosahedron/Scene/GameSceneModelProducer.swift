@@ -24,7 +24,7 @@ class GameSceneModelProducer {
     let turnLabelModel = LabelModel(text: "Turn 0")
     let scoreLabelModel = LabelModel(text: "Score 0")
     let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.defaultTimeLeft]))
-    let extendTimeLabelModel = FadeOutLabelModel(text: "+0.0sec")
+    let extendTimeLabelModelGroup = SequenceLabelModelGroup()
 
     var animationLoopValue: Float = 0.0
 
@@ -99,12 +99,12 @@ class GameSceneModelProducer {
         timeGaugeModel.horizontalAlign = .Right
         timeGaugeModel.verticalAlign = .Top
 
-        extendTimeLabelModel.position = GLKVector3Make(rightEdge, timeGaugeModel.position.y + timeGaugeModel.height * 1.5, 0)
-        extendTimeLabelModel.size = infoLabelSize
-        extendTimeLabelModel.horizontalAlign = .Right
-        extendTimeLabelModel.verticalAlign = .Top
-        extendTimeLabelModel.baseCustomColor = UIColor.flatWhiteColor().glColor
-        extendTimeLabelModel.duration = 2.0
+        extendTimeLabelModelGroup.position = GLKVector3Make(rightEdge, timeGaugeModel.position.y + timeGaugeModel.height * 1.5, 0)
+        extendTimeLabelModelGroup.size = infoLabelSize
+        extendTimeLabelModelGroup.horizontalAlign = .Right
+        extendTimeLabelModelGroup.verticalAlign = .Top
+        extendTimeLabelModelGroup.baseCustomColor = UIColor.flatWhiteColor().glColor
+        extendTimeLabelModelGroup.duration = 2.0
     }
 
     func setUpSubscriptions() {
@@ -137,8 +137,7 @@ class GameSceneModelProducer {
                     comboLabel.baseCustomColor = color.modelColor()
                 }
             case .ExtendTime(let time):
-                self.extendTimeLabelModel.text = String(format: "+%.1fsec", arguments: [time])
-                self.extendTimeLabelModel.animationProgress = 0.0
+                self.extendTimeLabelModelGroup.appendNewLabel(String(format: "+%.1fsec", arguments: [time]))
             }
         }.addDisposableTo(disposeBag)
 
@@ -210,9 +209,7 @@ class GameSceneModelProducer {
             blueLevelLabelModel,
         ]
 
-        if extendTimeLabelModel.isActive {
-            labels.append(extendTimeLabelModel)
-        }
+        labels.appendContentsOf(extendTimeLabelModelGroup.activeLabels.map { $0 as Renderable })
 
         return labels
     }
@@ -231,6 +228,6 @@ class GameSceneModelProducer {
             label.update(timeSinceLastUpdate)
         }
 
-        extendTimeLabelModel.update(timeSinceLastUpdate)
+        extendTimeLabelModelGroup.update(timeSinceLastUpdate)
     }
 }
