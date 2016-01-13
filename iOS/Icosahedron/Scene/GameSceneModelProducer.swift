@@ -10,7 +10,6 @@ class GameSceneModelProducer {
     let markerModel = MarkerModel()
 
     var floatingScoreLabels: [Icosahedron.Point: FloatingLabelModel] = [:]
-    var floatingComboLabels: [Icosahedron.Point: FloatingLabelModel] = [:]
 
     let redGaugeModel = GaugeModel(color: UIColor.flatRedColor().glColor)
     let greenGaugeModel = GaugeModel(color: UIColor.flatGreenColor().glColor)
@@ -25,6 +24,7 @@ class GameSceneModelProducer {
     let scoreLabelModel = LabelModel(text: "Score 0")
     let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.defaultTimeLeft]))
     let extendTimeLabelModelGroup = SequenceLabelModelGroup()
+    let comboLabelModelGroup = SequenceLabelModelGroup()
 
     var animationLoopValue: Float = 0.0
 
@@ -42,20 +42,12 @@ class GameSceneModelProducer {
             let scoreLabel = FloatingLabelModel(text: "")
             scoreLabel.baseCustomColor = UIColor.flatWhiteColor().glColor
 
-            let comboLabel = FloatingLabelModel(text: "")
-            comboLabel.baseCustomColor = UIColor.flatWhiteColor().glColor
-
             if let vertex = icosahedronModel.pointDict[point] {
                 scoreLabel.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.1)
                 scoreLabel.baseSize = 0.3
-
-                comboLabel.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.0)
-                comboLabel.baseSize = 0.2
-                comboLabel.duration = 1.0
             }
 
             floatingScoreLabels[point] = scoreLabel
-            floatingComboLabels[point] = comboLabel
         }
 
         let itemGaugeModels = [redGaugeModel, greenGaugeModel, blueGaugeModel]
@@ -103,8 +95,13 @@ class GameSceneModelProducer {
         extendTimeLabelModelGroup.size = infoLabelSize
         extendTimeLabelModelGroup.horizontalAlign = .Right
         extendTimeLabelModelGroup.verticalAlign = .Top
-        extendTimeLabelModelGroup.baseCustomColor = UIColor.flatWhiteColor().glColor
         extendTimeLabelModelGroup.duration = 1.5
+
+        comboLabelModelGroup.position = GLKVector3Make(0, -maxHeightRatio / 4, 0)
+        comboLabelModelGroup.size = 0.3
+        comboLabelModelGroup.verticalAlign = .Top
+        comboLabelModelGroup.direction = .Up
+        comboLabelModelGroup.duration = 2.0
     }
 
     func setUpSubscriptions() {
@@ -131,13 +128,13 @@ class GameSceneModelProducer {
                     scoreLabel.animationProgress = 0.0
                 }
 
-                if let comboLabel = self.floatingComboLabels[point] {
-                    comboLabel.text = String(combo)
-                    comboLabel.animationProgress = 0.0
-                    comboLabel.baseCustomColor = color.modelColor()
+                if combo > 1 {
+                    let comboText = String(format: "Combo \(combo)")
+                    self.comboLabelModelGroup.appendNewLabel(comboText, color: color.modelColor())
                 }
             case .ExtendTime(let time):
-                self.extendTimeLabelModelGroup.appendNewLabel(String(format: "+%.1fsec", arguments: [time]))
+                let timeText = String(format: "+%.1fsec", arguments: [time])
+                self.extendTimeLabelModelGroup.appendNewLabel(timeText, color: UIColor.flatWhiteColor().glColor)
             }
         }.addDisposableTo(disposeBag)
 
@@ -187,7 +184,7 @@ class GameSceneModelProducer {
     }
 
     func labelObjects() -> [LabelModel] {
-        return floatingScoreLabels.map { $1 }.filter { $0.isActive } + floatingComboLabels.map { $1 }.filter { $0.isActive }
+        return floatingScoreLabels.map { $1 }.filter { $0.isActive }
     }
 
     func uiObjects() -> [Renderable] {
@@ -210,6 +207,7 @@ class GameSceneModelProducer {
         ]
 
         labels.appendContentsOf(extendTimeLabelModelGroup.activeLabels.map { $0 as Renderable })
+        labels.appendContentsOf(comboLabelModelGroup.activeLabels.map { $0 as Renderable })
 
         return labels
     }
@@ -224,10 +222,7 @@ class GameSceneModelProducer {
             label.update(timeSinceLastUpdate)
         }
 
-        for (_, label) in floatingComboLabels {
-            label.update(timeSinceLastUpdate)
-        }
-
         extendTimeLabelModelGroup.update(timeSinceLastUpdate)
+        comboLabelModelGroup.update(timeSinceLastUpdate)
     }
 }
