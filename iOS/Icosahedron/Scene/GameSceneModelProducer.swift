@@ -26,6 +26,8 @@ class GameSceneModelProducer {
     let extendTimeLabelModelGroup = SequenceLabelModelGroup()
     let comboLabelModelGroup = SequenceLabelModelGroup()
 
+    var icosahedronPoints: [ModelVertex] = []
+
     var animationLoopValue: Float = 0.0
 
     let disposeBag = DisposeBag()
@@ -34,6 +36,7 @@ class GameSceneModelProducer {
         self.world = world
 
         setUpModels()
+        setUpPoints()
         setUpSubscriptions()
     }
 
@@ -102,6 +105,10 @@ class GameSceneModelProducer {
         comboLabelModelGroup.verticalAlign = .Top
         comboLabelModelGroup.direction = .Up
         comboLabelModelGroup.duration = 2.0
+    }
+
+    func setUpPoints() {
+        icosahedronPoints = icosahedronModel.localModelVertices.map { $0.changeColor(UIColor.randomFlatColor().glColor) }
     }
 
     func setUpSubscriptions() {
@@ -210,6 +217,10 @@ class GameSceneModelProducer {
         labels.appendContentsOf(comboLabelModelGroup.activeLabels.map { $0 as Renderable })
 
         return labels
+    }
+
+    func points() -> [ModelVertex] {
+        return icosahedronPoints
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval) {

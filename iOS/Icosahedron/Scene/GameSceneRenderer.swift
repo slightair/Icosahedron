@@ -13,6 +13,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
     var modelShaderProgram: ModelShaderProgram!
     var uiShaderProgram: UIShaderProgram!
+    var particleShaderProgram: ParticleShaderProgram!
 
     var projectionMatrix = GLKMatrix4Identity
     var worldMatrix = GLKMatrix4Identity
@@ -20,6 +21,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
     let fontData: FontData = FontData.defaultData
     var whiteTextureInfo: GLKTextureInfo!
+    var pointTextureInfo: GLKTextureInfo!
 
     let world: World
     let modelProducer: GameSceneModelProducer
@@ -70,6 +72,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         modelShaderProgram = ModelShaderProgram()
         uiShaderProgram = UIShaderProgram()
+        particleShaderProgram = ParticleShaderProgram()
 
         let projectionWidth: Float = 1.0
         let projectionHeight = projectionWidth / Screen.aspect
@@ -86,6 +89,12 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
             fatalError("white texture file not found")
         }
         whiteTextureInfo = try! GLKTextureLoader.textureWithContentsOfData(whiteTextureAsset.data, options: nil)
+
+        guard let pointTextureAsset = NSDataAsset(name: "Point") else {
+            fatalError("point texture file not found")
+        }
+        pointTextureInfo = try! GLKTextureLoader.textureWithContentsOfData(pointTextureAsset.data, options: nil)
+
         fontData.loadTexture()
     }
 
@@ -153,6 +162,28 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glBindVertexArray(0)
     }
 
+    func renderPoints(points: [ModelVertex]) {
+        let vertices: [Float] = points.flatMap { $0.v }
+
+        glBindVertexArray(modelVertexArray)
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), modelVertexBuffer)
+
+        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * points.count), vertices, GLenum(GL_STREAM_DRAW))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(0))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 6))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.TexCoord0.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.TexCoord0.rawValue), 2, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 10))
+
+        glDrawArrays(GLenum(GL_POINTS), 0, GLsizei(points.count))
+
+        glBindVertexArray(0)
+    }
+
     func update(timeSinceLastUpdate: NSTimeInterval = 0) {
         if animationProgress < 1.0 {
             animationProgress = min(1.0, animationProgress + Float(timeSinceLastUpdate) * 4)
@@ -185,6 +216,8 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glEnable(GLenum(GL_BLEND))
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
 
+        // Render Models
+
         glUseProgram(modelShaderProgram.programID)
 
         modelShaderProgram.projectionMatrix = projectionMatrix
@@ -198,6 +231,18 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         glBindTexture(GLenum(GL_TEXTURE_2D), fontData.textureInfo.name)
         renderModels(modelProducer.labelObjects().map { $0 as Renderable})
+
+        // Render Particles
+
+        glUseProgram(particleShaderProgram.programID)
+
+        particleShaderProgram.projectionMatrix = projectionMatrix
+        particleShaderProgram.worldMatrix = worldMatrix
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), pointTextureInfo.name)
+        renderPoints(modelProducer.points())
+
+        // Render UI
 
         glDisable(GLenum(GL_DEPTH_TEST))
 

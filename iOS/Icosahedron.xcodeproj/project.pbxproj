@@ -11,6 +11,9 @@
 		572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */; };
 		572FCA501C45306B00778913 /* SequenceLabelModelGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */; };
 		572FCA521C45308E00778913 /* FadeOutLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA511C45308E00778913 /* FadeOutLabelModel.swift */; };
+		572FCA541C47E0DD00778913 /* ParticleShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA531C47E0DD00778913 /* ParticleShaderProgram.swift */; };
+		572FCA561C47E31300778913 /* ParticleShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 572FCA551C47E31300778913 /* ParticleShader.vsh */; };
+		572FCA581C47E31E00778913 /* ParticleShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 572FCA571C47E31E00778913 /* ParticleShader.fsh */; };
 		573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132331BDCBF5200824EA5 /* ModelShader.fsh */; };
 		573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132341BDCBF5200824EA5 /* ModelShader.vsh */; };
 		5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778A5471C25382B0019FF99 /* UIShaderProgram.swift */; };
@@ -77,6 +80,9 @@
 		572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingLabelModel.swift; sourceTree = "<group>"; };
 		572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SequenceLabelModelGroup.swift; sourceTree = "<group>"; };
 		572FCA511C45308E00778913 /* FadeOutLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FadeOutLabelModel.swift; sourceTree = "<group>"; };
+		572FCA531C47E0DD00778913 /* ParticleShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticleShaderProgram.swift; sourceTree = "<group>"; };
+		572FCA551C47E31300778913 /* ParticleShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParticleShader.vsh; sourceTree = "<group>"; };
+		572FCA571C47E31E00778913 /* ParticleShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParticleShader.fsh; sourceTree = "<group>"; };
 		573132331BDCBF5200824EA5 /* ModelShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.fsh; sourceTree = "<group>"; };
 		573132341BDCBF5200824EA5 /* ModelShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.vsh; sourceTree = "<group>"; };
 		5778A5471C25382B0019FF99 /* UIShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIShaderProgram.swift; sourceTree = "<group>"; };
@@ -149,6 +155,9 @@
 				5778A5471C25382B0019FF99 /* UIShaderProgram.swift */,
 				5778A5491C25384F0019FF99 /* UIShader.fsh */,
 				5778A54B1C25385B0019FF99 /* UIShader.vsh */,
+				572FCA531C47E0DD00778913 /* ParticleShaderProgram.swift */,
+				572FCA571C47E31E00778913 /* ParticleShader.fsh */,
+				572FCA551C47E31300778913 /* ParticleShader.vsh */,
 			);
 			path = Shader;
 			sourceTree = "<group>";
@@ -337,9 +346,11 @@
 				579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */,
 				579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */,
 				579013B11BC1083400ADAE3E /* LaunchScreen.storyboard in Resources */,
+				572FCA561C47E31300778913 /* ParticleShader.vsh in Resources */,
 				5778A54A1C25384F0019FF99 /* UIShader.fsh in Resources */,
 				5778A54C1C25385B0019FF99 /* UIShader.vsh in Resources */,
 				573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */,
+				572FCA581C47E31E00778913 /* ParticleShader.fsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,6 +388,7 @@
 				579AD6011C01EEB900218D38 /* IcosahedronModel.swift in Sources */,
 				57DC980C1C1325C90004B107 /* FontData.swift in Sources */,
 				579AD6031C01EEB900218D38 /* ItemModel.swift in Sources */,
+				572FCA541C47E0DD00778913 /* ParticleShaderProgram.swift in Sources */,
 				5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */,
 				57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */,
 				57F5FB751C34DC1E00817824 /* OctahedronModel.swift in Sources */,
