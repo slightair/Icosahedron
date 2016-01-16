@@ -48,6 +48,7 @@ class GameSceneModelProducer {
             if let vertex = icosahedronModel.pointDict[point] {
                 scoreLabel.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.1)
                 scoreLabel.baseSize = 0.3
+                scoreLabel.duration = 1.0
             }
 
             floatingScoreLabels[point] = scoreLabel
