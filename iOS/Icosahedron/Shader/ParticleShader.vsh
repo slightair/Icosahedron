@@ -12,5 +12,5 @@ void main()
 {
     vColor = color;
     gl_Position = uProjectionMatrix * uWorldMatrix * position;
-    gl_PointSize = 20.0;
+    gl_PointSize = 48.0;
 }

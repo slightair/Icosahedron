@@ -1,21 +1,31 @@
 import GLKit
 
 class ParticleEmitter {
-    static let ParticleCountMax = 10000
-//    var duration: Float = 0.05
+    static let ParticleCountMax = 1000
+    var duration = 0.2 {
+        didSet {
+            progress = duration
+        }
+    }
     var lifeTime = 1.0
-    var emissionInterval = 0.01
-    var speed = 0.05
+    var emissionInterval = 0.05
+    var speed = 0.03
     var position = GLKVector3Make(0, 0, 0)
     var color = GLKVector4Make(1, 1, 1, 1)
+
     let particles: [Particle]
-    var time: NSTimeInterval = 0
+    var emissionClock: NSTimeInterval = 0
+    var progress = 0.0
     var nextParticleIndex = 0 {
         didSet {
             if nextParticleIndex >= ParticleEmitter.ParticleCountMax {
                 nextParticleIndex = 0
             }
         }
+    }
+
+    var active: Bool {
+        return progress < duration
     }
 
     var activeParticle: [Particle] {
@@ -26,28 +36,38 @@ class ParticleEmitter {
         particles = (0..<ParticleEmitter.ParticleCountMax).map { _ in
             return Particle()
         }
+        progress = duration
+    }
+
+    func emit() {
+        progress = 0.0
+        emissionClock = 0.0
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval) {
-        time += timeSinceLastUpdate
+        if active {
+            progress += timeSinceLastUpdate
 
-        var newParticles: [Particle] = []
-        while time > emissionInterval {
-            for particle in newParticles {
-                particle.time += emissionInterval
+            emissionClock += timeSinceLastUpdate
+
+            var newParticles: [Particle] = []
+            while emissionClock > emissionInterval {
+                for particle in newParticles {
+                    particle.time += emissionInterval
+                }
+
+                let nextParticle = particles[nextParticleIndex]
+                nextParticle.lifeTime = lifeTime
+                nextParticle.speed = speed
+                nextParticle.basePosition = position
+                nextParticle.baseColor = color
+                nextParticle.start()
+
+                newParticles.append(nextParticle)
+
+                nextParticleIndex++
+                emissionClock -= emissionInterval
             }
-
-            let nextParticle = particles[nextParticleIndex]
-            nextParticle.lifeTime = lifeTime
-            nextParticle.speed = speed
-            nextParticle.basePosition = position
-            nextParticle.baseColor = color
-            nextParticle.start()
-
-            newParticles.append(nextParticle)
-
-            nextParticleIndex++
-            time -= emissionInterval
         }
 
         for particle in activeParticle {

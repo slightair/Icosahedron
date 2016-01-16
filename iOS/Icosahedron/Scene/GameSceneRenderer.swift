@@ -208,12 +208,12 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT) | GLbitfield(GL_DEPTH_BUFFER_BIT))
 
-        glEnable(GLenum(GL_DEPTH_TEST))
-
         glEnable(GLenum(GL_BLEND))
-        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
 
         // Render Models
+
+        glEnable(GLenum(GL_DEPTH_TEST))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
 
         glUseProgram(modelShaderProgram.programID)
 
@@ -231,6 +231,9 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         // Render Particles
 
+        glDisable(GLenum(GL_DEPTH_TEST))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE))
+
         glUseProgram(particleShaderProgram.programID)
 
         particleShaderProgram.projectionMatrix = projectionMatrix
@@ -241,7 +244,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         // Render UI
 
-        glDisable(GLenum(GL_DEPTH_TEST))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
 
         glUseProgram(uiShaderProgram.programID)
 
