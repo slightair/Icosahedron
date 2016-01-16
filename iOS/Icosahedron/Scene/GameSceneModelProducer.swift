@@ -26,7 +26,7 @@ class GameSceneModelProducer {
     let extendTimeLabelModelGroup = SequenceLabelModelGroup()
     let comboLabelModelGroup = SequenceLabelModelGroup()
 
-    var icosahedronPoints: [ParticleVertex] = []
+    var icosahedronPointParticleEmitters: [ParticleEmitter] = []
 
     var animationLoopValue: Float = 0.0
 
@@ -108,11 +108,15 @@ class GameSceneModelProducer {
     }
 
     func setUpPoints() {
-        icosahedronPoints = Icosahedron.Point.values.map { point in
+        icosahedronPointParticleEmitters = Icosahedron.Point.values.map { point in
             let coordinate = self.icosahedronModel.coordinateOfPoint(point)
             let color = UIColor.randomFlatColor().glColor
 
-            return ParticleVertex(position: coordinate, color: color)
+            let particleEmitter = ParticleEmitter()
+            particleEmitter.position = coordinate
+            particleEmitter.color = color
+
+            return particleEmitter
         }
     }
 
@@ -225,7 +229,7 @@ class GameSceneModelProducer {
     }
 
     func particlePoints() -> [ParticleVertex] {
-        return icosahedronPoints
+        return icosahedronPointParticleEmitters.flatMap { $0.activeParticle.map { $0.vertex } }
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval) {
@@ -240,5 +244,9 @@ class GameSceneModelProducer {
 
         extendTimeLabelModelGroup.update(timeSinceLastUpdate)
         comboLabelModelGroup.update(timeSinceLastUpdate)
+
+        for particleEmitter in icosahedronPointParticleEmitters {
+            particleEmitter.update(timeSinceLastUpdate)
+        }
     }
 }
