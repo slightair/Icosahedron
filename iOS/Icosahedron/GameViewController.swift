@@ -29,8 +29,8 @@ class GameViewController: GLKViewController, GameSceneRendererDelegate {
         var location = touch.locationInView(view)
         location.x -= CGRectGetMidX(view.bounds)
         location.y -= CGRectGetMidY(view.bounds)
-        let normalizedLocation = CGPointMake(location.x * 2 / CGRectGetWidth(view.bounds),
-                                            -location.y * 2 / CGRectGetHeight(view.bounds))
+        let normalizedLocation = CGPoint(x: location.x * 2 / CGRectGetWidth(view.bounds),
+                                         y: -location.y * 2 / CGRectGetHeight(view.bounds))
 
         renderer.rotateModelWithTappedLocation(normalizedLocation)
     }
