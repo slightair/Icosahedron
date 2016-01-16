@@ -171,14 +171,6 @@ class World {
         redLevel.asObservable().subscribeNext(extendTime).addDisposableTo(disposeBag)
         greenLevel.asObservable().subscribeNext(extendTime).addDisposableTo(disposeBag)
         blueLevel.asObservable().subscribeNext(extendTime).addDisposableTo(disposeBag)
-
-        chainedItem.asObservable().subscribeNext { chainedItem in
-            guard let kind = chainedItem?.kind, count = chainedItem?.count else {
-                return
-            }
-
-            print(kind, count)
-        }.addDisposableTo(disposeBag)
     }
 
     func putNewItemWithIgnore(ignore: Icosahedron.Point) {

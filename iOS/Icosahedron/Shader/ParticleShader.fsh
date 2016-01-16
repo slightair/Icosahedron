@@ -9,7 +9,7 @@ uniform sampler2D uTexture;
 void main()
 {
     mediump vec4 textureColor = texture(uTexture, gl_PointCoord);
-    if (textureColor.a < 0.1) {
+    if (textureColor.a < 0.01) {
         discard;
     }
     outputColor = vColor * textureColor;
