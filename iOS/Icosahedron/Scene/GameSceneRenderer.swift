@@ -162,22 +162,19 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glBindVertexArray(0)
     }
 
-    func renderPoints(points: [ModelVertex]) {
+    func renderParticle(points: [ParticleVertex]) {
         let vertices: [Float] = points.flatMap { $0.v }
 
         glBindVertexArray(modelVertexArray)
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), modelVertexBuffer)
 
-        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * points.count), vertices, GLenum(GL_STREAM_DRAW))
+        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ParticleVertex.size * points.count), vertices, GLenum(GL_STREAM_DRAW))
 
         glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(0))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ParticleVertex.size), BUFFER_OFFSET(0))
 
         glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 6))
-
-        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.TexCoord0.rawValue))
-        glVertexAttribPointer(GLuint(GLKVertexAttrib.TexCoord0.rawValue), 2, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 10))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ParticleVertex.size), BUFFER_OFFSET(sizeof(Float) * 3))
 
         glDrawArrays(GLenum(GL_POINTS), 0, GLsizei(points.count))
 
@@ -240,7 +237,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         particleShaderProgram.worldMatrix = worldMatrix
 
         glBindTexture(GLenum(GL_TEXTURE_2D), pointTextureInfo.name)
-        renderPoints(modelProducer.points())
+        renderParticle(modelProducer.particlePoints())
 
         // Render UI
 

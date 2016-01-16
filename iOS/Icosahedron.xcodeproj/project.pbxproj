@@ -15,6 +15,7 @@
 		572FCA561C47E31300778913 /* ParticleShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 572FCA551C47E31300778913 /* ParticleShader.vsh */; };
 		572FCA581C47E31E00778913 /* ParticleShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 572FCA571C47E31E00778913 /* ParticleShader.fsh */; };
 		572FCA5B1C4A2D6E00778913 /* ParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA5A1C4A2D6E00778913 /* ParticleEmitter.swift */; };
+		572FCA5F1C4A442700778913 /* ParticleVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA5E1C4A442700778913 /* ParticleVertex.swift */; };
 		573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132331BDCBF5200824EA5 /* ModelShader.fsh */; };
 		573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132341BDCBF5200824EA5 /* ModelShader.vsh */; };
 		5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778A5471C25382B0019FF99 /* UIShaderProgram.swift */; };
@@ -85,6 +86,7 @@
 		572FCA551C47E31300778913 /* ParticleShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParticleShader.vsh; sourceTree = "<group>"; };
 		572FCA571C47E31E00778913 /* ParticleShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParticleShader.fsh; sourceTree = "<group>"; };
 		572FCA5A1C4A2D6E00778913 /* ParticleEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticleEmitter.swift; sourceTree = "<group>"; };
+		572FCA5E1C4A442700778913 /* ParticleVertex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticleVertex.swift; sourceTree = "<group>"; };
 		573132331BDCBF5200824EA5 /* ModelShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.fsh; sourceTree = "<group>"; };
 		573132341BDCBF5200824EA5 /* ModelShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.vsh; sourceTree = "<group>"; };
 		5778A5471C25382B0019FF99 /* UIShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIShaderProgram.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				572FCA5A1C4A2D6E00778913 /* ParticleEmitter.swift */,
+				572FCA5E1C4A442700778913 /* ParticleVertex.swift */,
 			);
 			path = Particle;
 			sourceTree = "<group>";
@@ -409,6 +412,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */,
+				572FCA5F1C4A442700778913 /* ParticleVertex.swift in Sources */,
 				57D866C51BEF66F90034DEDE /* GameSceneRenderer.swift in Sources */,
 				571416B31C3A9C2A00CF6F7D /* Math.swift in Sources */,
 				579AD6011C01EEB900218D38 /* IcosahedronModel.swift in Sources */,

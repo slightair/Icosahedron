@@ -26,7 +26,7 @@ class GameSceneModelProducer {
     let extendTimeLabelModelGroup = SequenceLabelModelGroup()
     let comboLabelModelGroup = SequenceLabelModelGroup()
 
-    var icosahedronPoints: [ModelVertex] = []
+    var icosahedronPoints: [ParticleVertex] = []
 
     var animationLoopValue: Float = 0.0
 
@@ -108,7 +108,12 @@ class GameSceneModelProducer {
     }
 
     func setUpPoints() {
-        icosahedronPoints = icosahedronModel.localModelVertices.map { $0.changeColor(UIColor.randomFlatColor().glColor) }
+        icosahedronPoints = Icosahedron.Point.values.map { point in
+            let coordinate = self.icosahedronModel.coordinateOfPoint(point)
+            let color = UIColor.randomFlatColor().glColor
+
+            return ParticleVertex(position: coordinate, color: color)
+        }
     }
 
     func setUpSubscriptions() {
@@ -219,7 +224,7 @@ class GameSceneModelProducer {
         return labels
     }
 
-    func points() -> [ModelVertex] {
+    func particlePoints() -> [ParticleVertex] {
         return icosahedronPoints
     }
 
