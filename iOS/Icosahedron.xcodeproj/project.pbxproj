@@ -300,6 +300,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 579013B51BC1083400ADAE3E /* Build configuration list for PBXNativeTarget "Icosahedron" */;
 			buildPhases = (
+				572FCA5C1C4A430500778913 /* SwiftLint */,
 				5790139B1BC1083400ADAE3E /* Sources */,
 				5790139C1BC1083400ADAE3E /* Frameworks */,
 				5790139D1BC1083400ADAE3E /* Resources */,
@@ -368,6 +369,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		572FCA5C1C4A430500778913 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = /opt/brew/bin/swiftlint;
+		};
 		57F5FB661C33BCF200817824 /* Carthage copy-framework */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
