@@ -2,7 +2,7 @@ import GLKit
 import SpriteKit
 
 class GameViewController: GLKViewController, GameSceneRendererDelegate {
-    static let detectActionThreshold: Float = 160
+    static let detectActionThreshold: Float = 200
 
     var renderer: GameSceneRenderer!
     let world = World()
@@ -41,7 +41,7 @@ class GameViewController: GLKViewController, GameSceneRendererDelegate {
         case .Changed:
             let velocity = gestureRecognizer.velocityInView(view)
             if GLKVector2Length(GLKVector2Make(Float(velocity.x), Float(velocity.y))) > GameViewController.detectActionThreshold {
-                renderer.rotateModelWithTappedLocation(CGPoint(x: -velocity.x, y: velocity.y))
+                renderer.rotateModelWithTappedLocation(CGPoint(x: velocity.x, y: -velocity.y))
             }
         default:
             break
