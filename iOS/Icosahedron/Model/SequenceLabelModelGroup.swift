@@ -13,6 +13,8 @@ class SequenceLabelModelGroup {
     var verticalAlign: RenderableVerticalAlign = .Center
     var duration: Float = 0.5
     var direction: Direction = .Down
+    var showBackground = false
+    var baseBackgroundColor = LabelModel.defaultBackgroundColor
 
     func appendNewLabel(text: String, color: GLKVector4) {
         let newLabel = FadeOutLabelModel(text: text)
@@ -20,12 +22,15 @@ class SequenceLabelModelGroup {
         newLabel.size = size
         newLabel.horizontalAlign = horizontalAlign
         newLabel.verticalAlign = verticalAlign
-        newLabel.baseCustomColor = color
+        newLabel.baseTextColor = color
         newLabel.duration = duration
         newLabel.animationProgress = 0.0
+        newLabel.showBackground = showBackground
+        newLabel.baseBackgroundColor = baseBackgroundColor
 
         for label in activeLabels {
-            let addY = direction == .Down ? newLabel.glyphHeight : -newLabel.glyphHeight
+            let labelHeight = newLabel.glyphHeight + newLabel.backgroundMarginVertical * 2
+            let addY = direction == .Down ? labelHeight : -labelHeight
             label.position = GLKVector3Add(label.position, GLKVector3Make(0, addY, 0))
         }
         activeLabels.append(newLabel)

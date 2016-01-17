@@ -2,6 +2,8 @@ import GLKit
 import RxSwift
 
 class LabelModel: Renderable {
+    static let defaultBackgroundColor = UIColor.flatBlackColor().glColor
+
     var position = GLKVector3Make(0.0, 0.0, 0.0)
     var quaternion = GLKQuaternionIdentity
     var localModelVertices: [ModelVertex] = []
@@ -12,6 +14,7 @@ class LabelModel: Renderable {
             updateLocalModelVertices()
         }
     }
+    var textColor = GLKVector4Make(1, 1, 1, 1)
 
     var rx_text: AnyObserver<String> {
         return AnyObserver { [weak self] event in
@@ -31,11 +34,7 @@ class LabelModel: Renderable {
 
     var chars: [FontData.Char] = []
 
-    var size: Float = 0.2 {
-        didSet {
-            updateLocalModelVertices()
-        }
-    }
+    var size: Float = 0.2
 
     var glyphWidth: Float {
         return size / 10 * FontData.defaultData.ratio
@@ -45,29 +44,24 @@ class LabelModel: Renderable {
         return size / 10
     }
 
-    var horizontalAlign: RenderableHorizontalAlign = .Center {
-        didSet {
-            updateLocalModelVertices()
-        }
-    }
-
-    var verticalAlign: RenderableVerticalAlign = .Center {
-        didSet {
-            updateLocalModelVertices()
-        }
-    }
+    var horizontalAlign: RenderableHorizontalAlign = .Center
+    var verticalAlign: RenderableVerticalAlign = .Center
+    var showBackground: Bool = false
+    var backgroundColor = LabelModel.defaultBackgroundColor
+    var backgroundMarginHorizontal: Float = 0.01
+    var backgroundMarginVertical: Float = 0.001
 
     let topCoordinate = GLKVector3Make(0.0, 1.0, 0.0)
 
     init(text: String) {
         self.text = text
+
         chars = text.characters.map { FontData.defaultData.map[String($0)]! }
         updateLocalModelVertices()
     }
 
     func updateLocalModelVertices() {
         let normal = GLKVector3Make(0, 0, -1)
-        let color = GLKVector4Make(1, 1, 1, 1)
 
         var vertices: [ModelVertex] = []
         var baseX: Float
@@ -91,6 +85,29 @@ class LabelModel: Renderable {
             baseY = -glyphHeight
         }
 
+        if showBackground {
+            let width = glyphWidth * Float(self.chars.count) + backgroundMarginHorizontal * 2
+            let height = glyphHeight + backgroundMarginVertical * 2
+
+            let posA = GLKVector3Make(baseX - backgroundMarginHorizontal, baseY - backgroundMarginVertical, 0)
+            let posB = GLKVector3Make(baseX - backgroundMarginHorizontal, baseY - backgroundMarginVertical + height, 0)
+            let posC = GLKVector3Make(baseX - backgroundMarginHorizontal + width, baseY - backgroundMarginVertical, 0)
+            let posD = GLKVector3Make(baseX - backgroundMarginHorizontal + width, baseY - backgroundMarginVertical + height, 0)
+
+            let char = FontData.defaultData.map["."]!
+            let texCoord = GLKVector2Make(char.rect.s + char.rect.p / 2, char.rect.t + char.rect.q / 2)
+
+            vertices.appendContentsOf([
+                ModelVertex(position: posA, normal: normal, color: backgroundColor, texCoord: texCoord),
+                ModelVertex(position: posB, normal: normal, color: backgroundColor, texCoord: texCoord),
+                ModelVertex(position: posC, normal: normal, color: backgroundColor, texCoord: texCoord),
+
+                ModelVertex(position: posB, normal: normal, color: backgroundColor, texCoord: texCoord),
+                ModelVertex(position: posC, normal: normal, color: backgroundColor, texCoord: texCoord),
+                ModelVertex(position: posD, normal: normal, color: backgroundColor, texCoord: texCoord),
+            ])
+        }
+
         for char in self.chars {
             let localX = glyphWidth * char.canvas.s
             let localY = glyphHeight * char.canvas.t
@@ -108,13 +125,13 @@ class LabelModel: Renderable {
             let texCoordD = GLKVector2Make(char.rect.s + char.rect.p, char.rect.t + char.rect.q)
 
             vertices.appendContentsOf([
-                ModelVertex(position: posA, normal: normal, color: color, texCoord: texCoordA),
-                ModelVertex(position: posB, normal: normal, color: color, texCoord: texCoordB),
-                ModelVertex(position: posC, normal: normal, color: color, texCoord: texCoordC),
+                ModelVertex(position: posA, normal: normal, color: textColor, texCoord: texCoordA),
+                ModelVertex(position: posB, normal: normal, color: textColor, texCoord: texCoordB),
+                ModelVertex(position: posC, normal: normal, color: textColor, texCoord: texCoordC),
 
-                ModelVertex(position: posB, normal: normal, color: color, texCoord: texCoordB),
-                ModelVertex(position: posC, normal: normal, color: color, texCoord: texCoordC),
-                ModelVertex(position: posD, normal: normal, color: color, texCoord: texCoordD),
+                ModelVertex(position: posB, normal: normal, color: textColor, texCoord: texCoordB),
+                ModelVertex(position: posC, normal: normal, color: textColor, texCoord: texCoordC),
+                ModelVertex(position: posD, normal: normal, color: textColor, texCoord: texCoordD),
             ])
 
             baseX += glyphWidth

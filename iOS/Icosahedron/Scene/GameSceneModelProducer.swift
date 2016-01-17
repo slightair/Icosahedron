@@ -43,7 +43,7 @@ class GameSceneModelProducer {
     func setUpModels() {
         for point in Icosahedron.Point.values {
             let scoreLabel = FloatingLabelModel(text: "")
-            scoreLabel.baseCustomColor = UIColor.flatWhiteColor().glColor
+            scoreLabel.baseTextColor = UIColor.flatWhiteColor().glColor
 
             if let vertex = icosahedronModel.pointDict[point] {
                 scoreLabel.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.1)
@@ -106,6 +106,7 @@ class GameSceneModelProducer {
         comboLabelModelGroup.verticalAlign = .Top
         comboLabelModelGroup.direction = .Up
         comboLabelModelGroup.duration = 2.0
+        comboLabelModelGroup.showBackground = true
     }
 
     func setUpPoints() {

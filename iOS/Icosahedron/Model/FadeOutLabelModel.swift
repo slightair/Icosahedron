@@ -3,9 +3,14 @@ import GLKit
 class FadeOutLabelModel: LabelModel {
     var animationProgress: Float = 1.0
     var duration: Float = 0.5
-    var baseCustomColor: GLKVector4 = GLKVector4Make(0, 0, 0, 0) {
+    var baseTextColor: GLKVector4 = GLKVector4Make(0, 0, 0, 0) {
         didSet {
-            customColor = baseCustomColor
+            textColor = baseTextColor
+        }
+    }
+    var baseBackgroundColor = LabelModel.defaultBackgroundColor {
+        didSet {
+            backgroundColor = baseBackgroundColor
         }
     }
     var isActive: Bool {
@@ -22,7 +27,9 @@ class FadeOutLabelModel: LabelModel {
             } else {
                 alpha = 1.0 - (animationProgress - 0.75) * 4
             }
-            self.customColor = GLKVector4Multiply(self.baseCustomColor, GLKVector4Make(1, 1, 1, alpha))
+            textColor = GLKVector4Multiply(baseTextColor, GLKVector4Make(1, 1, 1, alpha))
+            backgroundColor = GLKVector4Multiply(baseBackgroundColor, GLKVector4Make(1, 1, 1, alpha))
+            updateLocalModelVertices()
         }
     }
 }

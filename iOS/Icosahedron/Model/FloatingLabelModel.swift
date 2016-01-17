@@ -8,9 +8,14 @@ class FloatingLabelModel: LabelModel {
             size = baseSize
         }
     }
-    var baseCustomColor: GLKVector4 = GLKVector4Make(0, 0, 0, 0) {
+    var baseTextColor: GLKVector4 = GLKVector4Make(0, 0, 0, 0) {
         didSet {
-            customColor = baseCustomColor
+            textColor = baseTextColor
+        }
+    }
+    var baseBackgroundColor = LabelModel.defaultBackgroundColor {
+        didSet {
+            backgroundColor = baseBackgroundColor
         }
     }
     var isActive: Bool {
@@ -21,8 +26,10 @@ class FloatingLabelModel: LabelModel {
         if isActive {
             animationProgress = min(1.0, animationProgress + Float(timeSinceLastUpdate) * (1 / duration))
 
-            self.size = baseSize * animationProgress * 5
-            self.customColor = GLKVector4Multiply(self.baseCustomColor, GLKVector4Make(1, 1, 1, 1.0 - animationProgress))
+            size = baseSize * animationProgress * 5
+            textColor = GLKVector4Multiply(baseTextColor, GLKVector4Make(1, 1, 1, 1.0 - animationProgress))
+            backgroundColor = GLKVector4Multiply(baseBackgroundColor, GLKVector4Make(1, 1, 1, 1.0 - animationProgress))
+            updateLocalModelVertices()
         }
     }
 }
