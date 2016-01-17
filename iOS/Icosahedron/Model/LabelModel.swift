@@ -4,7 +4,68 @@ import RxSwift
 class LabelModel: Renderable {
     var position = GLKVector3Make(0.0, 0.0, 0.0)
     var quaternion = GLKQuaternionIdentity
-    var localModelVertices: [ModelVertex] {
+    var localModelVertices: [ModelVertex] = []
+    var customColor: GLKVector4? = nil
+    var text: String {
+        didSet {
+            chars = text.characters.map { FontData.defaultData.map[String($0)]! }
+            updateLocalModelVertices()
+        }
+    }
+
+    var rx_text: AnyObserver<String> {
+        return AnyObserver { [weak self] event in
+            MainScheduler.ensureExecutingOnScheduler()
+
+            switch event {
+            case .Next(let value):
+                self?.text = value
+            case .Error(let error):
+                fatalError("Binding error to UI: \(error)")
+                break
+            case .Completed:
+                break
+            }
+        }
+    }
+
+    var chars: [FontData.Char] = []
+
+    var size: Float = 0.2 {
+        didSet {
+            updateLocalModelVertices()
+        }
+    }
+
+    var glyphWidth: Float {
+        return size / 10 * FontData.defaultData.ratio
+    }
+
+    var glyphHeight: Float {
+        return size / 10
+    }
+
+    var horizontalAlign: RenderableHorizontalAlign = .Center {
+        didSet {
+            updateLocalModelVertices()
+        }
+    }
+
+    var verticalAlign: RenderableVerticalAlign = .Center {
+        didSet {
+            updateLocalModelVertices()
+        }
+    }
+
+    let topCoordinate = GLKVector3Make(0.0, 1.0, 0.0)
+
+    init(text: String) {
+        self.text = text
+        chars = text.characters.map { FontData.defaultData.map[String($0)]! }
+        updateLocalModelVertices()
+    }
+
+    func updateLocalModelVertices() {
         let normal = GLKVector3Make(0, 0, -1)
         let color = GLKVector4Make(1, 1, 1, 1)
 
@@ -58,54 +119,7 @@ class LabelModel: Renderable {
 
             baseX += glyphWidth
         }
-        return vertices
-    }
-    var customColor: GLKVector4? = nil
-    var text: String {
-        didSet {
-            chars = text.characters.map { FontData.defaultData.map[String($0)]! }
-        }
-    }
 
-    var rx_text: AnyObserver<String> {
-        return AnyObserver { [weak self] event in
-            MainScheduler.ensureExecutingOnScheduler()
-
-            switch event {
-            case .Next(let value):
-                self?.text = value
-            case .Error(let error):
-                fatalError("Binding error to UI: \(error)")
-                break
-            case .Completed:
-                break
-            }
-        }
-    }
-
-    var chars: [FontData.Char] = []
-
-    var size: Float = 0.2
-
-    var glyphWidth: Float {
-        return size / 10 * FontData.defaultData.ratio
-    }
-
-    var glyphHeight: Float {
-        return size / 10
-    }
-
-    var horizontalAlign: RenderableHorizontalAlign = .Center
-    var verticalAlign: RenderableVerticalAlign = .Center
-
-    class var scale: Float {
-        return 1.0
-    }
-
-    let topCoordinate = GLKVector3Make(0.0, 1.0, 0.0)
-
-    init(text: String) {
-        self.text = text
-        chars = text.characters.map { FontData.defaultData.map[String($0)]! }
+        localModelVertices = vertices
     }
 }
