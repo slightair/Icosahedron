@@ -19,6 +19,8 @@
 		572FCA611C4A59D400778913 /* Particle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA601C4A59D400778913 /* Particle.swift */; };
 		573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132331BDCBF5200824EA5 /* ModelShader.fsh */; };
 		573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132341BDCBF5200824EA5 /* ModelShader.vsh */; };
+		5771700D1C4D1886008C35A2 /* SphereModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771700C1C4D1886008C35A2 /* SphereModel.swift */; };
+		5771700F1C4E7F50008C35A2 /* RenderablePolygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771700E1C4E7F50008C35A2 /* RenderablePolygon.swift */; };
 		5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778A5471C25382B0019FF99 /* UIShaderProgram.swift */; };
 		5778A54A1C25384F0019FF99 /* UIShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5778A5491C25384F0019FF99 /* UIShader.fsh */; };
 		5778A54C1C25385B0019FF99 /* UIShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5778A54B1C25385B0019FF99 /* UIShader.vsh */; };
@@ -91,6 +93,8 @@
 		572FCA601C4A59D400778913 /* Particle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Particle.swift; sourceTree = "<group>"; };
 		573132331BDCBF5200824EA5 /* ModelShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.fsh; sourceTree = "<group>"; };
 		573132341BDCBF5200824EA5 /* ModelShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.vsh; sourceTree = "<group>"; };
+		5771700C1C4D1886008C35A2 /* SphereModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SphereModel.swift; sourceTree = "<group>"; };
+		5771700E1C4E7F50008C35A2 /* RenderablePolygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderablePolygon.swift; sourceTree = "<group>"; };
 		5778A5471C25382B0019FF99 /* UIShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIShaderProgram.swift; sourceTree = "<group>"; };
 		5778A5491C25384F0019FF99 /* UIShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UIShader.fsh; sourceTree = "<group>"; };
 		5778A54B1C25385B0019FF99 /* UIShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UIShader.vsh; sourceTree = "<group>"; };
@@ -218,6 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				579AD5FE1C01EEB900218D38 /* Renderable.swift */,
+				5771700E1C4E7F50008C35A2 /* RenderablePolygon.swift */,
 				579AD5FD1C01EEB900218D38 /* ModelVertex.swift */,
 				579AD5FA1C01EEB900218D38 /* IcosahedronVertex.swift */,
 				579AD60A1C02F8CE00218D38 /* BaseModel */,
@@ -227,6 +232,7 @@
 				57F5FB761C36702600817824 /* LevelLabelModel.swift */,
 				572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */,
 				572FCA511C45308E00778913 /* FadeOutLabelModel.swift */,
+				5771700C1C4D1886008C35A2 /* SphereModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -414,6 +420,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5771700D1C4D1886008C35A2 /* SphereModel.swift in Sources */,
 				572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */,
 				572FCA611C4A59D400778913 /* Particle.swift in Sources */,
 				572FCA5F1C4A442700778913 /* ParticleVertex.swift in Sources */,
@@ -423,6 +430,7 @@
 				57DC980C1C1325C90004B107 /* FontData.swift in Sources */,
 				579AD6031C01EEB900218D38 /* ItemModel.swift in Sources */,
 				572FCA541C47E0DD00778913 /* ParticleShaderProgram.swift in Sources */,
+				5771700F1C4E7F50008C35A2 /* RenderablePolygon.swift in Sources */,
 				5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */,
 				572FCA5B1C4A2D6E00778913 /* ParticleEmitter.swift in Sources */,
 				57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */,

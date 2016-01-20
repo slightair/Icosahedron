@@ -10,6 +10,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
     var modelVertexArray: GLuint = 0
     var modelVertexBuffer: GLuint = 0
+    var modelIndexBuffer: GLuint = 0
 
     var modelShaderProgram: ModelShaderProgram!
     var uiShaderProgram: UIShaderProgram!
@@ -81,7 +82,10 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glGenVertexArrays(1, &modelVertexArray)
         glBindVertexArray(modelVertexArray)
 
-        glGenBuffers(1, &modelVertexBuffer)
+        var buffers: [GLuint] = [GLuint](count: 2, repeatedValue: 0)
+        glGenBuffers(2, &buffers)
+        modelVertexBuffer = buffers[0]
+        modelIndexBuffer = buffers[1]
 
         glBindVertexArray(0)
 
@@ -134,6 +138,36 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         prevQuaternion = currentQuaternion
         currentQuaternion = GLKQuaternionMultiply(currentQuaternion, relativeQuaternion)
+    }
+
+    func renderPolygons(polygons: [RenderablePolygon]) {
+        let modelVertices = polygons.flatMap { $0.modelVertices }
+        let vertices: [Float] = modelVertices.flatMap { $0.v }
+        let indexes: [GLushort] = polygons.flatMap { $0.modelIndexes }
+
+        glBindVertexArray(modelVertexArray)
+
+        glBindBuffer(GLenum(GL_ARRAY_BUFFER), modelVertexBuffer)
+        glBufferData(GLenum(GL_ARRAY_BUFFER), GLsizeiptr(ModelVertex.size * modelVertices.count), vertices, GLenum(GL_STREAM_DRAW))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Position.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Position.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(0))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Normal.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Normal.rawValue), 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 3))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 6))
+
+        glEnableVertexAttribArray(GLuint(GLKVertexAttrib.TexCoord0.rawValue))
+        glVertexAttribPointer(GLuint(GLKVertexAttrib.TexCoord0.rawValue), 2, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ModelVertex.size), BUFFER_OFFSET(sizeof(Float) * 10))
+
+        glBindBuffer(GLenum(GL_ELEMENT_ARRAY_BUFFER), modelIndexBuffer)
+        glBufferData(GLenum(GL_ELEMENT_ARRAY_BUFFER), GLsizeiptr(sizeof(GLushort) * indexes.count), indexes, GLenum(GL_STREAM_DRAW))
+
+        glDrawElements(GLenum(GL_LINE_STRIP), GLsizei(indexes.count), GLenum(GL_UNSIGNED_SHORT), nil)
+
+        glBindVertexArray(0)
     }
 
     func renderModels(models: [Renderable]) {
@@ -224,6 +258,9 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glActiveTexture(GLenum(GL_TEXTURE0))
 
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
+
+        renderPolygons(modelProducer.polygons())
+
         renderModels(modelProducer.modelObjects())
 
         glBindTexture(GLenum(GL_TEXTURE_2D), fontData.textureInfo.name)

@@ -6,6 +6,7 @@ import Chameleon
 class GameSceneModelProducer {
     let world: World
 
+    let sphereModel = SphereModel()
     let icosahedronModel = MotherIcosahedronModel()
     let markerModel = MarkerModel()
 
@@ -184,6 +185,10 @@ class GameSceneModelProducer {
             resultSelector: debugLevelText)
             .bindTo(blueLevelLabelModel.rx_text)
             .addDisposableTo(disposeBag)
+    }
+
+    func polygons() -> [RenderablePolygon] {
+        return [sphereModel]
     }
 
     func modelObjects() -> [Renderable] {
