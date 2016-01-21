@@ -260,7 +260,6 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
 
         renderPolygons(modelProducer.polygons())
-
         renderModels(modelProducer.modelObjects())
 
         glBindTexture(GLenum(GL_TEXTURE_2D), fontData.textureInfo.name)
