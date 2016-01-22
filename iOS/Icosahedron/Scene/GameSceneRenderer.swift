@@ -16,11 +16,13 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
     var uiShaderProgram: UIShaderProgram!
     var particleShaderProgram: ParticleShaderProgram!
 
-    var projectionMatrix = GLKMatrix4Identity
+    var backgroundProjectionMatrix = GLKMatrix4Identity
+    var modelProjectionMatrix = GLKMatrix4Identity
     var worldMatrix = GLKMatrix4Identity
     var normalMatrix = GLKMatrix3Identity
 
     let fontData: FontData = FontData.defaultData
+    var debugTextureInfo: GLKTextureInfo!
     var whiteTextureInfo: GLKTextureInfo!
     var pointTextureInfo: GLKTextureInfo!
 
@@ -77,7 +79,8 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         let projectionWidth: Float = 1.0
         let projectionHeight = projectionWidth / Screen.aspect
-        projectionMatrix = GLKMatrix4MakeOrtho(-projectionWidth / 2, projectionWidth / 2, -projectionHeight / 2, projectionHeight / 2, 0.1, 100)
+        modelProjectionMatrix = GLKMatrix4MakeOrtho(-projectionWidth / 2, projectionWidth / 2, -projectionHeight / 2, projectionHeight / 2, 0.1, 100)
+        backgroundProjectionMatrix = GLKMatrix4MakePerspective(120, Screen.aspect, 0.1, 100)
 
         glGenVertexArrays(1, &modelVertexArray)
         glBindVertexArray(modelVertexArray)
@@ -88,6 +91,11 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         modelIndexBuffer = buffers[1]
 
         glBindVertexArray(0)
+
+        guard let debugTextureAsset = NSDataAsset(name: "Debug") else {
+            fatalError("debug texture file not found")
+        }
+        debugTextureInfo = try! GLKTextureLoader.textureWithContentsOfData(debugTextureAsset.data, options: nil)
 
         guard let whiteTextureAsset = NSDataAsset(name: "White") else {
             fatalError("white texture file not found")
@@ -165,7 +173,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glBindBuffer(GLenum(GL_ELEMENT_ARRAY_BUFFER), modelIndexBuffer)
         glBufferData(GLenum(GL_ELEMENT_ARRAY_BUFFER), GLsizeiptr(sizeof(GLushort) * indexes.count), indexes, GLenum(GL_STREAM_DRAW))
 
-        glDrawElements(GLenum(GL_LINE_STRIP), GLsizei(indexes.count), GLenum(GL_UNSIGNED_SHORT), nil)
+        glDrawElements(GLenum(GL_TRIANGLE_STRIP), GLsizei(indexes.count), GLenum(GL_UNSIGNED_SHORT), nil)
 
         glBindVertexArray(0)
     }
@@ -251,15 +259,19 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         glUseProgram(modelShaderProgram.programID)
 
-        modelShaderProgram.projectionMatrix = projectionMatrix
         modelShaderProgram.worldMatrix = worldMatrix
         modelShaderProgram.normalMatrix = normalMatrix
 
         glActiveTexture(GLenum(GL_TEXTURE0))
 
+        glBindTexture(GLenum(GL_TEXTURE_2D), debugTextureInfo.name)
+
+        modelShaderProgram.projectionMatrix = backgroundProjectionMatrix
+        renderPolygons(modelProducer.polygons())
+
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
 
-        renderPolygons(modelProducer.polygons())
+        modelShaderProgram.projectionMatrix = modelProjectionMatrix
         renderModels(modelProducer.modelObjects())
 
         glBindTexture(GLenum(GL_TEXTURE_2D), fontData.textureInfo.name)
@@ -272,7 +284,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         glUseProgram(particleShaderProgram.programID)
 
-        particleShaderProgram.projectionMatrix = projectionMatrix
+        particleShaderProgram.projectionMatrix = modelProjectionMatrix
         particleShaderProgram.worldMatrix = worldMatrix
 
         glBindTexture(GLenum(GL_TEXTURE_2D), pointTextureInfo.name)
@@ -284,7 +296,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         glUseProgram(uiShaderProgram.programID)
 
-        uiShaderProgram.projectionMatrix = projectionMatrix
+        uiShaderProgram.projectionMatrix = modelProjectionMatrix
 
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
         renderModels(modelProducer.uiObjects())
