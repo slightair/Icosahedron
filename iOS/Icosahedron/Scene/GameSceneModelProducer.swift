@@ -187,17 +187,17 @@ class GameSceneModelProducer {
             .addDisposableTo(disposeBag)
     }
 
+    func polygons() -> [RenderablePolygon] {
+        return [sphereModel]
+    }
+
     func modelObjects() -> [Renderable] {
         func coord(point: Icosahedron.Point) -> GLKVector3 {
             return icosahedronModel.coordinateOfPoint(point)
         }
 
         markerModel.status = world.markerStatus
-        let requiredModels: [Renderable] = [
-//            icosahedronModel,
-            sphereModel,
-            markerModel
-        ]
+        let requiredModels: [Renderable] = [icosahedronModel, markerModel]
         let itemModels: [Renderable] = world.items.map { item in
             let coord = coord(item.point)
             let model = ItemModel(initialPosition: coord, kind: item.kind)
