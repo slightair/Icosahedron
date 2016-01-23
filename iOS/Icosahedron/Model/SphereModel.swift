@@ -9,7 +9,7 @@ class SphereModel: RenderablePolygon {
 
     init() {
         let split = 32
-        let scale: Float = 1.2
+        let scale: Float = 1.5
         let delta = M_PI / Double(split - 1)
 
         var vertices: [ModelVertex] = []
@@ -22,7 +22,7 @@ class SphereModel: RenderablePolygon {
                 let localCoord = GLKVector3MultiplyScalar(GLKVector3Make(Float(cos(theta)), Float(sin(theta)), 0), scale)
                 let coord = GLKQuaternionRotateVector3(quaternion, localCoord)
                 let normal = GLKVector3Normalize(GLKVector3MultiplyScalar(coord, -1))
-                let color = GLKVector4Make(Float(cos(theta)), Float(sin(theta)), 1, 1)
+                let color = GLKVector4Make(1, 1, 1, 1)
 
                 let texCoordX: Float = x % 2 == 0 ? 0.0 : 1.0
                 let texCoordY: Float = y % 2 == 0 ? 0.0 : 1.0

@@ -22,7 +22,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
     var normalMatrix = GLKMatrix3Identity
 
     let fontData: FontData = FontData.defaultData
-    var debugTextureInfo: GLKTextureInfo!
+    var meshTextureInfo: GLKTextureInfo!
     var whiteTextureInfo: GLKTextureInfo!
     var pointTextureInfo: GLKTextureInfo!
 
@@ -92,10 +92,10 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         glBindVertexArray(0)
 
-        guard let debugTextureAsset = NSDataAsset(name: "Debug") else {
+        guard let meshTextureAsset = NSDataAsset(name: "Mesh") else {
             fatalError("debug texture file not found")
         }
-        debugTextureInfo = try! GLKTextureLoader.textureWithContentsOfData(debugTextureAsset.data, options: nil)
+        meshTextureInfo = try! GLKTextureLoader.textureWithContentsOfData(meshTextureAsset.data, options: nil)
 
         guard let whiteTextureAsset = NSDataAsset(name: "White") else {
             fatalError("white texture file not found")
@@ -264,7 +264,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         glActiveTexture(GLenum(GL_TEXTURE0))
 
-        glBindTexture(GLenum(GL_TEXTURE_2D), debugTextureInfo.name)
+        glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
 
         modelShaderProgram.projectionMatrix = backgroundProjectionMatrix
         renderPolygons(modelProducer.polygons())
