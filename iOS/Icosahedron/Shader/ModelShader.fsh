@@ -10,8 +10,6 @@ uniform sampler2D uTexture;
 void main()
 {
     mediump vec4 textureColor = texture(uTexture, vTexCoord);
-    if (textureColor.a < 0.001) {
-        discard;
-    }
+
     outputColor = vColor * textureColor;
 }
