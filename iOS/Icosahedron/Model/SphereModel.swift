@@ -9,7 +9,7 @@ class SphereModel: RenderablePolygon {
 
     init() {
         let split = 32
-        let scale: Float = 1.5
+        let scale: Float = 3
         let delta = M_PI / Double(split - 1)
 
         var vertices: [ModelVertex] = []

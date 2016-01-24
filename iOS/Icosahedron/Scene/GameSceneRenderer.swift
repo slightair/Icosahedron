@@ -17,6 +17,9 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
     var particleShaderProgram: ParticleShaderProgram!
 
     var backgroundProjectionMatrix = GLKMatrix4Identity
+    var backgroundWorldMatrix = GLKMatrix4Identity
+    var backgroundNormalMatrix = GLKMatrix3Identity
+
     var modelProjectionMatrix = GLKMatrix4Identity
     var worldMatrix = GLKMatrix4Identity
     var normalMatrix = GLKMatrix3Identity
@@ -79,8 +82,8 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         let projectionWidth: Float = 1.0
         let projectionHeight = projectionWidth / Screen.aspect
-        modelProjectionMatrix = GLKMatrix4MakeOrtho(-projectionWidth / 2, projectionWidth / 2, -projectionHeight / 2, projectionHeight / 2, 0.1, 100)
-        backgroundProjectionMatrix = GLKMatrix4MakePerspective(120, Screen.aspect, 0.1, 100)
+        modelProjectionMatrix = GLKMatrix4MakeOrtho(-projectionWidth / 2, projectionWidth / 2, -projectionHeight / 2, projectionHeight / 2, 0.1, 10)
+        backgroundProjectionMatrix = GLKMatrix4MakePerspective(120, Screen.aspect, 0.1, 10)
 
         glGenVertexArrays(1, &modelVertexArray)
         glBindVertexArray(modelVertexArray)
@@ -148,7 +151,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         currentQuaternion = GLKQuaternionMultiply(currentQuaternion, relativeQuaternion)
     }
 
-    func renderPolygons(polygons: [RenderablePolygon]) {
+    func drawPolygons(polygons: [RenderablePolygon]) {
         let modelVertices = polygons.flatMap { $0.modelVertices }
         let vertices: [Float] = modelVertices.flatMap { $0.v }
         let indexes: [GLushort] = polygons.flatMap { $0.modelIndexes }
@@ -178,7 +181,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glBindVertexArray(0)
     }
 
-    func renderModels(models: [Renderable]) {
+    func drawModels(models: [Renderable]) {
         let modelVertices = models.flatMap { $0.modelVertices }
         let vertices: [Float] = modelVertices.flatMap { $0.v }
 
@@ -204,7 +207,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glBindVertexArray(0)
     }
 
-    func renderParticle(points: [ParticleVertex]) {
+    func drawParticle(points: [ParticleVertex]) {
         let vertices: [Float] = points.flatMap { $0.v }
 
         glBindVertexArray(modelVertexArray)
@@ -242,6 +245,67 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         for label in modelProducer.labelObjects() {
             label.quaternion = billboardQuaternion
         }
+
+        let backgroundBaseMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -2.0)
+        backgroundWorldMatrix = GLKMatrix4Multiply(backgroundBaseMatrix, GLKMatrix4MakeWithQuaternion(movingQuaternion))
+        backgroundNormalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(backgroundWorldMatrix), nil)
+    }
+
+    func renderBackground() {
+        glEnable(GLenum(GL_DEPTH_TEST))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
+
+        glUseProgram(modelShaderProgram.programID)
+        modelShaderProgram.projectionMatrix = backgroundProjectionMatrix
+        modelShaderProgram.worldMatrix = backgroundWorldMatrix
+        modelShaderProgram.normalMatrix = backgroundNormalMatrix
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
+
+        modelShaderProgram.projectionMatrix = backgroundProjectionMatrix
+        drawPolygons(modelProducer.polygons())
+    }
+
+    func renderModels() {
+        glEnable(GLenum(GL_DEPTH_TEST))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
+
+        glUseProgram(modelShaderProgram.programID)
+        modelShaderProgram.projectionMatrix = modelProjectionMatrix
+        modelShaderProgram.worldMatrix = worldMatrix
+        modelShaderProgram.normalMatrix = normalMatrix
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
+        drawModels(modelProducer.modelObjects())
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), fontData.textureInfo.name)
+        drawModels(modelProducer.labelObjects().map { $0 as Renderable})
+    }
+
+    func renderParticles() {
+        glDisable(GLenum(GL_DEPTH_TEST))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE))
+
+        glUseProgram(particleShaderProgram.programID)
+        particleShaderProgram.projectionMatrix = modelProjectionMatrix
+        particleShaderProgram.worldMatrix = worldMatrix
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), pointTextureInfo.name)
+        drawParticle(modelProducer.particlePoints())
+    }
+
+    func renderUI() {
+        glDisable(GLenum(GL_DEPTH_TEST))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
+
+        glUseProgram(uiShaderProgram.programID)
+        uiShaderProgram.projectionMatrix = modelProjectionMatrix
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
+        drawModels(modelProducer.uiObjects())
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), fontData.textureInfo.name)
+        drawModels(modelProducer.uiLabelObjects())
     }
 
     // MARK: - GLKView delegate methods
@@ -251,57 +315,11 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT) | GLbitfield(GL_DEPTH_BUFFER_BIT))
 
         glEnable(GLenum(GL_BLEND))
-
-        // Render Models
-
-        glEnable(GLenum(GL_DEPTH_TEST))
-        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
-
-        glUseProgram(modelShaderProgram.programID)
-
-        modelShaderProgram.worldMatrix = worldMatrix
-        modelShaderProgram.normalMatrix = normalMatrix
-
         glActiveTexture(GLenum(GL_TEXTURE0))
 
-        glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
-
-        modelShaderProgram.projectionMatrix = backgroundProjectionMatrix
-        renderPolygons(modelProducer.polygons())
-
-        glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
-
-        modelShaderProgram.projectionMatrix = modelProjectionMatrix
-        renderModels(modelProducer.modelObjects())
-
-        glBindTexture(GLenum(GL_TEXTURE_2D), fontData.textureInfo.name)
-        renderModels(modelProducer.labelObjects().map { $0 as Renderable})
-
-        // Render Particles
-
-        glDisable(GLenum(GL_DEPTH_TEST))
-        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE))
-
-        glUseProgram(particleShaderProgram.programID)
-
-        particleShaderProgram.projectionMatrix = modelProjectionMatrix
-        particleShaderProgram.worldMatrix = worldMatrix
-
-        glBindTexture(GLenum(GL_TEXTURE_2D), pointTextureInfo.name)
-        renderParticle(modelProducer.particlePoints())
-
-        // Render UI
-
-        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
-
-        glUseProgram(uiShaderProgram.programID)
-
-        uiShaderProgram.projectionMatrix = modelProjectionMatrix
-
-        glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
-        renderModels(modelProducer.uiObjects())
-
-        glBindTexture(GLenum(GL_TEXTURE_2D), fontData.textureInfo.name)
-        renderModels(modelProducer.uiLabelObjects())
+        renderBackground()
+        renderModels()
+        renderParticles()
+        renderUI()
     }
 }
