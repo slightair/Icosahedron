@@ -247,7 +247,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         }
 
         let backgroundBaseMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -2.0)
-        backgroundWorldMatrix = GLKMatrix4Multiply(backgroundBaseMatrix, GLKMatrix4MakeWithQuaternion(movingQuaternion))
+        backgroundWorldMatrix = GLKMatrix4Multiply(backgroundBaseMatrix, GLKMatrix4MakeWithQuaternion(worldQuaternion))
         backgroundNormalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(backgroundWorldMatrix), nil)
     }
 

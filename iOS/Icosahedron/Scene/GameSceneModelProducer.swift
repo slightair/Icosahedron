@@ -58,6 +58,8 @@ class GameSceneModelProducer {
         let itemGaugeModels = [redGaugeModel, greenGaugeModel, blueGaugeModel]
         for (index, gauge) in itemGaugeModels.enumerate() {
             gauge.position = GLKVector3Add(GLKVector3Make(0, 0.075, 0), GLKVector3Make(0, 0.025 * Float(index + 1), 0))
+            gauge.width = 0.15
+            gauge.height = 0.01
         }
 
         let levelLabelModels = [redLevelLabelModel, greenLevelLabelModel, blueLevelLabelModel]
@@ -102,7 +104,7 @@ class GameSceneModelProducer {
         extendTimeLabelModelGroup.verticalAlign = .Top
         extendTimeLabelModelGroup.duration = 1.5
 
-        comboLabelModelGroup.position = GLKVector3Make(0, -maxHeightRatio / 4, 0)
+        comboLabelModelGroup.position = GLKVector3Make(0, -maxHeightRatio / 4 - 0.03, 0)
         comboLabelModelGroup.size = 0.3
         comboLabelModelGroup.verticalAlign = .Top
         comboLabelModelGroup.direction = .Up

@@ -2,7 +2,7 @@ import GLKit
 import RxSwift
 
 class LabelModel: Renderable {
-    static let defaultBackgroundColor = UIColor.flatBlackColor().glColor
+    static let defaultBackgroundColor = UIColor.flatWhiteColorDark().glColor
 
     var position = GLKVector3Make(0.0, 0.0, 0.0)
     var quaternion = GLKQuaternionIdentity

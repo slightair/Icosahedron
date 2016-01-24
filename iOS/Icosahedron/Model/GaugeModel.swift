@@ -38,7 +38,11 @@ class GaugeModel: Renderable {
         }
     }
 
-    let height: Float = 0.0075
+    var height: Float = 0.0075 {
+        didSet {
+            updateLocalModelVertices()
+        }
+    }
 
     var horizontalAlign: RenderableHorizontalAlign = .Center {
         didSet {
