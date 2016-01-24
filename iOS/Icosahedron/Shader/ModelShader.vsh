@@ -19,9 +19,9 @@ void main()
     vec4 diffuseColor = vec4(1.0, 1.0, 1.0, 1.0);
 
     float nDotVP = max(0.6, dot(eyeNormal, normalize(lightPosition)));
+    vec4 nDotVPVector = vec4(nDotVP, nDotVP, nDotVP, 1.0);
 
-    vColor = diffuseColor * nDotVP * color;
-    vColor.a = 1.0;
+    vColor = diffuseColor * nDotVPVector * color;
     vTexCoord = texCoord;
 
     gl_Position = uProjectionMatrix * uWorldMatrix * position;
