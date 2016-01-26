@@ -200,10 +200,11 @@ class GameSceneModelProducer {
 
         markerModel.status = world.markerStatus
         let requiredModels: [Renderable] = [icosahedronModel, markerModel]
+        let angle = Float(2 * M_PI) * animationLoopValue / 4
         let itemModels: [Renderable] = world.items.map { item in
             let coord = coord(item.point)
             let model = ItemModel(initialPosition: coord, kind: item.kind)
-            let rotateQuaternion = GLKQuaternionMakeWithAngleAndVector3Axis(Float(2 * M_PI) * animationLoopValue, GLKVector3Normalize(coord))
+            let rotateQuaternion = GLKQuaternionMakeWithAngleAndVector3Axis(angle, GLKVector3Normalize(coord))
             model.quaternion = GLKQuaternionMultiply(rotateQuaternion, model.quaternion)
 
             return model
@@ -246,7 +247,7 @@ class GameSceneModelProducer {
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval) {
-        animationLoopValue += Float(timeSinceLastUpdate / 4)
+        animationLoopValue += Float(timeSinceLastUpdate)
         if animationLoopValue > 1.0 {
             animationLoopValue -= 1.0
         }
@@ -261,5 +262,8 @@ class GameSceneModelProducer {
         for particleEmitter in icosahedronPointParticleEmitters.values {
             particleEmitter.update(timeSinceLastUpdate)
         }
+
+        let markerScale = Float(1.0 + 0.2 * cos(2 * M_PI * Double(animationLoopValue)))
+        markerModel.scale = GLKVector3Make(markerScale, 1.0, markerScale)
     }
 }

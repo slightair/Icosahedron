@@ -9,14 +9,16 @@ protocol Renderable {
     var position: GLKVector3 { get }
     var quaternion: GLKQuaternion { get }
     var localModelVertices: [ModelVertex] { get }
+    var scale: GLKVector3 { get }
     var customColor: GLKVector4? { get }
 }
 
 extension Renderable {
     var modelVertices: [ModelVertex] {
         let quaternionMatrix = GLKMatrix4MakeWithQuaternion(quaternion)
+        let matrix = GLKMatrix4ScaleWithVector3(quaternionMatrix, scale)
         return localModelVertices.map { vertex in
-            var convertedVertex = vertex.multiplyMatrix4(quaternionMatrix).addVector3(position)
+            var convertedVertex = vertex.multiplyMatrix4(matrix).addVector3(position)
             if let newColor = customColor {
                 convertedVertex = convertedVertex.changeColor(newColor)
             }

@@ -7,6 +7,7 @@ class LabelModel: Renderable {
     var position = GLKVector3Make(0.0, 0.0, 0.0)
     var quaternion = GLKQuaternionIdentity
     var localModelVertices: [ModelVertex] = []
+    var scale = GLKVector3Make(1.0, 1.0, 1.0)
     var customColor: GLKVector4? = nil
     var text: String {
         didSet {
