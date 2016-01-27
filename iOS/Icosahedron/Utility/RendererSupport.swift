@@ -31,10 +31,10 @@ func quaternionForRotate(from from: GLKVector3, to: GLKVector3) -> GLKQuaternion
 
 struct Screen {
     static var aspect: Float {
-        let width = GLsizei(CGRectGetHeight(UIScreen.mainScreen().nativeBounds)) // long side
-        let height = GLsizei(CGRectGetWidth(UIScreen.mainScreen().nativeBounds)) // short side
+        let width = CGRectGetHeight(UIScreen.mainScreen().nativeBounds) // long side
+        let height = CGRectGetWidth(UIScreen.mainScreen().nativeBounds) // short side
 
-        return Float(fabs(Double(width) / Double(height)))
+        return Float(fabs(width / height))
     }
 }
 

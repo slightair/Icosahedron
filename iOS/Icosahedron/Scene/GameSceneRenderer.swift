@@ -12,9 +12,14 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
     var modelVertexBuffer: GLuint = 0
     var modelIndexBuffer: GLuint = 0
 
+    var modelFrameBuffer: GLuint = 0
+    var modelColorTexture: GLuint = 0
+    var modelDepthRenderBuffer: GLuint = 0
+
     var modelShaderProgram: ModelShaderProgram!
-    var uiShaderProgram: UIShaderProgram!
     var particleShaderProgram: ParticleShaderProgram!
+    var canvasShaderProgram: CanvasShaderProgram!
+    var uiShaderProgram: UIShaderProgram!
 
     var backgroundProjectionMatrix = GLKMatrix4Identity
     var backgroundWorldMatrix = GLKMatrix4Identity
@@ -31,6 +36,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
     let world: World
     let modelProducer: GameSceneModelProducer
+    let canvasModel = CanvasModel()
     var delegate: GameSceneRendererDelegate?
 
     var prevVertex: IcosahedronVertex!
@@ -77,8 +83,9 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         EAGLContext.setCurrentContext(context)
 
         modelShaderProgram = ModelShaderProgram()
-        uiShaderProgram = UIShaderProgram()
         particleShaderProgram = ParticleShaderProgram()
+        canvasShaderProgram = CanvasShaderProgram()
+        uiShaderProgram = UIShaderProgram()
 
         let projectionWidth: Float = 1.0
         let projectionHeight = projectionWidth / Screen.aspect
@@ -111,11 +118,42 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         pointTextureInfo = try! GLKTextureLoader.textureWithContentsOfData(pointTextureAsset.data, options: nil)
 
         fontData.loadTexture()
+
+        let width = GLsizei(CGRectGetHeight(UIScreen.mainScreen().nativeBounds)) // long side
+        let height = GLsizei(CGRectGetWidth(UIScreen.mainScreen().nativeBounds)) // short side
+
+        glGenTextures(1, &modelColorTexture)
+        glBindTexture(GLenum(GL_TEXTURE_2D), modelColorTexture)
+        glTexImage2D(GLenum(GL_TEXTURE_2D), 0, GLint(GL_RGBA8), width, height, 0, GLenum(GL_RGBA), GLenum(GL_UNSIGNED_BYTE), nil)
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MAG_FILTER), GLint(GL_LINEAR))
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MIN_FILTER), GLint(GL_LINEAR))
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GLint(GL_CLAMP_TO_EDGE))
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_T), GLint(GL_CLAMP_TO_EDGE))
+        glBindTexture(GLenum(GL_TEXTURE_2D), 0)
+
+        glGenRenderbuffers(1, &modelDepthRenderBuffer)
+        glBindRenderbuffer(GLenum(GL_RENDERBUFFER), modelDepthRenderBuffer)
+        glRenderbufferStorage(GLenum(GL_RENDERBUFFER), GLenum(GL_DEPTH_COMPONENT24), width, height)
+        glBindRenderbuffer(GLenum(GL_RENDERBUFFER), 0)
+
+        glGenFramebuffers(1, &modelFrameBuffer)
+        glBindFramebuffer(GLenum(GL_FRAMEBUFFER), modelFrameBuffer)
+        glFramebufferTexture2D(GLenum(GL_FRAMEBUFFER), GLenum(GL_COLOR_ATTACHMENT0), GLenum(GL_TEXTURE_2D), modelColorTexture, 0)
+        glFramebufferRenderbuffer(GLenum(GL_FRAMEBUFFER), GLenum(GL_DEPTH_ATTACHMENT), GLenum(GL_RENDERBUFFER), modelDepthRenderBuffer)
+        guard glCheckFramebufferStatus(GLenum(GL_FRAMEBUFFER)) == GLenum(GL_FRAMEBUFFER_COMPLETE) else {
+            fatalError("Check frame buffer status error!")
+        }
+        glBindFramebuffer(GLenum(GL_FRAMEBUFFER), 0)
     }
 
     func tearDownGL() {
         glDeleteBuffers(1, &modelVertexBuffer)
+        glDeleteBuffers(1, &modelIndexBuffer)
         glDeleteVertexArrays(1, &modelVertexArray)
+
+        glDeleteTextures(1, &modelColorTexture)
+        glDeleteRenderbuffers(1, &modelDepthRenderBuffer)
+        glDeleteFramebuffers(1, &modelFrameBuffer)
     }
 
     func rotateModelWithTappedLocation(location: CGPoint) {
@@ -294,6 +332,17 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         drawParticle(modelProducer.particlePoints())
     }
 
+    func renderCanvas() {
+        glDisable(GLenum(GL_DEPTH_TEST))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
+
+        glUseProgram(canvasShaderProgram.programID)
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), modelColorTexture)
+
+        drawPolygons([canvasModel])
+    }
+
     func renderUI() {
         glDisable(GLenum(GL_DEPTH_TEST))
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
@@ -311,6 +360,16 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
     // MARK: - GLKView delegate methods
 
     func glkView(view: GLKView, drawInRect rect: CGRect) {
+        var defaultFrameBufferObject: GLint = 0
+        glGetIntegerv(GLenum(GL_FRAMEBUFFER_BINDING), &defaultFrameBufferObject)
+
+        glBindFramebuffer(GLenum(GL_FRAMEBUFFER), modelFrameBuffer)
+
+        let buffers = [
+            GLenum(GL_COLOR_ATTACHMENT0),
+        ]
+        glDrawBuffers(1, buffers)
+
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT) | GLbitfield(GL_DEPTH_BUFFER_BIT))
 
@@ -320,6 +379,13 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         renderBackground()
         renderModels()
         renderParticles()
+
+        glBindFramebuffer(GLenum(GL_FRAMEBUFFER), GLuint(defaultFrameBufferObject))
+
+        glClearColor(0.0, 0.0, 0.0, 1.0)
+        glClear(GLbitfield(GL_COLOR_BUFFER_BIT))
+
+        renderCanvas()
         renderUI()
     }
 }

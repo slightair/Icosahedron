@@ -19,6 +19,10 @@
 		572FCA611C4A59D400778913 /* Particle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA601C4A59D400778913 /* Particle.swift */; };
 		573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132331BDCBF5200824EA5 /* ModelShader.fsh */; };
 		573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132341BDCBF5200824EA5 /* ModelShader.vsh */; };
+		5756BE7E1C5908AB007F163B /* CanvasShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756BE7D1C5908AB007F163B /* CanvasShaderProgram.swift */; };
+		5756BE801C5908C8007F163B /* CanvasShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5756BE7F1C5908C8007F163B /* CanvasShader.vsh */; };
+		5756BE821C5908D4007F163B /* CanvasShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5756BE811C5908D4007F163B /* CanvasShader.fsh */; };
+		5756BE841C590ACB007F163B /* CanvasModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756BE831C590ACB007F163B /* CanvasModel.swift */; };
 		5771700D1C4D1886008C35A2 /* SphereModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771700C1C4D1886008C35A2 /* SphereModel.swift */; };
 		5771700F1C4E7F50008C35A2 /* RenderablePolygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771700E1C4E7F50008C35A2 /* RenderablePolygon.swift */; };
 		5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778A5471C25382B0019FF99 /* UIShaderProgram.swift */; };
@@ -93,6 +97,10 @@
 		572FCA601C4A59D400778913 /* Particle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Particle.swift; sourceTree = "<group>"; };
 		573132331BDCBF5200824EA5 /* ModelShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.fsh; sourceTree = "<group>"; };
 		573132341BDCBF5200824EA5 /* ModelShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.vsh; sourceTree = "<group>"; };
+		5756BE7D1C5908AB007F163B /* CanvasShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasShaderProgram.swift; sourceTree = "<group>"; };
+		5756BE7F1C5908C8007F163B /* CanvasShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CanvasShader.vsh; sourceTree = "<group>"; };
+		5756BE811C5908D4007F163B /* CanvasShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CanvasShader.fsh; sourceTree = "<group>"; };
+		5756BE831C590ACB007F163B /* CanvasModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasModel.swift; sourceTree = "<group>"; };
 		5771700C1C4D1886008C35A2 /* SphereModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SphereModel.swift; sourceTree = "<group>"; };
 		5771700E1C4E7F50008C35A2 /* RenderablePolygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderablePolygon.swift; sourceTree = "<group>"; };
 		5778A5471C25382B0019FF99 /* UIShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIShaderProgram.swift; sourceTree = "<group>"; };
@@ -178,6 +186,9 @@
 				572FCA531C47E0DD00778913 /* ParticleShaderProgram.swift */,
 				572FCA571C47E31E00778913 /* ParticleShader.fsh */,
 				572FCA551C47E31300778913 /* ParticleShader.vsh */,
+				5756BE7D1C5908AB007F163B /* CanvasShaderProgram.swift */,
+				5756BE7F1C5908C8007F163B /* CanvasShader.vsh */,
+				5756BE811C5908D4007F163B /* CanvasShader.fsh */,
 			);
 			path = Shader;
 			sourceTree = "<group>";
@@ -233,6 +244,7 @@
 				572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */,
 				572FCA511C45308E00778913 /* FadeOutLabelModel.swift */,
 				5771700C1C4D1886008C35A2 /* SphereModel.swift */,
+				5756BE831C590ACB007F163B /* CanvasModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -366,12 +378,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5756BE821C5908D4007F163B /* CanvasShader.fsh in Resources */,
 				573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */,
 				579013AC1BC1083400ADAE3E /* Main.storyboard in Resources */,
 				579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */,
 				579013B11BC1083400ADAE3E /* LaunchScreen.storyboard in Resources */,
 				572FCA561C47E31300778913 /* ParticleShader.vsh in Resources */,
 				5778A54A1C25384F0019FF99 /* UIShader.fsh in Resources */,
+				5756BE801C5908C8007F163B /* CanvasShader.vsh in Resources */,
 				5778A54C1C25385B0019FF99 /* UIShader.vsh in Resources */,
 				573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */,
 				572FCA581C47E31E00778913 /* ParticleShader.fsh in Resources */,
@@ -425,6 +439,7 @@
 				572FCA611C4A59D400778913 /* Particle.swift in Sources */,
 				572FCA5F1C4A442700778913 /* ParticleVertex.swift in Sources */,
 				57D866C51BEF66F90034DEDE /* GameSceneRenderer.swift in Sources */,
+				5756BE841C590ACB007F163B /* CanvasModel.swift in Sources */,
 				571416B31C3A9C2A00CF6F7D /* Math.swift in Sources */,
 				579AD6011C01EEB900218D38 /* IcosahedronModel.swift in Sources */,
 				57DC980C1C1325C90004B107 /* FontData.swift in Sources */,
@@ -456,6 +471,7 @@
 				579AD6021C01EEB900218D38 /* IcosahedronVertex.swift in Sources */,
 				579AD6061C01EEB900218D38 /* Renderable.swift in Sources */,
 				579AD6071C01EEB900218D38 /* TetrahedronModel.swift in Sources */,
+				5756BE7E1C5908AB007F163B /* CanvasShaderProgram.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
