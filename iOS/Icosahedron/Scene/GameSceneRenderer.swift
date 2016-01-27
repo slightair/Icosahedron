@@ -299,8 +299,6 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         modelShaderProgram.normalMatrix = backgroundNormalMatrix
 
         glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
-
-        modelShaderProgram.projectionMatrix = backgroundProjectionMatrix
         drawPolygons(modelProducer.polygons())
     }
 

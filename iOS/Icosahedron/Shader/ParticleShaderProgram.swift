@@ -28,12 +28,6 @@ class ParticleShaderProgram: ShaderProgram {
         }
     }
 
-    var texture: GLint = 0 {
-        didSet {
-            glUniform1i(uniforms[Uniform.Texture.rawValue], texture)
-        }
-    }
-
     init() {
         super.init(shaderName: "ParticleShader")
 
