@@ -336,7 +336,12 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         glUseProgram(canvasShaderProgram.programID)
 
+        var time = CFAbsoluteTimeGetCurrent()
+        time -= floor(time)
+
         glBindTexture(GLenum(GL_TEXTURE_2D), modelColorTexture)
+        canvasShaderProgram.noiseFactor = 0.1
+        canvasShaderProgram.time = GLfloat(time)
 
         drawPolygons([canvasModel])
     }
