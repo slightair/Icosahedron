@@ -1,12 +1,10 @@
-#version 300 es
+attribute vec4 position;
+attribute vec3 normal;
+attribute vec4 color;
+attribute vec2 texCoord;
 
-layout (location = 0) in vec4 position;
-layout (location = 1) in vec3 normal;
-layout (location = 2) in vec4 color;
-layout (location = 3) in vec2 texCoord;
-
-out lowp vec4 vColor;
-out lowp vec2 vTexCoord;
+varying vec4 vColor;
+varying vec2 vTexCoord;
 
 uniform mat4 uProjectionMatrix;
 uniform mat4 uWorldMatrix;

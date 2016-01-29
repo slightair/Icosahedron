@@ -1,13 +1,10 @@
-#version 300 es
-
 precision mediump float;
 
-in lowp vec4 vColor;
-in lowp vec2 vTexCoord;
-
-out mediump vec4 outputColor;
+varying vec4 vColor;
+varying vec2 vTexCoord;
 
 uniform sampler2D uTexture;
+uniform vec2 uBlockSize;
 uniform mediump float uNoiseFactor;
 uniform mediump float uTime;
 
@@ -18,18 +15,13 @@ float rand(vec2 co)
 
 void main()
 {
-    vec2 size = vec2(textureSize(uTexture, 0));
-    vec2 blockNum = vec2(32.0, 128.0);
-    vec2 blockSize = 1.0 / blockNum * size;
-    vec2 blockCoord = floor(gl_FragCoord.xy / blockSize) * blockSize;
-    vec2 distortion = blockSize / size;
-
+    vec2 blockCoord = floor(gl_FragCoord.xy / uBlockSize) * uBlockSize;
     float noise = rand(blockCoord + uTime);
 
     vec2 texCoord = vTexCoord;
-    if (noise < uNoiseFactor) {
-        texCoord = vTexCoord + mix(distortion, -distortion, noise / uNoiseFactor);
+    if (noise < 0.0) {
+        texCoord = vTexCoord + mix(uBlockSize, -uBlockSize, noise / uNoiseFactor);
     }
 
-    outputColor = vColor * texture(uTexture, texCoord);
+    gl_FragColor = vColor * texture2D(uTexture, texCoord);
 }

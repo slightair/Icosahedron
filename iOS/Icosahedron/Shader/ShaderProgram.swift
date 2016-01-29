@@ -5,11 +5,15 @@ class ShaderProgram {
     var uniforms: [GLint] = []
 
     init(shaderName: String) {
-        ShaderProgram.loadShaders(&programID, path: shaderName)
+        self.dynamicType.loadShaders(&programID, path: shaderName)
     }
 
     deinit {
         glDeleteProgram(programID)
+    }
+
+    class func bindAttribLocation(program: GLuint) {
+        fatalError("override required")
     }
 
     class func loadShaders(inout program: GLuint, path: String) -> Bool {
@@ -18,14 +22,16 @@ class ShaderProgram {
         var vertexShader: GLuint = 0
         let vertexShaderPathName = NSBundle.mainBundle().pathForResource(path, ofType: "vsh")!
         if !compileShader(&vertexShader, type: GLenum(GL_VERTEX_SHADER), file: vertexShaderPathName) {
-            fatalError("Failed to compile vertex shader")
+            fatalError("Failed to compile vertex shader (\(path).vsh)")
         }
 
         var fragmentShader: GLuint = 0
         let fragmentShaderPathName = NSBundle.mainBundle().pathForResource(path, ofType: "fsh")!
         if !compileShader(&fragmentShader, type: GLenum(GL_FRAGMENT_SHADER), file: fragmentShaderPathName) {
-            fatalError("Failed to compile fragment shader")
+            fatalError("Failed to compile fragment shader (\(path).fsh)")
         }
+
+        bindAttribLocation(program)
 
         glAttachShader(program, vertexShader)
         glAttachShader(program, fragmentShader)

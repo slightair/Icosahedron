@@ -187,8 +187,8 @@
 				572FCA571C47E31E00778913 /* ParticleShader.fsh */,
 				572FCA551C47E31300778913 /* ParticleShader.vsh */,
 				5756BE7D1C5908AB007F163B /* CanvasShaderProgram.swift */,
-				5756BE7F1C5908C8007F163B /* CanvasShader.vsh */,
 				5756BE811C5908D4007F163B /* CanvasShader.fsh */,
+				5756BE7F1C5908C8007F163B /* CanvasShader.vsh */,
 			);
 			path = Shader;
 			sourceTree = "<group>";

@@ -1,13 +1,11 @@
-#version 300 es
+precision mediump float;
 
-in lowp vec4 vColor;
-
-out mediump vec4 outputColor;
+varying vec4 vColor;
 
 uniform sampler2D uTexture;
 
 void main()
 {
-    mediump vec4 textureColor = texture(uTexture, gl_PointCoord);
-    outputColor = textureColor * vColor;
+    vec4 textureColor = texture2D(uTexture, gl_PointCoord);
+    gl_FragColor = textureColor * vColor;
 }

@@ -124,7 +124,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         glGenTextures(1, &modelColorTexture)
         glBindTexture(GLenum(GL_TEXTURE_2D), modelColorTexture)
-        glTexImage2D(GLenum(GL_TEXTURE_2D), 0, GLint(GL_RGBA8), width, height, 0, GLenum(GL_RGBA), GLenum(GL_UNSIGNED_BYTE), nil)
+        glTexImage2D(GLenum(GL_TEXTURE_2D), 0, GLint(GL_RGBA), width, height, 0, GLenum(GL_RGBA), GLenum(GL_UNSIGNED_BYTE), nil)
         glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MAG_FILTER), GLint(GL_LINEAR))
         glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MIN_FILTER), GLint(GL_LINEAR))
         glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GLint(GL_CLAMP_TO_EDGE))
@@ -339,7 +339,13 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         var time = CFAbsoluteTimeGetCurrent()
         time -= floor(time)
 
+        let width = Float(CGRectGetHeight(UIScreen.mainScreen().nativeBounds)) // long side
+        let height = Float(CGRectGetWidth(UIScreen.mainScreen().nativeBounds)) // short side
+        let numBlockHorizontal: Float = 32
+        let numBlockVertical: Float = 128
+
         glBindTexture(GLenum(GL_TEXTURE_2D), modelColorTexture)
+        canvasShaderProgram.blockSize = GLKVector2Make(width / numBlockHorizontal, height / numBlockVertical)
         canvasShaderProgram.noiseFactor = 0.1
         canvasShaderProgram.time = GLfloat(time)
 

@@ -28,6 +28,11 @@ class ParticleShaderProgram: ShaderProgram {
         }
     }
 
+    override class func bindAttribLocation(program: GLuint) {
+        glBindAttribLocation(program, GLuint(GLKVertexAttrib.Position.rawValue), "position")
+        glBindAttribLocation(program, GLuint(GLKVertexAttrib.Color.rawValue), "color")
+    }
+
     init() {
         super.init(shaderName: "ParticleShader")
 

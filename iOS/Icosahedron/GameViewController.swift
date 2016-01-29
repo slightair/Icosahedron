@@ -10,7 +10,7 @@ class GameViewController: GLKViewController, GameSceneRendererDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let context = EAGLContext(API: .OpenGLES3)
+        let context = EAGLContext(API: .OpenGLES2)
         renderer = GameSceneRenderer(context: context, world: world)
         renderer.delegate = self
 

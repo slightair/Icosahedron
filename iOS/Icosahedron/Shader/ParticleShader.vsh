@@ -1,9 +1,7 @@
-#version 300 es
+attribute vec4 position;
+attribute vec4 color;
 
-layout (location = 0) in vec4 position;
-layout (location = 2) in vec4 color;
-
-out lowp vec4 vColor;
+varying vec4 vColor;
 
 uniform mat4 uProjectionMatrix;
 uniform mat4 uWorldMatrix;
