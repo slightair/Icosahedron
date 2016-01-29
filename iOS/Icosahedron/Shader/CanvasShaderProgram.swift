@@ -4,12 +4,13 @@ import OpenGLES
 class CanvasShaderProgram: ShaderProgram {
     enum Uniform: Int {
         case Texture
+        case TextureSize
         case BlockSize
         case NoiseFactor
         case Time
 
         static var count: Int {
-            return [Texture, BlockSize, NoiseFactor, Time].count
+            return [Texture, TextureSize, BlockSize, NoiseFactor, Time].count
         }
     }
 
@@ -17,6 +18,14 @@ class CanvasShaderProgram: ShaderProgram {
         didSet {
             withUnsafePointer(&blockSize, {
                 glUniform2fv(uniforms[Uniform.BlockSize.rawValue], 1, UnsafePointer($0))
+            })
+        }
+    }
+
+    var textureSize: GLKVector2 = GLKVector2Make(1, 1) {
+        didSet {
+            withUnsafePointer(&textureSize, {
+                glUniform2fv(uniforms[Uniform.TextureSize.rawValue], 1, UnsafePointer($0))
             })
         }
     }
@@ -44,6 +53,7 @@ class CanvasShaderProgram: ShaderProgram {
 
         uniforms = [GLint](count: Uniform.count, repeatedValue: 0)
         uniforms[Uniform.Texture.rawValue] = glGetUniformLocation(programID, "uTexture")
+        uniforms[Uniform.TextureSize.rawValue] = glGetUniformLocation(programID, "uTextureSize")
         uniforms[Uniform.BlockSize.rawValue] = glGetUniformLocation(programID, "uBlockSize")
         uniforms[Uniform.NoiseFactor.rawValue] = glGetUniformLocation(programID, "uNoiseFactor")
         uniforms[Uniform.Time.rawValue] = glGetUniformLocation(programID, "uTime")

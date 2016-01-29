@@ -1,26 +1,34 @@
-precision mediump float;
+precision highp float;
 
 varying vec4 vColor;
 varying vec2 vTexCoord;
 
 uniform sampler2D uTexture;
+uniform vec2 uTextureSize;
 uniform vec2 uBlockSize;
 uniform mediump float uNoiseFactor;
 uniform mediump float uTime;
 
 float rand(vec2 co)
 {
-    return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
+    float a = fract(dot(co.xy, vec2(2.067390879775102, 12.451168662908249))) - 0.5;
+    float s = a * (6.182785114200511 + a*a * (-38.026512460676566 + a*a * 53.392573080032137));
+    float t = fract(s * 43758.5453);
+
+    return t;
 }
 
 void main()
 {
     vec2 blockCoord = floor(gl_FragCoord.xy / uBlockSize) * uBlockSize;
-    float noise = rand(blockCoord + uTime);
+    vec2 blockCoordProgress = blockCoord / uTextureSize;
+    vec2 blockSizeProgress = uBlockSize / uTextureSize;
+
+    float noise = rand(blockCoordProgress + uTime);
 
     vec2 texCoord = vTexCoord;
-    if (noise < 0.0) {
-        texCoord = vTexCoord + mix(uBlockSize, -uBlockSize, noise / uNoiseFactor);
+    if (abs(noise) < uNoiseFactor) {
+        texCoord = vTexCoord + mix(blockSizeProgress, -blockSizeProgress, abs(noise) / uNoiseFactor);
     }
 
     gl_FragColor = vColor * texture2D(uTexture, texCoord);

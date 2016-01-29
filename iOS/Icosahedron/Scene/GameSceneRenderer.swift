@@ -345,6 +345,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         let numBlockVertical: Float = 128
 
         glBindTexture(GLenum(GL_TEXTURE_2D), modelColorTexture)
+        canvasShaderProgram.textureSize = GLKVector2Make(width, height)
         canvasShaderProgram.blockSize = GLKVector2Make(width / numBlockHorizontal, height / numBlockVertical)
         canvasShaderProgram.noiseFactor = 0.1
         canvasShaderProgram.time = GLfloat(time)
