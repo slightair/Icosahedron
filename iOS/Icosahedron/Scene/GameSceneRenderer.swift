@@ -341,8 +341,8 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         let width = Float(CGRectGetHeight(UIScreen.mainScreen().nativeBounds)) // long side
         let height = Float(CGRectGetWidth(UIScreen.mainScreen().nativeBounds)) // short side
-        let numBlockHorizontal: Float = 32
-        let numBlockVertical: Float = 128
+        let numBlockHorizontal: Float = 64
+        let numBlockVertical: Float = 256
 
         glBindTexture(GLenum(GL_TEXTURE_2D), modelColorTexture)
         canvasShaderProgram.textureSize = GLKVector2Make(width, height)
