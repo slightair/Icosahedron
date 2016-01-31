@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5708F42A1C5DE50D00ECDE0E /* BackgroundShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5708F4271C5DE50D00ECDE0E /* BackgroundShader.fsh */; };
+		5708F42B1C5DE50D00ECDE0E /* BackgroundShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5708F4281C5DE50D00ECDE0E /* BackgroundShaderProgram.swift */; };
+		5708F42C1C5DE50D00ECDE0E /* BackgroundShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5708F4291C5DE50D00ECDE0E /* BackgroundShader.vsh */; };
 		571416B31C3A9C2A00CF6F7D /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571416B21C3A9C2A00CF6F7D /* Math.swift */; };
 		572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */; };
 		572FCA501C45306B00778913 /* SequenceLabelModelGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */; };
@@ -85,6 +88,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5708F4271C5DE50D00ECDE0E /* BackgroundShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BackgroundShader.fsh; sourceTree = "<group>"; };
+		5708F4281C5DE50D00ECDE0E /* BackgroundShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundShaderProgram.swift; sourceTree = "<group>"; };
+		5708F4291C5DE50D00ECDE0E /* BackgroundShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BackgroundShader.vsh; sourceTree = "<group>"; };
 		571416B21C3A9C2A00CF6F7D /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingLabelModel.swift; sourceTree = "<group>"; };
 		572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SequenceLabelModelGroup.swift; sourceTree = "<group>"; };
@@ -177,6 +183,9 @@
 			isa = PBXGroup;
 			children = (
 				57D866CA1BF2ED5E0034DEDE /* ShaderProgram.swift */,
+				5708F4271C5DE50D00ECDE0E /* BackgroundShader.fsh */,
+				5708F4281C5DE50D00ECDE0E /* BackgroundShaderProgram.swift */,
+				5708F4291C5DE50D00ECDE0E /* BackgroundShader.vsh */,
 				57D866CC1BF2EF0C0034DEDE /* ModelShaderProgram.swift */,
 				573132331BDCBF5200824EA5 /* ModelShader.fsh */,
 				573132341BDCBF5200824EA5 /* ModelShader.vsh */,
@@ -384,6 +393,8 @@
 				579013AE1BC1083400ADAE3E /* Assets.xcassets in Resources */,
 				579013B11BC1083400ADAE3E /* LaunchScreen.storyboard in Resources */,
 				572FCA561C47E31300778913 /* ParticleShader.vsh in Resources */,
+				5708F42A1C5DE50D00ECDE0E /* BackgroundShader.fsh in Resources */,
+				5708F42C1C5DE50D00ECDE0E /* BackgroundShader.vsh in Resources */,
 				5778A54A1C25384F0019FF99 /* UIShader.fsh in Resources */,
 				5756BE801C5908C8007F163B /* CanvasShader.vsh in Resources */,
 				5778A54C1C25385B0019FF99 /* UIShader.vsh in Resources */,
@@ -435,6 +446,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5771700D1C4D1886008C35A2 /* SphereModel.swift in Sources */,
+				5708F42B1C5DE50D00ECDE0E /* BackgroundShaderProgram.swift in Sources */,
 				572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */,
 				572FCA611C4A59D400778913 /* Particle.swift in Sources */,
 				572FCA5F1C4A442700778913 /* ParticleVertex.swift in Sources */,

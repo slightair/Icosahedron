@@ -16,6 +16,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
     var modelColorTexture: GLuint = 0
     var modelDepthRenderBuffer: GLuint = 0
 
+    var backgroundShaderProgram: BackgroundShaderProgram!
     var modelShaderProgram: ModelShaderProgram!
     var particleShaderProgram: ParticleShaderProgram!
     var canvasShaderProgram: CanvasShaderProgram!
@@ -82,6 +83,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
     func setUpGL() {
         EAGLContext.setCurrentContext(context)
 
+        backgroundShaderProgram = BackgroundShaderProgram()
         modelShaderProgram = ModelShaderProgram()
         particleShaderProgram = ParticleShaderProgram()
         canvasShaderProgram = CanvasShaderProgram()
@@ -293,12 +295,17 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glEnable(GLenum(GL_DEPTH_TEST))
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
 
-        glUseProgram(modelShaderProgram.programID)
-        modelShaderProgram.projectionMatrix = backgroundProjectionMatrix
-        modelShaderProgram.worldMatrix = backgroundWorldMatrix
-        modelShaderProgram.normalMatrix = backgroundNormalMatrix
+        glUseProgram(backgroundShaderProgram.programID)
+        backgroundShaderProgram.projectionMatrix = backgroundProjectionMatrix
+        backgroundShaderProgram.worldMatrix = backgroundWorldMatrix
+        backgroundShaderProgram.normalMatrix = backgroundNormalMatrix
+
+        var time = CFAbsoluteTimeGetCurrent()
+        time -= floor(time)
 
         glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
+        backgroundShaderProgram.time = GLfloat(0)
+
         drawPolygons(modelProducer.polygons())
     }
 
