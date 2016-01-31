@@ -30,6 +30,9 @@ class GameSceneModelProducer {
     var icosahedronPointParticleEmitters: [Icosahedron.Point: ParticleEmitter] = [:]
 
     var animationLoopValue: Float = 0.0
+    var noiseFactor: Float = 0.0
+    var effectColor: GLKVector4 = GLKVector4Make(1, 1, 1, 1)
+    var effectColorFactor: Float = 0.0
 
     let disposeBag = DisposeBag()
 
@@ -156,7 +159,13 @@ class GameSceneModelProducer {
                 if combo > 1 {
                     let comboText = String(format: "Combo \(combo)")
                     self.comboLabelModelGroup.appendNewLabel(comboText, color: color.modelColor())
+                } else {
+                    self.noiseFactor = 0.3
                 }
+
+                self.effectColor = color.modelColor()
+                self.effectColorFactor = 0.5
+
             case .ExtendTime(let time):
                 let timeText = String(format: "+%.1fsec", arguments: [time])
                 self.extendTimeLabelModelGroup.appendNewLabel(timeText, color: UIColor.flatWhiteColor().glColor)
@@ -265,5 +274,13 @@ class GameSceneModelProducer {
 
         let markerScale = Float(1.0 + 0.2 * cos(2 * M_PI * Double(animationLoopValue)))
         markerModel.scale = GLKVector3Make(markerScale, 1.0, markerScale)
+
+        if noiseFactor > 0.0 {
+            noiseFactor = max(0.0, noiseFactor - Float(timeSinceLastUpdate))
+        }
+
+        if effectColorFactor > 0.0 {
+            effectColorFactor = max(0.0, effectColorFactor - Float(timeSinceLastUpdate))
+        }
     }
 }

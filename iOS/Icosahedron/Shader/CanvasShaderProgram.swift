@@ -7,10 +7,12 @@ class CanvasShaderProgram: ShaderProgram {
         case TextureSize
         case BlockSize
         case NoiseFactor
+        case EffectColor
+        case EffectColorFactor
         case Time
 
         static var count: Int {
-            return [Texture, TextureSize, BlockSize, NoiseFactor, Time].count
+            return [Texture, TextureSize, BlockSize, NoiseFactor, EffectColor, EffectColorFactor, Time].count
         }
     }
 
@@ -36,6 +38,20 @@ class CanvasShaderProgram: ShaderProgram {
         }
     }
 
+    var effectColor: GLKVector4 = GLKVector4Make(1, 1, 1, 1) {
+        didSet {
+            withUnsafePointer(&effectColor, {
+                glUniform4fv(uniforms[Uniform.EffectColor.rawValue], 1, UnsafePointer($0))
+            })
+        }
+    }
+
+    var effectColorFactor: GLfloat = 0.0 {
+        didSet {
+            glUniform1f(uniforms[Uniform.EffectColorFactor.rawValue], effectColorFactor)
+        }
+    }
+
     var time: GLfloat = 0.0 {
         didSet {
             glUniform1f(uniforms[Uniform.Time.rawValue], time)
@@ -56,6 +72,8 @@ class CanvasShaderProgram: ShaderProgram {
         uniforms[Uniform.TextureSize.rawValue] = glGetUniformLocation(programID, "uTextureSize")
         uniforms[Uniform.BlockSize.rawValue] = glGetUniformLocation(programID, "uBlockSize")
         uniforms[Uniform.NoiseFactor.rawValue] = glGetUniformLocation(programID, "uNoiseFactor")
+        uniforms[Uniform.EffectColor.rawValue] = glGetUniformLocation(programID, "uEffectColor")
+        uniforms[Uniform.EffectColorFactor.rawValue] = glGetUniformLocation(programID, "uEffectColorFactor")
         uniforms[Uniform.Time.rawValue] = glGetUniformLocation(programID, "uTime")
     }
 }

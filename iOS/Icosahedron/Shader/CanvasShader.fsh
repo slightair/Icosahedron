@@ -6,8 +6,10 @@ varying vec2 vTexCoord;
 uniform sampler2D uTexture;
 uniform vec2 uTextureSize;
 uniform vec2 uBlockSize;
-uniform mediump float uNoiseFactor;
-uniform mediump float uTime;
+uniform float uNoiseFactor;
+uniform vec4 uEffectColor;
+uniform float uEffectColorFactor;
+uniform float uTime;
 
 float rand(vec2 co)
 {
@@ -26,10 +28,15 @@ void main()
 
     float noise = rand(blockCoordProgress + uTime);
 
+    vec4 effectColor = vec4(0.0);
+    if (uEffectColorFactor > 0.0) {
+        effectColor = uEffectColor * uEffectColorFactor * 0.5;
+    }
+
     vec2 texCoord = vTexCoord;
     if (abs(noise) < uNoiseFactor) {
         texCoord = vTexCoord + mix(blockSizeProgress, -blockSizeProgress, abs(noise) / uNoiseFactor);
     }
 
-    gl_FragColor = vColor * texture2D(uTexture, texCoord);
+    gl_FragColor = vColor * texture2D(uTexture, texCoord) + effectColor;
 }

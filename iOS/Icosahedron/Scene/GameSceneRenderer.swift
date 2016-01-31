@@ -347,7 +347,9 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glBindTexture(GLenum(GL_TEXTURE_2D), modelColorTexture)
         canvasShaderProgram.textureSize = GLKVector2Make(width, height)
         canvasShaderProgram.blockSize = GLKVector2Make(width / numBlockHorizontal, height / numBlockVertical)
-        canvasShaderProgram.noiseFactor = 0.1
+        canvasShaderProgram.noiseFactor = modelProducer.noiseFactor
+        canvasShaderProgram.effectColor = modelProducer.effectColor
+        canvasShaderProgram.effectColorFactor = modelProducer.effectColorFactor
         canvasShaderProgram.time = GLfloat(time)
 
         drawPolygons([canvasModel])
