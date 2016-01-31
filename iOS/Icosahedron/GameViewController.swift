@@ -20,11 +20,15 @@ class GameViewController: GLKViewController, GameSceneRendererDelegate {
         glkView.drawableColorFormat = .SRGBA8888
         glkView.drawableDepthFormat = .Format24
 
-        let gestureRecognizer = UIPanGestureRecognizer()
-        gestureRecognizer.addTarget(self, action: "panAction:")
-        gestureRecognizer.maximumNumberOfTouches = 1
+        let panGestureRecognizer = UIPanGestureRecognizer()
+        panGestureRecognizer.addTarget(self, action: "panAction:")
+        panGestureRecognizer.maximumNumberOfTouches = 1
 
-        glkView.addGestureRecognizer(gestureRecognizer)
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        tapGestureRecognizer.addTarget(self, action: "tapAction:")
+
+        glkView.addGestureRecognizer(panGestureRecognizer)
+        glkView.addGestureRecognizer(tapGestureRecognizer)
     }
 
     func update() {
@@ -46,5 +50,15 @@ class GameViewController: GLKViewController, GameSceneRendererDelegate {
         default:
             break
         }
+    }
+
+    func tapAction(gestureRecognizer: UITapGestureRecognizer) {
+        var location = gestureRecognizer.locationInView(view)
+        location.x -= CGRectGetMidX(view.bounds)
+        location.y -= CGRectGetMidY(view.bounds)
+        let normalizedLocation = CGPoint(x: location.x * 2 / CGRectGetWidth(view.bounds),
+            y: -location.y * 2 / CGRectGetHeight(view.bounds))
+
+        renderer.rotateModelWithTappedLocation(normalizedLocation)
     }
 }
