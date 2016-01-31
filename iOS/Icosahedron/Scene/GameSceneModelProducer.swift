@@ -132,9 +132,9 @@ class GameSceneModelProducer {
         world.greenProgress.bindTo(greenGaugeModel.rx_progress).addDisposableTo(disposeBag)
         world.blueProgress.bindTo(blueGaugeModel.rx_progress).addDisposableTo(disposeBag)
 
-//        world.redLevel.asObservable().bindTo(redLevelLabelModel.rx_level).addDisposableTo(disposeBag)
-//        world.greenLevel.asObservable().bindTo(greenLevelLabelModel.rx_level).addDisposableTo(disposeBag)
-//        world.blueLevel.asObservable().bindTo(blueLevelLabelModel.rx_level).addDisposableTo(disposeBag)
+        world.redLevel.asObservable().bindTo(redLevelLabelModel.rx_level).addDisposableTo(disposeBag)
+        world.greenLevel.asObservable().bindTo(greenLevelLabelModel.rx_level).addDisposableTo(disposeBag)
+        world.blueLevel.asObservable().bindTo(blueLevelLabelModel.rx_level).addDisposableTo(disposeBag)
 
         world.turn.asObservable().map { "Turn \($0)" }.bindTo(turnLabelModel.rx_text).addDisposableTo(disposeBag)
         world.time.asObservable().map { String(format: "Time %.3f", arguments: [$0]) }.bindTo(timeLabelModel.rx_text).addDisposableTo(disposeBag)
@@ -174,28 +174,28 @@ class GameSceneModelProducer {
 
         // for Debug
 
-        let debugLevelText: (Int, Int64, Int64) -> String = { (level, count, nextExp) in
-            return "Lv \(level)(\(count)/\(nextExp))"
-        }
-
-        Observable.combineLatest(world.redLevel.asObservable(),
-            world.redCount.asObservable(),
-            world.redNextExp.asObservable(),
-            resultSelector: debugLevelText)
-            .bindTo(redLevelLabelModel.rx_text)
-            .addDisposableTo(disposeBag)
-        Observable.combineLatest(world.greenLevel.asObservable(),
-            world.greenCount.asObservable(),
-            world.greenNextExp.asObservable(),
-            resultSelector: debugLevelText)
-            .bindTo(greenLevelLabelModel.rx_text)
-            .addDisposableTo(disposeBag)
-        Observable.combineLatest(world.blueLevel.asObservable(),
-            world.blueCount.asObservable(),
-            world.blueNextExp.asObservable(),
-            resultSelector: debugLevelText)
-            .bindTo(blueLevelLabelModel.rx_text)
-            .addDisposableTo(disposeBag)
+//        let debugLevelText: (Int, Int64, Int64) -> String = { (level, count, nextExp) in
+//            return "Lv \(level)(\(count)/\(nextExp))"
+//        }
+//
+//        Observable.combineLatest(world.redLevel.asObservable(),
+//            world.redCount.asObservable(),
+//            world.redNextExp.asObservable(),
+//            resultSelector: debugLevelText)
+//            .bindTo(redLevelLabelModel.rx_text)
+//            .addDisposableTo(disposeBag)
+//        Observable.combineLatest(world.greenLevel.asObservable(),
+//            world.greenCount.asObservable(),
+//            world.greenNextExp.asObservable(),
+//            resultSelector: debugLevelText)
+//            .bindTo(greenLevelLabelModel.rx_text)
+//            .addDisposableTo(disposeBag)
+//        Observable.combineLatest(world.blueLevel.asObservable(),
+//            world.blueCount.asObservable(),
+//            world.blueNextExp.asObservable(),
+//            resultSelector: debugLevelText)
+//            .bindTo(blueLevelLabelModel.rx_text)
+//            .addDisposableTo(disposeBag)
     }
 
     func polygons() -> [RenderablePolygon] {
