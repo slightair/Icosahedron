@@ -389,7 +389,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         ]
         glDrawBuffers(1, buffers)
 
-        glClearColor(0.0, 0.0, 0.0, 1.0)
+        glClearColor(1.0, 1.0, 1.0, 1.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT) | GLbitfield(GL_DEPTH_BUFFER_BIT))
 
         glEnable(GLenum(GL_BLEND))
@@ -401,7 +401,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), GLuint(defaultFrameBufferObject))
 
-        glClearColor(0.0, 0.0, 0.0, 1.0)
+        glClearColor(1.0, 1.0, 1.0, 1.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT))
 
         renderCanvas()
