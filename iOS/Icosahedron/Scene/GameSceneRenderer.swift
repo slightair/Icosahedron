@@ -304,7 +304,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         time -= floor(time)
 
         glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
-        backgroundShaderProgram.time = GLfloat(0)
+        backgroundShaderProgram.time = GLfloat(time)
 
         drawModels(modelProducer.backgroundModelObjects())
     }

@@ -8,59 +8,53 @@ class SphereModel: Renderable {
     let customColor: GLKVector4? = nil
 
     init() {
-//        let split = 4
-//        let scale: Float = 3
-//        let delta = M_PI / Double(split - 1)
+        let split = 32
+        let scale: Float = 3
+        let delta = M_PI / Double(split)
 
         var vertices: [ModelVertex] = []
 
-        let normal = GLKVector3Make(0, 0, -1)
-        let color = GLKVector4Make(1, 1, 1, 1)
+        let color = GLKVector4Make(0.8, 0.8, 0.8, 1)
 
-        let s: Float = 0.5
+        let texCoordA = GLKVector2Make(0, 0)
+        let texCoordB = GLKVector2Make(0, 1)
+        let texCoordC = GLKVector2Make(1, 1)
+        let texCoordD = GLKVector2Make(1, 0)
 
-        let plane = [
-            ModelVertex(position: GLKVector3Make(-s, -s, 0), normal: normal, color: color, texCoord: GLKVector2Make(0, 0)),
-            ModelVertex(position: GLKVector3Make(-s,  s, 0), normal: normal, color: color, texCoord: GLKVector2Make(0, 1)),
-            ModelVertex(position: GLKVector3Make( s,  s, 0), normal: normal, color: color, texCoord: GLKVector2Make(1, 1)),
+        for y in 0..<split {
+            for x in 0..<(split * 2) {
+                let quaternion0 = GLKQuaternionMakeWithAngleAndAxis(Float(delta) * Float(x), 1, 0, 0)
+                let quaternion1 = GLKQuaternionMakeWithAngleAndAxis(Float(delta) * Float(x + 1), 1, 0, 0)
+                let theta0 = Float(delta) * Float(y)
+                let theta1 = Float(delta) * Float(y + 1)
 
-            ModelVertex(position: GLKVector3Make(-s, -s, 0), normal: normal, color: color, texCoord: GLKVector2Make(0, 0)),
-            ModelVertex(position: GLKVector3Make( s,  s, 0), normal: normal, color: color, texCoord: GLKVector2Make(1, 1)),
-            ModelVertex(position: GLKVector3Make( s, -s, 0), normal: normal, color: color, texCoord: GLKVector2Make(1, 0)),
-        ]
+                let s = GLKQuaternionRotateVector3(quaternion0, GLKVector3Make(cos(theta0), sin(theta0), 0))
+                let t = GLKQuaternionRotateVector3(quaternion1, GLKVector3Make(cos(theta0), sin(theta0), 0))
+                let v = GLKQuaternionRotateVector3(quaternion1, GLKVector3Make(cos(theta1), sin(theta1), 0))
+                let w = GLKQuaternionRotateVector3(quaternion0, GLKVector3Make(cos(theta1), sin(theta1), 0))
 
-        vertices.appendContentsOf(plane)
+                let coordA = GLKVector3MultiplyScalar(s, scale)
+                let coordB = GLKVector3MultiplyScalar(t, scale)
+                let coordC = GLKVector3MultiplyScalar(v, scale)
+                let coordD = GLKVector3MultiplyScalar(w, scale)
 
-//        for y in 0...((split - 1) * 2) {
-//            let radian = Float(delta) * Float(y)
-//            let quaternion = GLKQuaternionMakeWithAngleAndAxis(radian, 1, 0, 0)
-//            for x in 0..<split {
-//                let theta = delta * Double(x)
-//                let localCoord = GLKVector3MultiplyScalar(GLKVector3Make(Float(cos(theta)), Float(sin(theta)), 0), scale)
-//                let coord = GLKQuaternionRotateVector3(quaternion, localCoord)
-//                let normal = GLKVector3Normalize(GLKVector3MultiplyScalar(coord, -1))
-//                let color = GLKVector4Make(1, 1, 1, 1)
-//
-//                let texCoordX: Float = x % 2 == 0 ? 0.0 : 1.0
-//                let texCoordY: Float = y % 2 == 0 ? 0.0 : 1.0
-//                let texCoord = GLKVector2Make(texCoordX, texCoordY)
-//
-//                let vertex = ModelVertex(position: coord, normal: normal, color: color, texCoord: texCoord)
-//
-//                vertices.append(vertex)
-//            }
-//        }
+                let normalABC = createFaceNormal(coordA, y: coordB, z: coordC)
+                let normalACD = createFaceNormal(coordA, y: coordC, z: coordD)
+
+                let plane = [
+                    ModelVertex(position: coordA, normal: normalABC, color: color, texCoord: texCoordA),
+                    ModelVertex(position: coordB, normal: normalABC, color: color, texCoord: texCoordB),
+                    ModelVertex(position: coordC, normal: normalABC, color: color, texCoord: texCoordC),
+
+                    ModelVertex(position: coordA, normal: normalACD, color: color, texCoord: texCoordA),
+                    ModelVertex(position: coordC, normal: normalACD, color: color, texCoord: texCoordC),
+                    ModelVertex(position: coordD, normal: normalACD, color: color, texCoord: texCoordD),
+                ]
+
+                vertices.appendContentsOf(plane)
+            }
+        }
 
         localModelVertices = vertices
-
-//        var indexes: [GLushort] = []
-//        for i in 0..<((split - 1) * 2) {
-//            for j in 0..<split {
-//                indexes.appendContentsOf([GLushort(j + i * split), GLushort(j + (i + 1) * split)])
-//            }
-//            indexes.append(GLushort((i + 2) * split - 1))
-//        }
-//
-//        modelIndexes = indexes
     }
 }
