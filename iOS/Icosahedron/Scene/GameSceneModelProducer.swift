@@ -198,7 +198,7 @@ class GameSceneModelProducer {
 //            .addDisposableTo(disposeBag)
     }
 
-    func polygons() -> [RenderablePolygon] {
+    func backgroundModelObjects() -> [Renderable] {
         return [sphereModel]
     }
 

@@ -306,7 +306,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
         backgroundShaderProgram.time = GLfloat(0)
 
-        drawPolygons(modelProducer.polygons())
+        drawModels(modelProducer.backgroundModelObjects())
     }
 
     func renderModels() {
