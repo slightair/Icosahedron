@@ -9,12 +9,13 @@ class SphereModel: Renderable {
     let r: Float = 3
 
     init() {
-        let split = 32
+        let split = 24
         let delta = M_PI / Double(split)
 
         var vertices: [ModelVertex] = []
 
-        let color = GLKVector4Make(0.8, 0.8, 0.8, 1)
+        let white: Float = 0.9
+        let color = GLKVector4Make(white, white, white, 1)
 
         let texCoordA = GLKVector2Make(0, 0)
         let texCoordB = GLKVector2Make(0, 1)
@@ -38,17 +39,19 @@ class SphereModel: Renderable {
                 let coordC = GLKVector3MultiplyScalar(v, r)
                 let coordD = GLKVector3MultiplyScalar(w, r)
 
-                let normalABC = createFaceNormal(coordA, y: coordB, z: coordC)
-                let normalACD = createFaceNormal(coordA, y: coordC, z: coordD)
+                let normalA = GLKVector3Normalize(GLKVector3MultiplyScalar(coordA, -1))
+                let normalB = GLKVector3Normalize(GLKVector3MultiplyScalar(coordB, -1))
+                let normalC = GLKVector3Normalize(GLKVector3MultiplyScalar(coordC, -1))
+                let normalD = GLKVector3Normalize(GLKVector3MultiplyScalar(coordD, -1))
 
                 let plane = [
-                    ModelVertex(position: coordA, normal: normalABC, color: color, texCoord: texCoordA),
-                    ModelVertex(position: coordB, normal: normalABC, color: color, texCoord: texCoordB),
-                    ModelVertex(position: coordC, normal: normalABC, color: color, texCoord: texCoordC),
+                    ModelVertex(position: coordA, normal: normalA, color: color, texCoord: texCoordA),
+                    ModelVertex(position: coordB, normal: normalB, color: color, texCoord: texCoordB),
+                    ModelVertex(position: coordC, normal: normalC, color: color, texCoord: texCoordC),
 
-                    ModelVertex(position: coordA, normal: normalACD, color: color, texCoord: texCoordA),
-                    ModelVertex(position: coordC, normal: normalACD, color: color, texCoord: texCoordC),
-                    ModelVertex(position: coordD, normal: normalACD, color: color, texCoord: texCoordD),
+                    ModelVertex(position: coordA, normal: normalA, color: color, texCoord: texCoordA),
+                    ModelVertex(position: coordC, normal: normalC, color: color, texCoord: texCoordC),
+                    ModelVertex(position: coordD, normal: normalD, color: color, texCoord: texCoordD),
                 ]
 
                 vertices.appendContentsOf(plane)

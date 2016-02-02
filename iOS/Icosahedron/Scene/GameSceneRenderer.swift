@@ -313,8 +313,8 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
     }
 
     func renderBackgroundParticles() {
-        glEnable(GLenum(GL_DEPTH_TEST))
-        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
+        glDisable(GLenum(GL_DEPTH_TEST))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE))
 
         glUseProgram(particleShaderProgram.programID)
         particleShaderProgram.projectionMatrix = backgroundProjectionMatrix

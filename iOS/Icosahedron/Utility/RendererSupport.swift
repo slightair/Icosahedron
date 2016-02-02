@@ -49,4 +49,14 @@ extension World.Color {
             return UIColor.flatBlueColor().glColor
         }
     }
+
+    static func randomColor() -> GLKVector4 {
+        let colors = [
+            UIColor.flatRedColor().glColor,
+            UIColor.flatGreenColor().glColor,
+            UIColor.flatBlueColor().glColor,
+        ]
+        let needle = Int(arc4random_uniform(UInt32(colors.count)))
+        return colors[needle]
+    }
 }

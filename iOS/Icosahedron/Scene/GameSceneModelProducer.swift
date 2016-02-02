@@ -129,7 +129,7 @@ class GameSceneModelProducer {
 
 
         var particles: [Particle] = []
-        for _ in 0..<300 {
+        for _ in 0..<100 {
             let r = sphereModel.r * Float(Double(arc4random_uniform(10000)) / 10000 * 0.5 + 0.3)
             let theta: Double = Double(arc4random_uniform(10000)) / 10000 * M_PI * 2
             let phi: Double = Double(arc4random_uniform(10001)) / 10000 * M_PI
@@ -139,7 +139,7 @@ class GameSceneModelProducer {
 
             let particle = Particle(permanent: true)
             particle.basePosition = GLKVector3Make(x, y, z)
-            particle.baseColor = GLKVector4Make(1, 1, 1, 1)
+            particle.baseColor = World.Color.randomColor()
             particle.basePointSize = 24
             particle.setUpVertex()
 
