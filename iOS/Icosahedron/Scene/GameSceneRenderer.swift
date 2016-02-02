@@ -261,6 +261,9 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glEnableVertexAttribArray(GLuint(GLKVertexAttrib.Color.rawValue))
         glVertexAttribPointer(GLuint(GLKVertexAttrib.Color.rawValue), 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ParticleVertex.size), BUFFER_OFFSET(sizeof(Float) * 3))
 
+        glEnableVertexAttribArray(ParticleShaderProgram.PointSizeAttribLocation)
+        glVertexAttribPointer(ParticleShaderProgram.PointSizeAttribLocation, 1, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(ParticleVertex.size), BUFFER_OFFSET(sizeof(Float) * 7))
+
         glDrawArrays(GLenum(GL_POINTS), 0, GLsizei(points.count))
 
         glBindVertexArray(0)

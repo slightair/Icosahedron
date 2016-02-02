@@ -2,6 +2,8 @@ import GLKit
 import OpenGLES
 
 class ParticleShaderProgram: ShaderProgram {
+    static let PointSizeAttribLocation: GLuint = 10
+
     enum Uniform: Int {
         case ProjectionMatrix
         case WorldMatrix
@@ -31,6 +33,7 @@ class ParticleShaderProgram: ShaderProgram {
     override class func bindAttribLocation(program: GLuint) {
         glBindAttribLocation(program, GLuint(GLKVertexAttrib.Position.rawValue), "position")
         glBindAttribLocation(program, GLuint(GLKVertexAttrib.Color.rawValue), "color")
+        glBindAttribLocation(program, ParticleShaderProgram.PointSizeAttribLocation, "pointSize")
     }
 
     init() {

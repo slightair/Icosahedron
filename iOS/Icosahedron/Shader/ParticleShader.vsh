@@ -1,5 +1,6 @@
 attribute vec4 position;
 attribute vec4 color;
+attribute float pointSize;
 
 varying vec4 vColor;
 
@@ -10,5 +11,5 @@ void main()
 {
     vColor = color;
     gl_Position = uProjectionMatrix * uWorldMatrix * position;
-    gl_PointSize = 48.0;
+    gl_PointSize = pointSize;
 }
