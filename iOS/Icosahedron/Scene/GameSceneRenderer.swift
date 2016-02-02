@@ -312,6 +312,18 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         drawModels(modelProducer.backgroundModelObjects())
     }
 
+    func renderBackgroundParticles() {
+        glEnable(GLenum(GL_DEPTH_TEST))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
+
+        glUseProgram(particleShaderProgram.programID)
+        particleShaderProgram.projectionMatrix = backgroundProjectionMatrix
+        particleShaderProgram.worldMatrix = backgroundWorldMatrix
+
+        glBindTexture(GLenum(GL_TEXTURE_2D), pointTextureInfo.name)
+        drawParticle(modelProducer.backgroundParticlePoints())
+    }
+
     func renderModels() {
         glEnable(GLenum(GL_DEPTH_TEST))
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
@@ -399,6 +411,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glActiveTexture(GLenum(GL_TEXTURE0))
 
         renderBackground()
+        renderBackgroundParticles()
         renderModels()
         renderParticles()
 

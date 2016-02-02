@@ -46,6 +46,7 @@ class BackgroundShaderProgram: ShaderProgram {
 
     override class func bindAttribLocation(program: GLuint) {
         glBindAttribLocation(program, GLuint(GLKVertexAttrib.Position.rawValue), "position")
+        glBindAttribLocation(program, GLuint(GLKVertexAttrib.Normal.rawValue), "normal")
         glBindAttribLocation(program, GLuint(GLKVertexAttrib.Color.rawValue), "color")
         glBindAttribLocation(program, GLuint(GLKVertexAttrib.TexCoord0.rawValue), "texCoord")
     }

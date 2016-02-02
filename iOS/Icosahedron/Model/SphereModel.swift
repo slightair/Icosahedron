@@ -6,10 +6,10 @@ class SphereModel: Renderable {
     var localModelVertices: [ModelVertex]
     let scale: GLKVector3 = GLKVector3Make(1.0, 1.0, 1.0)
     let customColor: GLKVector4? = nil
+    let r: Float = 3
 
     init() {
         let split = 32
-        let scale: Float = 3
         let delta = M_PI / Double(split)
 
         var vertices: [ModelVertex] = []
@@ -33,10 +33,10 @@ class SphereModel: Renderable {
                 let v = GLKQuaternionRotateVector3(quaternion1, GLKVector3Make(cos(theta1), sin(theta1), 0))
                 let w = GLKQuaternionRotateVector3(quaternion0, GLKVector3Make(cos(theta1), sin(theta1), 0))
 
-                let coordA = GLKVector3MultiplyScalar(s, scale)
-                let coordB = GLKVector3MultiplyScalar(t, scale)
-                let coordC = GLKVector3MultiplyScalar(v, scale)
-                let coordD = GLKVector3MultiplyScalar(w, scale)
+                let coordA = GLKVector3MultiplyScalar(s, r)
+                let coordB = GLKVector3MultiplyScalar(t, r)
+                let coordC = GLKVector3MultiplyScalar(v, r)
+                let coordD = GLKVector3MultiplyScalar(w, r)
 
                 let normalABC = createFaceNormal(coordA, y: coordB, z: coordC)
                 let normalACD = createFaceNormal(coordA, y: coordC, z: coordD)
