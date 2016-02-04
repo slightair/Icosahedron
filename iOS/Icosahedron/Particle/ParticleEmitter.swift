@@ -33,7 +33,7 @@ class ParticleEmitter {
     }
 
     init() {
-        particles = (0..<ParticleEmitter.ParticleCountMax).map { _ in
+        particles = (0..<self.dynamicType.ParticleCountMax).map { _ in
             return Particle()
         }
         progress = duration
@@ -44,10 +44,21 @@ class ParticleEmitter {
         emissionClock = 0.0
     }
 
+    func setUpNewParticle(particle: Particle) {
+        func randomValue() -> Float {
+            return Float(arc4random()) / Float(UINT32_MAX) * 2 - 1
+        }
+
+        particle.lifeTime = lifeTime
+        particle.speed = speed
+        particle.basePosition = position
+        particle.baseColor = color
+        particle.direction = GLKVector3Normalize(GLKVector3Make(randomValue(), randomValue(), randomValue()))
+    }
+
     func update(timeSinceLastUpdate: NSTimeInterval) {
         if active {
             progress += timeSinceLastUpdate
-
             emissionClock += timeSinceLastUpdate
 
             var newParticles: [Particle] = []
@@ -57,12 +68,8 @@ class ParticleEmitter {
                 }
 
                 let nextParticle = particles[nextParticleIndex]
-                nextParticle.lifeTime = lifeTime
-                nextParticle.speed = speed
-                nextParticle.basePosition = position
-                nextParticle.baseColor = color
+                setUpNewParticle(nextParticle)
                 nextParticle.start()
-
                 newParticles.append(nextParticle)
 
                 nextParticleIndex++

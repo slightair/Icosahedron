@@ -13,29 +13,18 @@ class Particle {
         return lifeTime > time
     }
     var changeSize = false
-
-    init(permanent: Bool = false) {
-        time = permanent ? -1.0 : 0.0
-    }
+    var isPermanent = false
 
     func start() {
-        func randomValue() -> Float {
-            return Float(arc4random()) / Float(UINT32_MAX) * 2 - 1
-        }
+        time = isPermanent ? -1.0 : 0.0
 
-        time = 0.0
-        direction = GLKVector3Normalize(GLKVector3Make(randomValue(), randomValue(), randomValue()))
-        setUpVertex()
-    }
-
-    func setUpVertex() {
         vertex.position = basePosition
         vertex.color = baseColor
         vertex.pointSize = basePointSize
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval) {
-        if time < 0 {
+        if isPermanent {
             return
         }
 
