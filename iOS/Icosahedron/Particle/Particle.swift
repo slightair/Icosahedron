@@ -23,6 +23,7 @@ class Particle {
             return Float(arc4random()) / Float(UINT32_MAX) * 2 - 1
         }
 
+        time = 0.0
         direction = GLKVector3Normalize(GLKVector3Make(randomValue(), randomValue(), randomValue()))
         setUpVertex()
     }

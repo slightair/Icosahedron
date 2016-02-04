@@ -28,7 +28,6 @@ class GameSceneModelProducer {
     let comboLabelModelGroup = SequenceLabelModelGroup()
 
     var icosahedronPointParticleEmitters: [Icosahedron.Point: ParticleEmitter] = [:]
-    var backgroundParticles: [Particle] = []
 
     var animationLoopValue: Float = 0.0
     var noiseFactor: Float = 0.0
@@ -119,33 +118,13 @@ class GameSceneModelProducer {
     func setUpPoints() {
         for point in Icosahedron.Point.values {
             let particleEmitter = ParticleEmitter()
-            particleEmitter.position = self.icosahedronModel.coordinateOfPoint(point)
+            particleEmitter.position = icosahedronModel.coordinateOfPoint(point)
             particleEmitter.emissionInterval = 0.005
             particleEmitter.duration = 0.1
             particleEmitter.speed = 0.1
 
             icosahedronPointParticleEmitters[point] = particleEmitter
         }
-
-
-        var particles: [Particle] = []
-        for _ in 0..<100 {
-            let r = sphereModel.r * Float(Double(arc4random_uniform(10000)) / 10000 * 0.5 + 0.3)
-            let theta: Double = Double(arc4random_uniform(10000)) / 10000 * M_PI * 2
-            let phi: Double = Double(arc4random_uniform(10001)) / 10000 * M_PI
-            let x = r * Float(sin(phi)) * Float(cos(theta))
-            let y = r * Float(sin(phi)) * Float(sin(theta))
-            let z = r * Float(cos(phi))
-
-            let particle = Particle(permanent: true)
-            particle.basePosition = GLKVector3Make(x, y, z)
-            particle.baseColor = World.Color.randomColor()
-            particle.basePointSize = 24
-            particle.setUpVertex()
-
-            particles.append(particle)
-        }
-        backgroundParticles = particles
     }
 
     func setUpSubscriptions() {
@@ -224,7 +203,7 @@ class GameSceneModelProducer {
     }
 
     func backgroundParticlePoints() -> [ParticleVertex] {
-        return backgroundParticles.map { $0.vertex }
+        return []
     }
 
     func modelObjects() -> [Renderable] {
