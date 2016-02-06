@@ -20,6 +20,7 @@ class ParticleEmitter {
     var colorFunction: (Void -> GLKVector4) = { GLKVector4Make(1, 1, 1, 1) }
     var pointSizeFunction: (Void -> Float) = { 48 }
     var changeSize = false
+    var changeAlpha = true
 
     let particles: [Particle]
     var emissionClock: NSTimeInterval = 0
@@ -55,11 +56,12 @@ class ParticleEmitter {
     func setUpNewParticle(particle: Particle) {
         particle.lifeTime = lifeTimeFunction()
         particle.speed = speedFunction()
+        particle.direction = directionFunction()
         particle.basePosition = positionFunction()
         particle.baseColor = colorFunction()
         particle.basePointSize = pointSizeFunction()
         particle.changeSize = changeSize
-        particle.direction = directionFunction()
+        particle.changeAlpha = changeAlpha
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval) {

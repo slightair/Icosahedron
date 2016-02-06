@@ -13,6 +13,7 @@ class Particle {
         return lifeTime > time
     }
     var changeSize = false
+    var changeAlpha = false
     var isPermanent = false
 
     func start() {
@@ -30,7 +31,9 @@ class Particle {
 
         time += timeSinceLastUpdate
         vertex.position = GLKVector3Add(basePosition, GLKVector3MultiplyScalar(direction, Float(time * speed)))
-        vertex.color = GLKVector4Subtract(baseColor, GLKVector4Make(0, 0, 0, Float(time / lifeTime)))
+        if changeAlpha {
+            vertex.color = GLKVector4Subtract(baseColor, GLKVector4Make(0, 0, 0, Float(time / lifeTime)))
+        }
         if changeSize {
             vertex.pointSize = max(0, basePointSize * Float(1 - time / lifeTime))
         }

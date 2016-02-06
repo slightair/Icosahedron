@@ -127,13 +127,18 @@ class GameSceneModelProducer {
             icosahedronPointParticleEmitters[point] = particleEmitter
         }
 
-        sphereParticleEmitter.positionFunction = { GLKVector3Make(0, 0, 0) }
-        sphereParticleEmitter.emissionInterval = 0.01
         sphereParticleEmitter.duration = DBL_MAX
-        sphereParticleEmitter.lifeTimeFunction = { 10.0 }
-        sphereParticleEmitter.speedFunction = { drand48() }
-        sphereParticleEmitter.colorFunction = { UIColor.randomFlatColor().glColor }
-        sphereParticleEmitter.changeSize = true
+        sphereParticleEmitter.emissionInterval = 0.02
+        sphereParticleEmitter.lifeTimeFunction = { Double(self.sphereModel.r * 2) }
+        sphereParticleEmitter.speedFunction = { drand48() * 3.0 + 1.0 }
+        sphereParticleEmitter.directionFunction = { GLKVector3Make(1, 0, 0) }
+        sphereParticleEmitter.positionFunction = {
+            let r = drand48() * 0.9
+            let theta = drand48() * 2 * M_PI
+            return GLKVector3Make(-Float(self.sphereModel.r), Float(r * cos(theta)), Float(r * sin(theta)))
+        }
+        sphereParticleEmitter.colorFunction = { World.Color.randomColor() }
+        sphereParticleEmitter.pointSizeFunction = { Float(drand48() * 16 + 8.0) }
         sphereParticleEmitter.emit()
     }
 
