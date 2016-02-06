@@ -10,6 +10,12 @@ class ParticleEmitter {
     var emissionInterval = 0.05
     var lifeTimeFunction: (Void -> Double) = { 1.0 }
     var speedFunction: (Void -> Double) = { 0.03 }
+    var directionFunction: (Void -> GLKVector3) = {
+        func randomValue() -> Float {
+            return Float(drand48() * 2 - 1)
+        }
+        return GLKVector3Normalize(GLKVector3Make(randomValue(), randomValue(), randomValue()))
+    }
     var positionFunction: (Void -> GLKVector3) = { GLKVector3Make(0, 0, 0) }
     var colorFunction: (Void -> GLKVector4) = { GLKVector4Make(1, 1, 1, 1) }
     var pointSizeFunction: (Void -> Float) = { 48 }
@@ -47,17 +53,13 @@ class ParticleEmitter {
     }
 
     func setUpNewParticle(particle: Particle) {
-        func randomValue() -> Float {
-            return Float(arc4random()) / Float(UINT32_MAX) * 2 - 1
-        }
-
         particle.lifeTime = lifeTimeFunction()
         particle.speed = speedFunction()
         particle.basePosition = positionFunction()
         particle.baseColor = colorFunction()
         particle.basePointSize = pointSizeFunction()
         particle.changeSize = changeSize
-        particle.direction = GLKVector3Normalize(GLKVector3Make(randomValue(), randomValue(), randomValue()))
+        particle.direction = directionFunction()
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval) {
