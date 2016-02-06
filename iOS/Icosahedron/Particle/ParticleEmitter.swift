@@ -7,11 +7,13 @@ class ParticleEmitter {
             progress = duration
         }
     }
-    var lifeTime = 1.0
     var emissionInterval = 0.05
-    var speed = 0.03
-    var position = GLKVector3Make(0, 0, 0)
-    var color = GLKVector4Make(1, 1, 1, 1)
+    var lifeTimeFunction: (Void -> Double) = { 1.0 }
+    var speedFunction: (Void -> Double) = { 0.03 }
+    var positionFunction: (Void -> GLKVector3) = { GLKVector3Make(0, 0, 0) }
+    var colorFunction: (Void -> GLKVector4) = { GLKVector4Make(1, 1, 1, 1) }
+    var pointSizeFunction: (Void -> Float) = { 48 }
+    var changeSize = false
 
     let particles: [Particle]
     var emissionClock: NSTimeInterval = 0
@@ -28,7 +30,7 @@ class ParticleEmitter {
         return progress < duration
     }
 
-    var activeParticle: [Particle] {
+    var activeParticles: [Particle] {
         return particles.filter { $0.isActive }
     }
 
@@ -49,10 +51,12 @@ class ParticleEmitter {
             return Float(arc4random()) / Float(UINT32_MAX) * 2 - 1
         }
 
-        particle.lifeTime = lifeTime
-        particle.speed = speed
-        particle.basePosition = position
-        particle.baseColor = color
+        particle.lifeTime = lifeTimeFunction()
+        particle.speed = speedFunction()
+        particle.basePosition = positionFunction()
+        particle.baseColor = colorFunction()
+        particle.basePointSize = pointSizeFunction()
+        particle.changeSize = changeSize
         particle.direction = GLKVector3Normalize(GLKVector3Make(randomValue(), randomValue(), randomValue()))
     }
 
@@ -77,7 +81,7 @@ class ParticleEmitter {
             }
         }
 
-        for particle in activeParticle {
+        for particle in activeParticles {
             particle.update(timeSinceLastUpdate)
         }
     }

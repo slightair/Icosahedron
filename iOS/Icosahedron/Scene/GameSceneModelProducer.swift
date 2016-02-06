@@ -28,6 +28,7 @@ class GameSceneModelProducer {
     let comboLabelModelGroup = SequenceLabelModelGroup()
 
     var icosahedronPointParticleEmitters: [Icosahedron.Point: ParticleEmitter] = [:]
+    var sphereParticleEmitter = ParticleEmitter()
 
     var animationLoopValue: Float = 0.0
     var noiseFactor: Float = 0.0
@@ -118,13 +119,22 @@ class GameSceneModelProducer {
     func setUpPoints() {
         for point in Icosahedron.Point.values {
             let particleEmitter = ParticleEmitter()
-            particleEmitter.position = icosahedronModel.coordinateOfPoint(point)
             particleEmitter.emissionInterval = 0.005
             particleEmitter.duration = 0.1
-            particleEmitter.speed = 0.1
+            particleEmitter.positionFunction = { self.icosahedronModel.coordinateOfPoint(point) }
+            particleEmitter.speedFunction = { 0.1 }
 
             icosahedronPointParticleEmitters[point] = particleEmitter
         }
+
+        sphereParticleEmitter.positionFunction = { GLKVector3Make(0, 0, 0) }
+        sphereParticleEmitter.emissionInterval = 0.01
+        sphereParticleEmitter.duration = DBL_MAX
+        sphereParticleEmitter.lifeTimeFunction = { 10.0 }
+        sphereParticleEmitter.speedFunction = { drand48() }
+        sphereParticleEmitter.colorFunction = { UIColor.randomFlatColor().glColor }
+        sphereParticleEmitter.changeSize = true
+        sphereParticleEmitter.emit()
     }
 
     func setUpSubscriptions() {
@@ -152,7 +162,7 @@ class GameSceneModelProducer {
                 }
 
                 if let particleEmitter = self.icosahedronPointParticleEmitters[point] {
-                    particleEmitter.color = color.modelColor()
+                    particleEmitter.colorFunction = { color.modelColor() }
                     particleEmitter.emit()
                 }
 
@@ -203,7 +213,7 @@ class GameSceneModelProducer {
     }
 
     func backgroundParticlePoints() -> [ParticleVertex] {
-        return []
+        return sphereParticleEmitter.activeParticles.map { $0.vertex }
     }
 
     func modelObjects() -> [Renderable] {
@@ -256,7 +266,7 @@ class GameSceneModelProducer {
     }
 
     func particlePoints() -> [ParticleVertex] {
-        return icosahedronPointParticleEmitters.values.flatMap { $0.activeParticle.map { $0.vertex } }
+        return icosahedronPointParticleEmitters.values.flatMap { $0.activeParticles.map { $0.vertex } }
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval) {
@@ -275,6 +285,7 @@ class GameSceneModelProducer {
         for particleEmitter in icosahedronPointParticleEmitters.values {
             particleEmitter.update(timeSinceLastUpdate)
         }
+        sphereParticleEmitter.update(timeSinceLastUpdate)
 
         let markerScale = Float(1.0 + 0.2 * cos(2 * M_PI * Double(animationLoopValue)))
         markerModel.scale = GLKVector3Make(markerScale, 1.0, markerScale)
