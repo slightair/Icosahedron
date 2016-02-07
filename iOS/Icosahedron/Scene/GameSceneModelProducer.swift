@@ -28,7 +28,6 @@ class GameSceneModelProducer {
     let comboLabelModelGroup = SequenceLabelModelGroup()
 
     var icosahedronPointParticleEmitters: [Icosahedron.Point: ParticleEmitter] = [:]
-    var sphereParticleEmitter = ParticleEmitter()
 
     var animationLoopValue: Float = 0.0
     var noiseFactor: Float = 0.0
@@ -126,20 +125,6 @@ class GameSceneModelProducer {
 
             icosahedronPointParticleEmitters[point] = particleEmitter
         }
-
-        sphereParticleEmitter.duration = DBL_MAX
-        sphereParticleEmitter.emissionInterval = 0.02
-        sphereParticleEmitter.lifeTimeFunction = { Double(self.sphereModel.r * 2) }
-        sphereParticleEmitter.speedFunction = { drand48() * 3.0 + 1.0 }
-        sphereParticleEmitter.directionFunction = { GLKVector3Make(1, 0, 0) }
-        sphereParticleEmitter.positionFunction = {
-            let r = drand48() * 0.9
-            let theta = drand48() * 2 * M_PI
-            return GLKVector3Make(-Float(self.sphereModel.r), Float(r * cos(theta)), Float(r * sin(theta)))
-        }
-        sphereParticleEmitter.colorFunction = { World.Color.randomColor() }
-        sphereParticleEmitter.pointSizeFunction = { Float(drand48() * 16 + 8.0) }
-        sphereParticleEmitter.emit()
     }
 
     func setUpSubscriptions() {
@@ -217,10 +202,6 @@ class GameSceneModelProducer {
         return [sphereModel]
     }
 
-    func backgroundParticlePoints() -> [ParticleVertex] {
-        return sphereParticleEmitter.activeParticles.map { $0.vertex }
-    }
-
     func modelObjects() -> [Renderable] {
         func coord(point: Icosahedron.Point) -> GLKVector3 {
             return icosahedronModel.coordinateOfPoint(point)
@@ -290,7 +271,6 @@ class GameSceneModelProducer {
         for particleEmitter in icosahedronPointParticleEmitters.values {
             particleEmitter.update(timeSinceLastUpdate)
         }
-        sphereParticleEmitter.update(timeSinceLastUpdate)
 
         let markerScale = Float(1.0 + 0.2 * cos(2 * M_PI * Double(animationLoopValue)))
         markerModel.scale = GLKVector3Make(markerScale, 1.0, markerScale)

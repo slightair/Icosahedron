@@ -303,25 +303,8 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         backgroundShaderProgram.worldMatrix = backgroundWorldMatrix
         backgroundShaderProgram.normalMatrix = backgroundNormalMatrix
 
-        var time = CFAbsoluteTimeGetCurrent()
-        time -= floor(time)
-
         glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
-        backgroundShaderProgram.time = GLfloat(time)
-
         drawModels(modelProducer.backgroundModelObjects())
-    }
-
-    func renderBackgroundParticles() {
-        glDisable(GLenum(GL_DEPTH_TEST))
-        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE))
-
-        glUseProgram(particleShaderProgram.programID)
-        particleShaderProgram.projectionMatrix = backgroundProjectionMatrix
-        particleShaderProgram.worldMatrix = backgroundWorldMatrix
-
-        glBindTexture(GLenum(GL_TEXTURE_2D), pointTextureInfo.name)
-        drawParticle(modelProducer.backgroundParticlePoints())
     }
 
     func renderModels() {
@@ -411,7 +394,6 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glActiveTexture(GLenum(GL_TEXTURE0))
 
         renderBackground()
-        renderBackgroundParticles()
         renderModels()
         renderParticles()
 
