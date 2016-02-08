@@ -5,9 +5,7 @@ protocol GameSceneRendererDelegate {
     func didChangeIcosahedronPoint(point: Icosahedron.Point)
 }
 
-class GameSceneRenderer: NSObject, GLKViewDelegate {
-    let context: EAGLContext
-
+class GameSceneRenderer {
     var modelVertexArray: GLuint = 0
     var modelVertexBuffer: GLuint = 0
     var modelIndexBuffer: GLuint = 0
@@ -63,12 +61,9 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         tearDownGL()
     }
 
-    init(context: EAGLContext, world: World) {
-        self.context = context
+    init(world: World) {
         self.world = world
         self.modelProducer = GameSceneModelProducer(world: world)
-
-        super.init()
 
         currentVertex = modelProducer.icosahedronModel.pointDict[.C]
 
@@ -80,9 +75,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         update()
     }
 
-    func setUpGL() {
-        EAGLContext.setCurrentContext(context)
-
+    private func setUpGL() {
         backgroundShaderProgram = BackgroundShaderProgram()
         modelShaderProgram = ModelShaderProgram()
         particleShaderProgram = ParticleShaderProgram()
@@ -148,7 +141,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), 0)
     }
 
-    func tearDownGL() {
+    private func tearDownGL() {
         glDeleteBuffers(1, &modelVertexBuffer)
         glDeleteBuffers(1, &modelIndexBuffer)
         glDeleteVertexArrays(1, &modelVertexArray)
@@ -158,29 +151,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glDeleteFramebuffers(1, &modelFrameBuffer)
     }
 
-    func rotateModelWithTappedLocation(location: CGPoint) {
-        if animationProgress < 1.0 {
-            return
-        }
-
-        let locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(worldMatrix, nil), GLKVector3Make(Float(location.x), Float(location.y), 0))
-
-        var nearestDistance = FLT_MAX
-        var nearestVertex: IcosahedronVertex?
-        for vertex in currentVertex.nextVertices {
-            let distance = GLKVector3Distance(locationVector, vertex.coordinate)
-            if distance < nearestDistance {
-                nearestDistance = distance
-                nearestVertex = vertex
-            }
-        }
-
-        if let selectedVertex = nearestVertex {
-            moveToVertex(selectedVertex)
-        }
-    }
-
-    func moveToVertex(vertex: IcosahedronVertex) {
+    private func moveToVertex(vertex: IcosahedronVertex) {
         prevVertex = currentVertex
         currentVertex = vertex
         animationProgress = 0.0
@@ -191,7 +162,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         currentQuaternion = GLKQuaternionMultiply(currentQuaternion, relativeQuaternion)
     }
 
-    func drawPolygons(polygons: [RenderablePolygon]) {
+    private func drawPolygons(polygons: [RenderablePolygon]) {
         let modelVertices = polygons.flatMap { $0.modelVertices }
         let vertices: [Float] = modelVertices.flatMap { $0.v }
         let indexes: [GLushort] = polygons.flatMap { $0.modelIndexes }
@@ -221,7 +192,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glBindVertexArray(0)
     }
 
-    func drawModels(models: [Renderable]) {
+    private func drawModels(models: [Renderable]) {
         let modelVertices = models.flatMap { $0.modelVertices }
         let vertices: [Float] = modelVertices.flatMap { $0.v }
 
@@ -247,7 +218,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glBindVertexArray(0)
     }
 
-    func drawParticle(points: [ParticleVertex]) {
+    private func drawParticle(points: [ParticleVertex]) {
         let vertices: [Float] = points.flatMap { $0.v }
 
         glBindVertexArray(modelVertexArray)
@@ -269,32 +240,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         glBindVertexArray(0)
     }
 
-    func update(timeSinceLastUpdate: NSTimeInterval = 0) {
-        if animationProgress < 1.0 {
-            animationProgress = min(1.0, animationProgress + Float(timeSinceLastUpdate) * 4)
-        }
-
-        modelProducer.update(timeSinceLastUpdate)
-
-        let baseQuaternion = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0)
-        let movingQuaternion = GLKQuaternionSlerp(prevQuaternion, currentQuaternion, animationProgress)
-        let worldQuaternion = GLKQuaternionMultiply(baseQuaternion, movingQuaternion)
-        billboardQuaternion = GLKQuaternionInvert(movingQuaternion)
-
-        let baseMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -1.0)
-        worldMatrix = GLKMatrix4Multiply(baseMatrix, GLKMatrix4MakeWithQuaternion(worldQuaternion))
-        normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(worldMatrix), nil)
-
-        for label in modelProducer.labelObjects() {
-            label.quaternion = billboardQuaternion
-        }
-
-        let backgroundBaseMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -2.0)
-        backgroundWorldMatrix = GLKMatrix4Multiply(backgroundBaseMatrix, GLKMatrix4MakeWithQuaternion(worldQuaternion))
-        backgroundNormalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(backgroundWorldMatrix), nil)
-    }
-
-    func renderBackground() {
+    private func renderBackground() {
         glEnable(GLenum(GL_DEPTH_TEST))
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
 
@@ -307,7 +253,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         drawModels(modelProducer.backgroundModelObjects())
     }
 
-    func renderModels() {
+    private func renderModels() {
         glEnable(GLenum(GL_DEPTH_TEST))
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
 
@@ -323,7 +269,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         drawModels(modelProducer.labelObjects().map { $0 as Renderable})
     }
 
-    func renderParticles() {
+    private func renderParticles() {
         glDisable(GLenum(GL_DEPTH_TEST))
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE))
 
@@ -335,7 +281,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         drawParticle(modelProducer.particlePoints())
     }
 
-    func renderCanvas() {
+    private func renderCanvas() {
         glDisable(GLenum(GL_DEPTH_TEST))
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
 
@@ -360,7 +306,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         drawPolygons([canvasModel])
     }
 
-    func renderUI() {
+    private func renderUI() {
         glDisable(GLenum(GL_DEPTH_TEST))
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
 
@@ -374,9 +320,7 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
         drawModels(modelProducer.uiLabelObjects())
     }
 
-    // MARK: - GLKView delegate methods
-
-    func glkView(view: GLKView, drawInRect rect: CGRect) {
+    func render() {
         var defaultFrameBufferObject: GLint = 0
         glGetIntegerv(GLenum(GL_FRAMEBUFFER_BINDING), &defaultFrameBufferObject)
 
@@ -404,5 +348,52 @@ class GameSceneRenderer: NSObject, GLKViewDelegate {
 
         renderCanvas()
         renderUI()
+    }
+
+    func update(timeSinceLastUpdate: NSTimeInterval = 0) {
+        if animationProgress < 1.0 {
+            animationProgress = min(1.0, animationProgress + Float(timeSinceLastUpdate) * 4)
+        }
+
+        modelProducer.update(timeSinceLastUpdate)
+
+        let baseQuaternion = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0)
+        let movingQuaternion = GLKQuaternionSlerp(prevQuaternion, currentQuaternion, animationProgress)
+        let worldQuaternion = GLKQuaternionMultiply(baseQuaternion, movingQuaternion)
+        billboardQuaternion = GLKQuaternionInvert(movingQuaternion)
+
+        let baseMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -1.0)
+        worldMatrix = GLKMatrix4Multiply(baseMatrix, GLKMatrix4MakeWithQuaternion(worldQuaternion))
+        normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(worldMatrix), nil)
+
+        for label in modelProducer.labelObjects() {
+            label.quaternion = billboardQuaternion
+        }
+
+        let backgroundBaseMatrix = GLKMatrix4MakeTranslation(0.0, 0.0, -2.0)
+        backgroundWorldMatrix = GLKMatrix4Multiply(backgroundBaseMatrix, GLKMatrix4MakeWithQuaternion(worldQuaternion))
+        backgroundNormalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(backgroundWorldMatrix), nil)
+    }
+
+    func rotateModelWithTappedLocation(location: CGPoint) {
+        if animationProgress < 1.0 {
+            return
+        }
+
+        let locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(worldMatrix, nil), GLKVector3Make(Float(location.x), Float(location.y), 0))
+
+        var nearestDistance = FLT_MAX
+        var nearestVertex: IcosahedronVertex?
+        for vertex in currentVertex.nextVertices {
+            let distance = GLKVector3Distance(locationVector, vertex.coordinate)
+            if distance < nearestDistance {
+                nearestDistance = distance
+                nearestVertex = vertex
+            }
+        }
+
+        if let selectedVertex = nearestVertex {
+            moveToVertex(selectedVertex)
+        }
     }
 }

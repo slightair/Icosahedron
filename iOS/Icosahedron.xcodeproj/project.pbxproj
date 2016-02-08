@@ -11,6 +11,9 @@
 		5708F42B1C5DE50D00ECDE0E /* BackgroundShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5708F4281C5DE50D00ECDE0E /* BackgroundShaderProgram.swift */; };
 		5708F42C1C5DE50D00ECDE0E /* BackgroundShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5708F4291C5DE50D00ECDE0E /* BackgroundShader.vsh */; };
 		571416B31C3A9C2A00CF6F7D /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571416B21C3A9C2A00CF6F7D /* Math.swift */; };
+		571B92AE1C68C60400FF9DA3 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92AD1C68C60400FF9DA3 /* GameScene.swift */; };
+		571B92B01C68C61800FF9DA3 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92AF1C68C61800FF9DA3 /* Scene.swift */; };
+		571B92B21C68CB4500FF9DA3 /* SceneSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92B11C68CB4500FF9DA3 /* SceneSwitcher.swift */; };
 		572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */; };
 		572FCA501C45306B00778913 /* SequenceLabelModelGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */; };
 		572FCA521C45308E00778913 /* FadeOutLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA511C45308E00778913 /* FadeOutLabelModel.swift */; };
@@ -92,6 +95,9 @@
 		5708F4281C5DE50D00ECDE0E /* BackgroundShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundShaderProgram.swift; sourceTree = "<group>"; };
 		5708F4291C5DE50D00ECDE0E /* BackgroundShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BackgroundShader.vsh; sourceTree = "<group>"; };
 		571416B21C3A9C2A00CF6F7D /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		571B92AD1C68C60400FF9DA3 /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		571B92AF1C68C61800FF9DA3 /* Scene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		571B92B11C68CB4500FF9DA3 /* SceneSwitcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneSwitcher.swift; sourceTree = "<group>"; };
 		572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingLabelModel.swift; sourceTree = "<group>"; };
 		572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SequenceLabelModelGroup.swift; sourceTree = "<group>"; };
 		572FCA511C45308E00778913 /* FadeOutLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FadeOutLabelModel.swift; sourceTree = "<group>"; };
@@ -274,6 +280,9 @@
 		57C31EAA1C3E946500DAFCCE /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				571B92AF1C68C61800FF9DA3 /* Scene.swift */,
+				571B92B11C68CB4500FF9DA3 /* SceneSwitcher.swift */,
+				571B92AD1C68C60400FF9DA3 /* GameScene.swift */,
 				57D866C41BEF66F90034DEDE /* GameSceneRenderer.swift */,
 				57C31EA81C3E8EDE00DAFCCE /* GameSceneModelProducer.swift */,
 			);
@@ -455,6 +464,8 @@
 				571416B31C3A9C2A00CF6F7D /* Math.swift in Sources */,
 				579AD6011C01EEB900218D38 /* IcosahedronModel.swift in Sources */,
 				57DC980C1C1325C90004B107 /* FontData.swift in Sources */,
+				571B92B21C68CB4500FF9DA3 /* SceneSwitcher.swift in Sources */,
+				571B92AE1C68C60400FF9DA3 /* GameScene.swift in Sources */,
 				579AD6031C01EEB900218D38 /* ItemModel.swift in Sources */,
 				572FCA541C47E0DD00778913 /* ParticleShaderProgram.swift in Sources */,
 				5771700F1C4E7F50008C35A2 /* RenderablePolygon.swift in Sources */,
@@ -480,6 +491,7 @@
 				57C58F071C1F18B600840B56 /* GaugeModel.swift in Sources */,
 				57C31EA91C3E8EDE00DAFCCE /* GameSceneModelProducer.swift in Sources */,
 				57DC980E1C141A350004B107 /* LabelModel.swift in Sources */,
+				571B92B01C68C61800FF9DA3 /* Scene.swift in Sources */,
 				579AD6021C01EEB900218D38 /* IcosahedronVertex.swift in Sources */,
 				579AD6061C01EEB900218D38 /* Renderable.swift in Sources */,
 				579AD6071C01EEB900218D38 /* TetrahedronModel.swift in Sources */,
