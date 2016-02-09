@@ -1,9 +1,5 @@
 import GLKit
 
-protocol GameSceneRendererDelegate {
-    func didChangeIcosahedronPoint(point: Icosahedron.Point)
-}
-
 class GameSceneRenderer: BaseRenderer {
     var backgroundShaderProgram: BackgroundShaderProgram!
     var modelShaderProgram: ModelShaderProgram!
@@ -18,7 +14,6 @@ class GameSceneRenderer: BaseRenderer {
     let world: World
     let modelProducer: GameSceneModelProducer
     let canvasModel = CanvasModel()
-    var delegate: GameSceneRendererDelegate?
 
     var prevVertex: IcosahedronVertex!
     var currentVertex: IcosahedronVertex!
@@ -26,15 +21,11 @@ class GameSceneRenderer: BaseRenderer {
     var currentQuaternion = GLKQuaternionIdentity
     var billboardQuaternion = GLKQuaternionIdentity
 
-    var animationProgress: Float = 1.0 {
+    var movingProgress: Float = 1.0 {
         didSet {
             if prevVertex != nil && currentVertex != nil {
-                let markerPosition = GLKVector3Lerp(prevVertex.coordinate, currentVertex.coordinate, animationProgress)
+                let markerPosition = GLKVector3Lerp(prevVertex.coordinate, currentVertex.coordinate, movingProgress)
                 modelProducer.markerModel.setPosition(markerPosition, prevPosition: prevVertex.coordinate)
-
-                if animationProgress == 1.0 {
-                    delegate?.didChangeIcosahedronPoint(currentVertex.point)
-                }
             }
         }
     }
@@ -83,7 +74,6 @@ class GameSceneRenderer: BaseRenderer {
     private func moveToVertex(vertex: IcosahedronVertex) {
         prevVertex = currentVertex
         currentVertex = vertex
-        animationProgress = 0.0
 
         let relativeQuaternion = quaternionForRotate(from: currentVertex.coordinate, to: prevVertex.coordinate)
 
@@ -202,14 +192,10 @@ class GameSceneRenderer: BaseRenderer {
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval = 0) {
-        if animationProgress < 1.0 {
-            animationProgress = min(1.0, animationProgress + Float(timeSinceLastUpdate) * 4)
-        }
-
         modelProducer.update(timeSinceLastUpdate)
 
         let baseQuaternion = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(150), 1.0, 0.0, 0.0)
-        let movingQuaternion = GLKQuaternionSlerp(prevQuaternion, currentQuaternion, animationProgress)
+        let movingQuaternion = GLKQuaternionSlerp(prevQuaternion, currentQuaternion, movingProgress)
         let worldQuaternion = GLKQuaternionMultiply(baseQuaternion, movingQuaternion)
         billboardQuaternion = GLKQuaternionInvert(movingQuaternion)
 
@@ -227,10 +213,6 @@ class GameSceneRenderer: BaseRenderer {
     }
 
     func rotateModelWithTappedLocation(location: CGPoint) {
-        if animationProgress < 1.0 {
-            return
-        }
-
         let locationVector = GLKMatrix4MultiplyVector3(GLKMatrix4Invert(worldMatrix, nil), GLKVector3Make(Float(location.x), Float(location.y), 0))
 
         var nearestDistance = FLT_MAX

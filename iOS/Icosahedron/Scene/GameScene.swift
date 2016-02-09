@@ -1,11 +1,19 @@
 import GLKit
 
-class GameScene: NSObject, SceneType, GameSceneRendererDelegate {
+class GameScene: NSObject, SceneType {
     static let detectActionThreshold: Float = 200
 
     let glkView: GLKView
     var renderer: GameSceneRenderer!
     let world = World()
+    var movingProgress = 0.0 {
+        didSet {
+            renderer.movingProgress = Float(movingProgress)
+            if movingProgress == 1.0 {
+                world.currentPoint.value = renderer.currentVertex.point
+            }
+        }
+    }
 
     required init(view: GLKView) {
         self.glkView = view
@@ -13,7 +21,6 @@ class GameScene: NSObject, SceneType, GameSceneRendererDelegate {
         super.init()
 
         renderer = GameSceneRenderer(world: world)
-        renderer.delegate = self
     }
 
     func setUp() {
@@ -37,6 +44,9 @@ class GameScene: NSObject, SceneType, GameSceneRendererDelegate {
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval = 0) {
+        if movingProgress < 1.0 {
+            movingProgress = min(1.0, movingProgress + timeSinceLastUpdate * 4)
+        }
         world.update(timeSinceLastUpdate)
         renderer.update(timeSinceLastUpdate)
     }
@@ -46,7 +56,7 @@ class GameScene: NSObject, SceneType, GameSceneRendererDelegate {
         case .Changed:
             let velocity = gestureRecognizer.velocityInView(glkView)
             if GLKVector2Length(GLKVector2Make(Float(velocity.x), Float(velocity.y))) > GameScene.detectActionThreshold {
-                renderer.rotateModelWithTappedLocation(CGPoint(x: velocity.x, y: -velocity.y))
+                rotateModelWithTappedLocation(CGPoint(x: velocity.x, y: -velocity.y))
             }
         default:
             break
@@ -59,19 +69,20 @@ class GameScene: NSObject, SceneType, GameSceneRendererDelegate {
         location.y -= CGRectGetMidY(glkView.bounds)
         let normalizedLocation = CGPoint(x: location.x * 2 / CGRectGetWidth(glkView.bounds),
             y: -location.y * 2 / CGRectGetHeight(glkView.bounds))
+        rotateModelWithTappedLocation(normalizedLocation)
+    }
 
-        renderer.rotateModelWithTappedLocation(normalizedLocation)
+    func rotateModelWithTappedLocation(location: CGPoint) {
+        if movingProgress < 1.0 {
+            return
+        }
+        movingProgress = 0.0
+        renderer.rotateModelWithTappedLocation(location)
     }
 
     // MARK: - GLKView delegate methods
 
     func glkView(view: GLKView, drawInRect rect: CGRect) {
         renderer.render()
-    }
-
-    // MARK: - GameSceneRendererDelegate
-
-    func didChangeIcosahedronPoint(point: Icosahedron.Point) {
-        world.currentPoint.value = point
     }
 }
