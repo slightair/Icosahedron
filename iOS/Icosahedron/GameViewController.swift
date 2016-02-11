@@ -12,9 +12,12 @@ class GameViewController: GLKViewController {
         glkView.drawableColorFormat = .SRGBA8888
         glkView.drawableDepthFormat = .Format24
 
+        TextureSet.sharedSet.loadTextures()
+        FontData.defaultData.loadTexture()
+
         let sceneSwitcher = SceneSwitcher.sharedSwitcher
         sceneSwitcher.contextView = glkView
-        sceneSwitcher.switchScene(.Game)
+        sceneSwitcher.switchScene(.Title)
     }
 
     func update() {

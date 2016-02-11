@@ -1,10 +1,12 @@
 import GLKit
 
 enum Scene {
-    case Game
+    case Title, Game
 
     static func createScene(scene: Scene, view: GLKView) -> SceneType {
         switch scene {
+        case .Title:
+            return TitleScene(view: view)
         case .Game:
             return GameScene(view: view)
         }

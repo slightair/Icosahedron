@@ -7,10 +7,6 @@ class GameSceneRenderer: BaseRenderer {
     var canvasShaderProgram: CanvasShaderProgram!
     var uiShaderProgram: UIShaderProgram!
 
-    var meshTextureInfo: GLKTextureInfo!
-    var whiteTextureInfo: GLKTextureInfo!
-    var pointTextureInfo: GLKTextureInfo!
-
     let world: World
     let modelProducer: GameSceneModelProducer
     let canvasModel = CanvasModel()
@@ -52,23 +48,6 @@ class GameSceneRenderer: BaseRenderer {
         particleShaderProgram = ParticleShaderProgram()
         canvasShaderProgram = CanvasShaderProgram()
         uiShaderProgram = UIShaderProgram()
-
-        guard let meshTextureAsset = NSDataAsset(name: "Mesh") else {
-            fatalError("debug texture file not found")
-        }
-        meshTextureInfo = try! GLKTextureLoader.textureWithContentsOfData(meshTextureAsset.data, options: nil)
-
-        guard let whiteTextureAsset = NSDataAsset(name: "White") else {
-            fatalError("white texture file not found")
-        }
-        whiteTextureInfo = try! GLKTextureLoader.textureWithContentsOfData(whiteTextureAsset.data, options: nil)
-
-        guard let pointTextureAsset = NSDataAsset(name: "Point") else {
-            fatalError("point texture file not found")
-        }
-        pointTextureInfo = try! GLKTextureLoader.textureWithContentsOfData(pointTextureAsset.data, options: nil)
-
-        FontData.defaultData.loadTexture()
     }
 
     private func moveToVertex(vertex: IcosahedronVertex) {
@@ -90,6 +69,7 @@ class GameSceneRenderer: BaseRenderer {
         backgroundShaderProgram.worldMatrix = backgroundWorldMatrix
         backgroundShaderProgram.normalMatrix = backgroundNormalMatrix
 
+        let meshTextureInfo = TextureSet.sharedSet[.Mesh]
         glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
         drawModels(modelProducer.backgroundModelObjects())
     }
@@ -103,6 +83,7 @@ class GameSceneRenderer: BaseRenderer {
         modelShaderProgram.worldMatrix = worldMatrix
         modelShaderProgram.normalMatrix = normalMatrix
 
+        let whiteTextureInfo = TextureSet.sharedSet[.White]
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
         drawModels(modelProducer.modelObjects())
 
@@ -118,6 +99,7 @@ class GameSceneRenderer: BaseRenderer {
         particleShaderProgram.projectionMatrix = modelProjectionMatrix
         particleShaderProgram.worldMatrix = worldMatrix
 
+        let pointTextureInfo = TextureSet.sharedSet[.Point]
         glBindTexture(GLenum(GL_TEXTURE_2D), pointTextureInfo.name)
         drawParticle(modelProducer.particlePoints())
     }
@@ -154,6 +136,7 @@ class GameSceneRenderer: BaseRenderer {
         glUseProgram(uiShaderProgram.programID)
         uiShaderProgram.projectionMatrix = modelProjectionMatrix
 
+        let whiteTextureInfo = TextureSet.sharedSet[.White]
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
         drawModels(modelProducer.uiObjects())
 

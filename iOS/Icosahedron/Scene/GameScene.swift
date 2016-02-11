@@ -1,10 +1,11 @@
 import GLKit
+import RxSwift
 
 class GameScene: NSObject, SceneType {
     static let detectActionThreshold: Float = 200
 
     let glkView: GLKView
-    var renderer: GameSceneRenderer!
+    var renderer: GameSceneRenderer
     let world = World()
     var movingProgress = 0.0 {
         didSet {
@@ -14,13 +15,13 @@ class GameScene: NSObject, SceneType {
             }
         }
     }
+    let disposeBag = DisposeBag()
 
     required init(view: GLKView) {
         self.glkView = view
+        self.renderer = GameSceneRenderer(world: world)
 
         super.init()
-
-        renderer = GameSceneRenderer(world: world)
     }
 
     func setUp() {
@@ -33,6 +34,15 @@ class GameScene: NSObject, SceneType {
 
         glkView.addGestureRecognizer(panGestureRecognizer)
         glkView.addGestureRecognizer(tapGestureRecognizer)
+
+        world.eventLog.subscribeNext { event in
+            switch event {
+            case .GameOver:
+                SceneSwitcher.sharedSwitcher.switchScene(.Title)
+            default:
+                break
+            }
+        }.addDisposableTo(disposeBag)
     }
 
     func tearDown() {

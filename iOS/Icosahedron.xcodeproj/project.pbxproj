@@ -15,6 +15,9 @@
 		571B92B01C68C61800FF9DA3 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92AF1C68C61800FF9DA3 /* Scene.swift */; };
 		571B92B21C68CB4500FF9DA3 /* SceneSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92B11C68CB4500FF9DA3 /* SceneSwitcher.swift */; };
 		571B92B41C6A1EC800FF9DA3 /* BaseRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92B31C6A1EC800FF9DA3 /* BaseRenderer.swift */; };
+		571B92B61C6A2F0900FF9DA3 /* TitleScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92B51C6A2F0900FF9DA3 /* TitleScene.swift */; };
+		571B92B81C6A305D00FF9DA3 /* TitleSceneRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92B71C6A305D00FF9DA3 /* TitleSceneRenderer.swift */; };
+		571B92BA1C6A399400FF9DA3 /* TextureSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92B91C6A399400FF9DA3 /* TextureSet.swift */; };
 		572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */; };
 		572FCA501C45306B00778913 /* SequenceLabelModelGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */; };
 		572FCA521C45308E00778913 /* FadeOutLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA511C45308E00778913 /* FadeOutLabelModel.swift */; };
@@ -100,6 +103,9 @@
 		571B92AF1C68C61800FF9DA3 /* Scene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
 		571B92B11C68CB4500FF9DA3 /* SceneSwitcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneSwitcher.swift; sourceTree = "<group>"; };
 		571B92B31C6A1EC800FF9DA3 /* BaseRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseRenderer.swift; sourceTree = "<group>"; };
+		571B92B51C6A2F0900FF9DA3 /* TitleScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleScene.swift; sourceTree = "<group>"; };
+		571B92B71C6A305D00FF9DA3 /* TitleSceneRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleSceneRenderer.swift; sourceTree = "<group>"; };
+		571B92B91C6A399400FF9DA3 /* TextureSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureSet.swift; sourceTree = "<group>"; };
 		572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingLabelModel.swift; sourceTree = "<group>"; };
 		572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SequenceLabelModelGroup.swift; sourceTree = "<group>"; };
 		572FCA511C45308E00778913 /* FadeOutLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FadeOutLabelModel.swift; sourceTree = "<group>"; };
@@ -242,6 +248,7 @@
 				579013AF1BC1083400ADAE3E /* LaunchScreen.storyboard */,
 				579013AD1BC1083400ADAE3E /* Assets.xcassets */,
 				579013B21BC1083400ADAE3E /* Info.plist */,
+				571B92B91C6A399400FF9DA3 /* TextureSet.swift */,
 			);
 			path = Icosahedron;
 			sourceTree = "<group>";
@@ -288,6 +295,8 @@
 				57D866C41BEF66F90034DEDE /* GameSceneRenderer.swift */,
 				57C31EA81C3E8EDE00DAFCCE /* GameSceneModelProducer.swift */,
 				571B92B31C6A1EC800FF9DA3 /* BaseRenderer.swift */,
+				571B92B51C6A2F0900FF9DA3 /* TitleScene.swift */,
+				571B92B71C6A305D00FF9DA3 /* TitleSceneRenderer.swift */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -479,6 +488,7 @@
 				57F5FB751C34DC1E00817824 /* OctahedronModel.swift in Sources */,
 				57F5FB731C34150A00817824 /* VectorExtensions.swift in Sources */,
 				579AD5F61C01EE0500218D38 /* Icosahedron.swift in Sources */,
+				571B92BA1C6A399400FF9DA3 /* TextureSet.swift in Sources */,
 				572FCA501C45306B00778913 /* SequenceLabelModelGroup.swift in Sources */,
 				579AD6041C01EEB900218D38 /* MarkerModel.swift in Sources */,
 				57D866C31BEE3AA30034DEDE /* GameViewController.swift in Sources */,
@@ -486,6 +496,7 @@
 				57D866CB1BF2ED5E0034DEDE /* ShaderProgram.swift in Sources */,
 				579AD6091C01F35300218D38 /* Item.swift in Sources */,
 				5778A5781C2A588B0019FF99 /* RendererSupport.swift in Sources */,
+				571B92B81C6A305D00FF9DA3 /* TitleSceneRenderer.swift in Sources */,
 				57D866CD1BF2EF0C0034DEDE /* ModelShaderProgram.swift in Sources */,
 				579AD60C1C02F92700218D38 /* MotherIcosahedronModel.swift in Sources */,
 				579AD5F41C01ECA100218D38 /* World.swift in Sources */,
@@ -500,6 +511,7 @@
 				579AD6061C01EEB900218D38 /* Renderable.swift in Sources */,
 				579AD6071C01EEB900218D38 /* TetrahedronModel.swift in Sources */,
 				5756BE7E1C5908AB007F163B /* CanvasShaderProgram.swift in Sources */,
+				571B92B61C6A2F0900FF9DA3 /* TitleScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
