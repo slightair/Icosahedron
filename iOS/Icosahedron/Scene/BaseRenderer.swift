@@ -29,7 +29,7 @@ class BaseRenderer {
         let projectionWidth: Float = 1.0
         let projectionHeight = projectionWidth / Screen.aspect
         modelProjectionMatrix = GLKMatrix4MakeOrtho(-projectionWidth / 2, projectionWidth / 2, -projectionHeight / 2, projectionHeight / 2, 0.1, 10)
-        backgroundProjectionMatrix = GLKMatrix4MakePerspective(120, Screen.aspect, 0.1, 10)
+        backgroundProjectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45), Screen.aspect, 0.1, 10)
 
         glGenVertexArrays(1, &modelVertexArray)
         glBindVertexArray(modelVertexArray)
