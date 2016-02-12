@@ -18,6 +18,7 @@
 		571B92B61C6A2F0900FF9DA3 /* TitleScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92B51C6A2F0900FF9DA3 /* TitleScene.swift */; };
 		571B92B81C6A305D00FF9DA3 /* TitleSceneRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92B71C6A305D00FF9DA3 /* TitleSceneRenderer.swift */; };
 		571B92BA1C6A399400FF9DA3 /* TextureSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92B91C6A399400FF9DA3 /* TextureSet.swift */; };
+		571B92BC1C6E487300FF9DA3 /* TitleSceneModelProducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92BB1C6E487300FF9DA3 /* TitleSceneModelProducer.swift */; };
 		572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */; };
 		572FCA501C45306B00778913 /* SequenceLabelModelGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */; };
 		572FCA521C45308E00778913 /* FadeOutLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA511C45308E00778913 /* FadeOutLabelModel.swift */; };
@@ -106,6 +107,7 @@
 		571B92B51C6A2F0900FF9DA3 /* TitleScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleScene.swift; sourceTree = "<group>"; };
 		571B92B71C6A305D00FF9DA3 /* TitleSceneRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleSceneRenderer.swift; sourceTree = "<group>"; };
 		571B92B91C6A399400FF9DA3 /* TextureSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureSet.swift; sourceTree = "<group>"; };
+		571B92BB1C6E487300FF9DA3 /* TitleSceneModelProducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleSceneModelProducer.swift; sourceTree = "<group>"; };
 		572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingLabelModel.swift; sourceTree = "<group>"; };
 		572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SequenceLabelModelGroup.swift; sourceTree = "<group>"; };
 		572FCA511C45308E00778913 /* FadeOutLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FadeOutLabelModel.swift; sourceTree = "<group>"; };
@@ -291,12 +293,13 @@
 			children = (
 				571B92AF1C68C61800FF9DA3 /* Scene.swift */,
 				571B92B11C68CB4500FF9DA3 /* SceneSwitcher.swift */,
+				571B92B31C6A1EC800FF9DA3 /* BaseRenderer.swift */,
 				571B92AD1C68C60400FF9DA3 /* GameScene.swift */,
 				57D866C41BEF66F90034DEDE /* GameSceneRenderer.swift */,
 				57C31EA81C3E8EDE00DAFCCE /* GameSceneModelProducer.swift */,
-				571B92B31C6A1EC800FF9DA3 /* BaseRenderer.swift */,
 				571B92B51C6A2F0900FF9DA3 /* TitleScene.swift */,
 				571B92B71C6A305D00FF9DA3 /* TitleSceneRenderer.swift */,
+				571B92BB1C6E487300FF9DA3 /* TitleSceneModelProducer.swift */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -468,6 +471,7 @@
 			files = (
 				5771700D1C4D1886008C35A2 /* SphereModel.swift in Sources */,
 				5708F42B1C5DE50D00ECDE0E /* BackgroundShaderProgram.swift in Sources */,
+				571B92BC1C6E487300FF9DA3 /* TitleSceneModelProducer.swift in Sources */,
 				572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */,
 				572FCA611C4A59D400778913 /* Particle.swift in Sources */,
 				572FCA5F1C4A442700778913 /* ParticleVertex.swift in Sources */,
