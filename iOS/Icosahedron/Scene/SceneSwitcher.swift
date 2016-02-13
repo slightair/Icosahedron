@@ -5,8 +5,13 @@ class SceneSwitcher {
 
     var contextView: GLKView!
     var currentScene: SceneType?
+    var sceneLock: Bool = false
 
     func switchScene(scene: Scene) {
+        if sceneLock {
+            return
+        }
+
         let sceneType = Scene.createScene(scene, view: contextView)
 
         currentScene?.tearDown()

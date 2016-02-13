@@ -17,7 +17,8 @@ class GameViewController: GLKViewController {
 
         let sceneSwitcher = SceneSwitcher.sharedSwitcher
         sceneSwitcher.contextView = glkView
-        sceneSwitcher.switchScene(.Title)
+        sceneSwitcher.switchScene(.Game)
+        sceneSwitcher.sceneLock = true
     }
 
     func update() {
