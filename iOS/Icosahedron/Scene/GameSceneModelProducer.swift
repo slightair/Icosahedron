@@ -8,7 +8,7 @@ class GameSceneModelProducer {
 
     let sphereModel = SphereModel()
     let icosahedronModel = MotherIcosahedronModel()
-    let markerModel = MarkerModel()
+    let markerModel: MarkerModel
 
     var floatingScoreLabels: [Icosahedron.Point: FloatingLabelModel] = [:]
 
@@ -38,6 +38,7 @@ class GameSceneModelProducer {
 
     init(world: World) {
         self.world = world
+        self.markerModel = MarkerModel(status: world.markerStatus)
 
         setUpModels()
         setUpPoints()

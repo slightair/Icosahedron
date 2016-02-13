@@ -4,7 +4,7 @@ import RxSwift
 
 class World {
     enum MarkerStatus {
-        case Neutral, Marked(color: Color)
+        case Marked(color: Color)
     }
 
     enum Color {
@@ -22,7 +22,7 @@ class World {
     static let defaultTimeLeft = 15.0
 
     let icosahedron = Icosahedron()
-    var markerStatus: MarkerStatus = .Neutral
+    var markerStatus: MarkerStatus
     var items: [Item] = []
 
     var currentPoint = Variable<Icosahedron.Point>(.C)
@@ -48,7 +48,7 @@ class World {
     let score = Variable<Int64>(0)
 
     typealias ChainedItem = (kind: Item.Kind, count: Int)
-    var chainedItem = Variable<ChainedItem?>(nil)
+    var chainedItem: Variable<ChainedItem>
 
     let pointRandomSource = GKMersenneTwisterRandomSource(seed: 6239)
     let colorRandomSource = GKMersenneTwisterRandomSource(seed: 3962)
@@ -71,6 +71,10 @@ class World {
             Item(point: .K, kind: .Stone(color: .Green)),
             Item(point: .L, kind: .Stone(color: .Blue)),
         ]
+
+        let firstColor: Color = .Blue
+        markerStatus = .Marked(color: firstColor)
+        chainedItem = Variable<ChainedItem>(ChainedItem(.Stone(color: firstColor), 1))
 
         setUpObservables()
         setUpSubscriptions()
@@ -116,13 +120,13 @@ class World {
                 case .Stone(let color):
                     self.markerStatus = .Marked(color: color)
 
-                    if let chained = self.chainedItem.value where chained.kind == catchedItem.kind {
-                        self.chainedItem.value = ChainedItem(catchedItem.kind, chained.count + 1)
+                    if self.chainedItem.value.kind == catchedItem.kind {
+                        self.chainedItem.value = ChainedItem(catchedItem.kind, self.chainedItem.value.count + 1)
                     } else {
                         self.chainedItem.value = ChainedItem(catchedItem.kind, 1)
                     }
 
-                    let colorPoint = Int64(2 ** (self.chainedItem.value!.count - 1))
+                    let colorPoint = Int64(2 ** (self.chainedItem.value.count - 1))
                     let obtainedScore: Int64
 
                     switch color {
@@ -139,7 +143,7 @@ class World {
 
                     self.score.value += obtainedScore
 
-                    let event: Event = .ObtainedColorStone(point: point, color: color, score: obtainedScore, combo: self.chainedItem.value!.count)
+                    let event: Event = .ObtainedColorStone(point: point, color: color, score: obtainedScore, combo: self.chainedItem.value.count)
                     self.eventLog.onNext(event)
                 }
             }

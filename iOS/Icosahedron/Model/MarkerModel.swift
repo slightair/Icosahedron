@@ -7,7 +7,7 @@ class MarkerModel: Renderable {
     var localModelVertices: [ModelVertex]
     var scale = GLKVector3Make(1.0, 1.0, 1.0)
     var customColor: GLKVector4? = nil
-    var status: World.MarkerStatus = .Neutral {
+    var status: World.MarkerStatus {
         didSet {
             customColor = MarkerModel.colorOfStatus(status)
         }
@@ -20,14 +20,14 @@ class MarkerModel: Renderable {
         switch status {
         case .Marked(let color):
             return color.modelColor()
-        case .Neutral:
-            return UIColor.flatSandColor().glColor
         }
     }
 
-    init() {
+    init(status: World.MarkerStatus) {
+        self.status = status
+
         let scale: Float = 0.02
-        let faceColor = MarkerModel.colorOfStatus(.Neutral)
+        let faceColor = GLKVector4Make(1, 1, 1, 1)
 
         let coordA = GLKVector3MultiplyScalar(GLKVector3Make(-1.0,  0.3, -1.0), scale)
         let coordB = GLKVector3MultiplyScalar(GLKVector3Make(-1.0, -0.3, -1.0), scale)
