@@ -7,7 +7,7 @@ class GameScene: NSObject, SceneType {
     let glkView: GLKView
     var renderer: GameSceneRenderer
     let world = World()
-    var movingProgress = 0.0 {
+    var movingProgress = 1.0 {
         didSet {
             renderer.movingProgress = Float(movingProgress)
             if movingProgress == 1.0 {

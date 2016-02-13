@@ -170,7 +170,7 @@ class GameSceneModelProducer {
             case .ExtendTime(let time):
                 let timeText = String(format: "+%.1fsec", arguments: [time])
                 self.extendTimeLabelModelGroup.appendNewLabel(timeText, color: UIColor.flatWhiteColor().glColor)
-            case .GameOver:
+            default:
                 break
             }
         }.addDisposableTo(disposeBag)
