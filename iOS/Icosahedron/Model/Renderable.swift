@@ -14,6 +14,14 @@ protocol Renderable {
 }
 
 extension Renderable {
+    var scale: GLKVector3 {
+        return GLKVector3Make(1.0, 1.0, 1.0)
+    }
+
+    var customColor: GLKVector4? {
+        return nil
+    }
+
     var modelVertices: [ModelVertex] {
         let quaternionMatrix = GLKMatrix4MakeWithQuaternion(quaternion)
         let matrix = GLKMatrix4ScaleWithVector3(quaternionMatrix, scale)
