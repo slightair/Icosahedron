@@ -222,7 +222,15 @@ class GameSceneModelProducer {
             return model
         }
 
-        return requiredModels + itemModels
+        let trackModels: [Renderable] = world.tracks.map { track in
+            let startPosition = icosahedronModel.coordinateOfPoint(track.start)
+            let endPosition = icosahedronModel.coordinateOfPoint(track.end)
+            let model = TrackModel(leftPosition: startPosition, rightPosition: endPosition, color: track.color)
+
+            return model
+        }
+
+        return requiredModels + itemModels + trackModels
     }
 
     func labelObjects() -> [LabelModel] {

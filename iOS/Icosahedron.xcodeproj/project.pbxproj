@@ -20,6 +20,7 @@
 		571B92BA1C6A399400FF9DA3 /* TextureSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92B91C6A399400FF9DA3 /* TextureSet.swift */; };
 		571B92BC1C6E487300FF9DA3 /* TitleSceneModelProducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92BB1C6E487300FF9DA3 /* TitleSceneModelProducer.swift */; };
 		571B92BE1C6EF6B300FF9DA3 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92BD1C6EF6B300FF9DA3 /* Track.swift */; };
+		571B92C01C70494100FF9DA3 /* TrackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92BF1C70494100FF9DA3 /* TrackModel.swift */; };
 		572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */; };
 		572FCA501C45306B00778913 /* SequenceLabelModelGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */; };
 		572FCA521C45308E00778913 /* FadeOutLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA511C45308E00778913 /* FadeOutLabelModel.swift */; };
@@ -110,6 +111,7 @@
 		571B92B91C6A399400FF9DA3 /* TextureSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureSet.swift; sourceTree = "<group>"; };
 		571B92BB1C6E487300FF9DA3 /* TitleSceneModelProducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleSceneModelProducer.swift; sourceTree = "<group>"; };
 		571B92BD1C6EF6B300FF9DA3 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
+		571B92BF1C70494100FF9DA3 /* TrackModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackModel.swift; sourceTree = "<group>"; };
 		572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingLabelModel.swift; sourceTree = "<group>"; };
 		572FCA4F1C45306B00778913 /* SequenceLabelModelGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SequenceLabelModelGroup.swift; sourceTree = "<group>"; };
 		572FCA511C45308E00778913 /* FadeOutLabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FadeOutLabelModel.swift; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 				572FCA511C45308E00778913 /* FadeOutLabelModel.swift */,
 				5771700C1C4D1886008C35A2 /* SphereModel.swift */,
 				5756BE831C590ACB007F163B /* CanvasModel.swift */,
+				571B92BF1C70494100FF9DA3 /* TrackModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -488,6 +491,7 @@
 				571B92AE1C68C60400FF9DA3 /* GameScene.swift in Sources */,
 				579AD6031C01EEB900218D38 /* ItemModel.swift in Sources */,
 				571B92B41C6A1EC800FF9DA3 /* BaseRenderer.swift in Sources */,
+				571B92C01C70494100FF9DA3 /* TrackModel.swift in Sources */,
 				572FCA541C47E0DD00778913 /* ParticleShaderProgram.swift in Sources */,
 				5771700F1C4E7F50008C35A2 /* RenderablePolygon.swift in Sources */,
 				5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */,
