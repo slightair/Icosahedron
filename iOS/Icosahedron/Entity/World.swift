@@ -58,8 +58,11 @@ class World {
             if tracks.count > World.numberOfTracks {
                 tracks.removeFirst()
             }
+            updateCompactTracks()
         }
     }
+
+    var compactTracks: [Track] = []
 
     let pointRandomSource = GKMersenneTwisterRandomSource(seed: 6239)
     let colorRandomSource = GKMersenneTwisterRandomSource(seed: 3962)
@@ -170,7 +173,7 @@ class World {
             self.turn.value += 1
 
             if let prev = self.prevPoint {
-                let track = Track(start: prev, end: point, color: markerColor)
+                let track = Track(start: prev, end: point, color: markerColor, turn: self.turn.value)
                 self.tracks.append(track)
                 self.eventLog.onNext(.Move(track: track))
             }
@@ -232,5 +235,34 @@ class World {
             return items[index]
         }
         return nil
+    }
+
+    func updateCompactTracks() {
+        var candidate: [Track] = []
+
+        for track in tracks {
+            if candidate.isEmpty {
+                candidate.append(track)
+                continue
+            }
+
+            var overlapped = false
+            for (index, stored) in candidate.enumerate() {
+                if stored.start == track.start && stored.end == track.end ||
+                   stored.start == track.end && stored.end == track.start {
+                    candidate.removeAtIndex(index)
+                    candidate.append(track)
+                    overlapped = true
+                    break
+                }
+            }
+
+            if !overlapped {
+                candidate.append(track)
+            }
+        }
+
+        compactTracks = candidate
+        debugPrint(candidate)
     }
 }

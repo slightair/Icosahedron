@@ -222,7 +222,7 @@ class GameSceneModelProducer {
             return model
         }
 
-        let trackModels: [Renderable] = world.tracks.map { track in
+        let trackModels: [Renderable] = world.compactTracks.map { track in
             let startPosition = icosahedronModel.coordinateOfPoint(track.start)
             let endPosition = icosahedronModel.coordinateOfPoint(track.end)
             let model = TrackModel(leftPosition: startPosition, rightPosition: endPosition, color: track.color)
