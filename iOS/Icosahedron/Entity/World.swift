@@ -263,6 +263,5 @@ class World {
         }
 
         compactTracks = candidate
-        debugPrint(candidate)
     }
 }
