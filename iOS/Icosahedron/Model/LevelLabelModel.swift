@@ -12,11 +12,7 @@ class LevelLabelModel: LabelModel {
 
             switch event {
             case .Next(let value):
-                if value >= World.needExpList.count - 1 {
-                    self?.text = "Lv Max"
-                } else {
-                    self?.text = "Lv \(value)"
-                }
+                self?.text = "Lv \(value)"
             case .Error(let error):
                 fatalError("Binding error to UI: \(error)")
                 break

@@ -17,10 +17,6 @@ class GameSceneModelProducer {
     let blueGaugeModel = GaugeModel(color: UIColor.flatBlueColor().glColor)
     let timeGaugeModel = GaugeModel(color: UIColor.flatWhiteColor().glColor)
 
-    let redLevelLabelModel = LevelLabelModel()
-    let greenLevelLabelModel = LevelLabelModel()
-    let blueLevelLabelModel = LevelLabelModel()
-
     let turnLabelModel = LabelModel(text: "Turn 0")
     let scoreLabelModel = LabelModel(text: "Score 0")
     let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.defaultTimeLeft]))
@@ -64,12 +60,6 @@ class GameSceneModelProducer {
             gauge.position = GLKVector3Add(GLKVector3Make(0, 0.075, 0), GLKVector3Make(0, 0.025 * Float(index + 1), 0))
             gauge.width = 0.15
             gauge.height = 0.01
-        }
-
-        let levelLabelModels = [redLevelLabelModel, greenLevelLabelModel, blueLevelLabelModel]
-        for (index, label) in levelLabelModels.enumerate() {
-            label.position = GLKVector3Add(GLKVector3Make(0, 0.075, 0), GLKVector3Make(0, 0.025 * Float(index + 1), 0))
-            label.size = 0.25
         }
 
         let maxWidthRatio: Float = 1.0
@@ -129,14 +119,6 @@ class GameSceneModelProducer {
     }
 
     func setUpSubscriptions() {
-        world.redProgress.bindTo(redGaugeModel.rx_progress).addDisposableTo(disposeBag)
-        world.greenProgress.bindTo(greenGaugeModel.rx_progress).addDisposableTo(disposeBag)
-        world.blueProgress.bindTo(blueGaugeModel.rx_progress).addDisposableTo(disposeBag)
-
-        world.redLevel.asObservable().bindTo(redLevelLabelModel.rx_level).addDisposableTo(disposeBag)
-        world.greenLevel.asObservable().bindTo(greenLevelLabelModel.rx_level).addDisposableTo(disposeBag)
-        world.blueLevel.asObservable().bindTo(blueLevelLabelModel.rx_level).addDisposableTo(disposeBag)
-
         world.turn.asObservable().map { "Turn \($0)" }.bindTo(turnLabelModel.rx_text).addDisposableTo(disposeBag)
         world.time.asObservable().map { String(format: "Time %.3f", arguments: [$0]) }.bindTo(timeLabelModel.rx_text).addDisposableTo(disposeBag)
         world.score.asObservable().map { "Score \($0)" }.bindTo(scoreLabelModel.rx_text).addDisposableTo(disposeBag)
@@ -146,12 +128,7 @@ class GameSceneModelProducer {
 
         world.eventLog.subscribeNext { event in
             switch event {
-            case .ObtainedColorStone(let point, let color, let score, let combo):
-                if let scoreLabel = self.floatingScoreLabels[point] {
-                    scoreLabel.text = String(score)
-                    scoreLabel.animationProgress = 0.0
-                }
-
+            case .ObtainedColorStone(let point, let color, let combo):
                 if let particleEmitter = self.icosahedronPointParticleEmitters[point] {
                     particleEmitter.colorFunction = { color.modelColor() }
                     particleEmitter.emit()
@@ -174,31 +151,6 @@ class GameSceneModelProducer {
                 break
             }
         }.addDisposableTo(disposeBag)
-
-        // for Debug
-
-//        let debugLevelText: (Int, Int64, Int64) -> String = { (level, count, nextExp) in
-//            return "Lv \(level)(\(count)/\(nextExp))"
-//        }
-//
-//        Observable.combineLatest(world.redLevel.asObservable(),
-//            world.redCount.asObservable(),
-//            world.redNextExp.asObservable(),
-//            resultSelector: debugLevelText)
-//            .bindTo(redLevelLabelModel.rx_text)
-//            .addDisposableTo(disposeBag)
-//        Observable.combineLatest(world.greenLevel.asObservable(),
-//            world.greenCount.asObservable(),
-//            world.greenNextExp.asObservable(),
-//            resultSelector: debugLevelText)
-//            .bindTo(greenLevelLabelModel.rx_text)
-//            .addDisposableTo(disposeBag)
-//        Observable.combineLatest(world.blueLevel.asObservable(),
-//            world.blueCount.asObservable(),
-//            world.blueNextExp.asObservable(),
-//            resultSelector: debugLevelText)
-//            .bindTo(blueLevelLabelModel.rx_text)
-//            .addDisposableTo(disposeBag)
     }
 
     func backgroundModelObjects() -> [Renderable] {
@@ -251,9 +203,6 @@ class GameSceneModelProducer {
             turnLabelModel,
             scoreLabelModel,
             timeLabelModel,
-            redLevelLabelModel,
-            greenLevelLabelModel,
-            blueLevelLabelModel,
         ]
 
         labels.appendContentsOf(extendTimeLabelModelGroup.activeLabels.map { $0 as Renderable })

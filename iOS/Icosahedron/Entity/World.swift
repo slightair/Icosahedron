@@ -13,12 +13,10 @@ class World {
 
     enum Event {
         case Move(track: Track)
-        case ObtainedColorStone(point: Icosahedron.Point, color: Color, score: Int64, combo: Int)
+        case ObtainedColorStone(point: Icosahedron.Point, color: Color, combo: Int)
         case ExtendTime(time: Double)
         case GameOver
     }
-
-    static let needExpList = [Int64.min, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, 514229, 832040, 1346269, 2178309, 3524578, 5702887, 9227465, 14930352, 24157816, 39088168, 63245984, 102334152, 165580128, 267914304, 433494464, 701408768, 1134903168, 1836311936, 2971215104, 4807526912, 7778741760, 12586268672, 20365010944, Int64.max]
 
     static let defaultTimeLeft = 15.0
     static let numberOfTracks = 5
@@ -33,18 +31,6 @@ class World {
     let redCount = Variable<Int64>(0)
     let greenCount = Variable<Int64>(0)
     let blueCount = Variable<Int64>(0)
-
-    let redLevel = Variable<Int>(1)
-    let greenLevel = Variable<Int>(1)
-    let blueLevel = Variable<Int>(1)
-
-    var redProgress: Observable<Float>!
-    var greenProgress: Observable<Float>!
-    var blueProgress: Observable<Float>!
-
-    var redNextExp: Observable<Int64>!
-    var greenNextExp: Observable<Int64>!
-    var blueNextExp: Observable<Int64>!
 
     let turn = Variable<Int>(0)
     let time = Variable<Double>(World.defaultTimeLeft)
@@ -97,36 +83,7 @@ class World {
         markerStatus = .Marked(color: firstColor)
         chainedItem = Variable<ChainedItem>(ChainedItem(.Stone(color: firstColor), 1))
 
-        setUpObservables()
         setUpSubscriptions()
-    }
-
-    func setUpObservables() {
-        func convertToProgress(level: Variable<Int>) -> (Int64 -> Float) {
-            return { count in
-                if count == 0 {
-                    return 0.0
-                }
-                if level.value == World.needExpList.count - 1 {
-                    return 1.0
-                }
-                let prev = World.needExpList[level.value - 1]
-                let next = World.needExpList[level.value]
-                return Float(count - prev) / Float(next - prev)
-            }
-        }
-
-        redProgress = redCount.asObservable().map(convertToProgress(redLevel))
-        greenProgress = greenCount.asObservable().map(convertToProgress(greenLevel))
-        blueProgress = blueCount.asObservable().map(convertToProgress(blueLevel))
-
-        let convertToNextExp: Int -> Int64 = { level in
-            World.needExpList[level]
-        }
-
-        redNextExp = redLevel.asObservable().map(convertToNextExp)
-        greenNextExp = greenLevel.asObservable().map(convertToNextExp)
-        blueNextExp = blueLevel.asObservable().map(convertToNextExp)
     }
 
     func setUpSubscriptions() {
@@ -149,23 +106,17 @@ class World {
                     }
 
                     let colorPoint = Int64(2 ** (self.chainedItem.value.count - 1))
-                    let obtainedScore: Int64
 
                     switch color {
                     case .Red:
-                        obtainedScore = Int64(self.redLevel.value) * colorPoint
                         self.redCount.value += colorPoint
                     case .Green:
-                        obtainedScore = Int64(self.greenLevel.value) * colorPoint
                         self.greenCount.value += colorPoint
                     case .Blue:
-                        obtainedScore = Int64(self.blueLevel.value) * colorPoint
                         self.blueCount.value += colorPoint
                     }
 
-                    self.score.value += obtainedScore
-
-                    let event: Event = .ObtainedColorStone(point: point, color: color, score: obtainedScore, combo: self.chainedItem.value.count)
+                    let event: Event = .ObtainedColorStone(point: point, color: color, combo: self.chainedItem.value.count)
                     self.eventLog.onNext(event)
                 }
             }
@@ -179,32 +130,6 @@ class World {
             }
             self.prevPoint = point
         }.addDisposableTo(disposeBag)
-
-        func levelUp(level: Variable<Int>) -> (Int64 -> Void) {
-            return { count in
-                guard level.value <= World.needExpList.count - 2 else {
-                    return
-                }
-
-                while count >= World.needExpList[level.value] {
-                    level.value += 1
-                }
-            }
-        }
-
-        redCount.asObservable().subscribeNext(levelUp(redLevel)).addDisposableTo(disposeBag)
-        greenCount.asObservable().subscribeNext(levelUp(greenLevel)).addDisposableTo(disposeBag)
-        blueCount.asObservable().subscribeNext(levelUp(blueLevel)).addDisposableTo(disposeBag)
-
-        let extendTime: (Int -> Void) = { level in
-            let time = Double(level) / 3.0
-            self.time.value += time
-            self.eventLog.onNext(.ExtendTime(time: time))
-        }
-
-        redLevel.asObservable().subscribeNext(extendTime).addDisposableTo(disposeBag)
-        greenLevel.asObservable().subscribeNext(extendTime).addDisposableTo(disposeBag)
-        blueLevel.asObservable().subscribeNext(extendTime).addDisposableTo(disposeBag)
 
         time.asObservable().filter { $0 == 0 }.subscribeNext { _ in
             self.eventLog.onNext(.GameOver)
