@@ -15,12 +15,11 @@ class GameSceneModelProducer {
     let redGaugeModel = GaugeModel(color: UIColor.flatRedColor().glColor)
     let greenGaugeModel = GaugeModel(color: UIColor.flatGreenColor().glColor)
     let blueGaugeModel = GaugeModel(color: UIColor.flatBlueColor().glColor)
-    let timeGaugeModel = GaugeModel(color: UIColor.flatWhiteColor().glColor)
+    let timeGaugeModel = GaugeModel(color: UIColor.flatWhiteColor().colorWithAlphaComponent(0.6).glColor, bgColor:UIColor.flatWhiteColor().colorWithAlphaComponent(0.2).glColor)
 
-    let turnLabelModel = LabelModel(text: "Turn 0")
+    let phaseLabelModel = LabelModel(text: "Phase 0")
     let scoreLabelModel = LabelModel(text: "Score 0")
-    let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.defaultTimeLeft]))
-    let extendTimeLabelModelGroup = SequenceLabelModelGroup()
+    let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.phaseInterval]))
     let comboLabelModelGroup = SequenceLabelModelGroup()
 
     var icosahedronPointParticleEmitters: [Icosahedron.Point: ParticleEmitter] = [:]
@@ -71,10 +70,10 @@ class GameSceneModelProducer {
         let bottomEdge = maxHeightRatio / 2 * 0.98
 
         let infoLabelSize: Float = 0.25
-        turnLabelModel.position = GLKVector3Make(leftEdge, bottomEdge, 0)
-        turnLabelModel.size = infoLabelSize
-        turnLabelModel.horizontalAlign = .Left
-        turnLabelModel.verticalAlign = .Bottom
+        phaseLabelModel.position = GLKVector3Make(0, bottomEdge, 0)
+        phaseLabelModel.size = infoLabelSize
+        phaseLabelModel.horizontalAlign = .Center
+        phaseLabelModel.verticalAlign = .Bottom
 
         scoreLabelModel.position = GLKVector3Make(leftEdge, topEdge, 0)
         scoreLabelModel.size = infoLabelSize
@@ -86,17 +85,11 @@ class GameSceneModelProducer {
         timeLabelModel.horizontalAlign = .Right
         timeLabelModel.verticalAlign = .Top
 
-        timeGaugeModel.position = GLKVector3Make(rightEdge, topEdge + timeLabelModel.glyphHeight * 1.2, 0)
-        timeGaugeModel.width = 0.15
+        timeGaugeModel.position = GLKVector3Make(0, topEdge + timeLabelModel.glyphHeight * 1.4, 0)
+        timeGaugeModel.width = 0.98
         timeGaugeModel.direction = .RightToLeft
-        timeGaugeModel.horizontalAlign = .Right
+        timeGaugeModel.horizontalAlign = .Center
         timeGaugeModel.verticalAlign = .Top
-
-        extendTimeLabelModelGroup.position = GLKVector3Make(rightEdge, timeGaugeModel.position.y + timeGaugeModel.height * 1.5, 0)
-        extendTimeLabelModelGroup.size = infoLabelSize
-        extendTimeLabelModelGroup.horizontalAlign = .Right
-        extendTimeLabelModelGroup.verticalAlign = .Top
-        extendTimeLabelModelGroup.duration = 1.5
 
         comboLabelModelGroup.position = GLKVector3Make(0, -maxHeightRatio / 4 - 0.03, 0)
         comboLabelModelGroup.size = 0.3
@@ -119,11 +112,11 @@ class GameSceneModelProducer {
     }
 
     func setUpSubscriptions() {
-        world.turn.asObservable().map { "Turn \($0)" }.bindTo(turnLabelModel.rx_text).addDisposableTo(disposeBag)
+        world.phase.asObservable().map { "Phase \($0)" }.bindTo(phaseLabelModel.rx_text).addDisposableTo(disposeBag)
         world.time.asObservable().map { String(format: "Time %.3f", arguments: [$0]) }.bindTo(timeLabelModel.rx_text).addDisposableTo(disposeBag)
         world.score.asObservable().map { "Score \($0)" }.bindTo(scoreLabelModel.rx_text).addDisposableTo(disposeBag)
 
-        let timeGaugeMax: Float = 30.0
+        let timeGaugeMax = Float(World.phaseInterval)
         world.time.asObservable().map { 1.0 - (timeGaugeMax - min(timeGaugeMax, Float($0))) / timeGaugeMax }.bindTo(timeGaugeModel.rx_progress).addDisposableTo(disposeBag)
 
         world.eventLog.subscribeNext { event in
@@ -144,9 +137,6 @@ class GameSceneModelProducer {
                 self.effectColor = color.modelColor()
                 self.effectColorFactor = 0.5
 
-            case .ExtendTime(let time):
-                let timeText = String(format: "+%.1fsec", arguments: [time])
-                self.extendTimeLabelModelGroup.appendNewLabel(timeText, color: UIColor.flatWhiteColor().glColor)
             default:
                 break
             }
@@ -200,12 +190,11 @@ class GameSceneModelProducer {
 
     func uiLabelObjects() -> [Renderable] {
         var labels: [Renderable] = [
-            turnLabelModel,
+            phaseLabelModel,
             scoreLabelModel,
             timeLabelModel,
         ]
 
-        labels.appendContentsOf(extendTimeLabelModelGroup.activeLabels.map { $0 as Renderable })
         labels.appendContentsOf(comboLabelModelGroup.activeLabels.map { $0 as Renderable })
 
         return labels
@@ -225,7 +214,6 @@ class GameSceneModelProducer {
             label.update(timeSinceLastUpdate)
         }
 
-        extendTimeLabelModelGroup.update(timeSinceLastUpdate)
         comboLabelModelGroup.update(timeSinceLastUpdate)
 
         for particleEmitter in icosahedronPointParticleEmitters.values {

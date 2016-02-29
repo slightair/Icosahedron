@@ -7,6 +7,7 @@ class GaugeModel: Renderable {
     var localModelVertices: [ModelVertex] = []
 
     let baseColor: GLKVector4
+    let maxColor: GLKVector4
 
     var progress: Float = 0.0 {
         didSet {
@@ -61,8 +62,13 @@ class GaugeModel: Renderable {
         }
     }
 
-    init(color: GLKVector4) {
+    init(color: GLKVector4, bgColor: GLKVector4? = nil) {
         baseColor = color
+        if bgColor == nil {
+            maxColor = GLKVector4Subtract(baseColor, GLKVector4Make(0, 0, 0, 0.7))
+        } else {
+            maxColor = bgColor!
+        }
         updateLocalModelVertices()
     }
 
@@ -70,11 +76,8 @@ class GaugeModel: Renderable {
         let normal = GLKVector3Make(0, 0, -1)
         let texCoord = GLKVector2Make(0, 0)
 
-        let progressColor = baseColor
-        let maxColor = GLKVector4Subtract(baseColor, GLKVector4Make(0, 0, 0, 0.7))
-
-        let leftColor = (direction == .LeftToRight) ? progressColor : maxColor
-        let rightColor = (direction == .LeftToRight) ? maxColor : progressColor
+        let leftColor = (direction == .LeftToRight) ? baseColor : maxColor
+        let rightColor = (direction == .LeftToRight) ? maxColor : baseColor
 
         let baseX: Float
         let baseY: Float

@@ -14,11 +14,11 @@ class World {
     enum Event {
         case Move(track: Track)
         case ObtainedColorStone(point: Icosahedron.Point, color: Color, combo: Int)
-        case ExtendTime(time: Double)
+        case PhaseChanged(phase: Int)
         case GameOver
     }
 
-    static let defaultTimeLeft = 15.0
+    static let phaseInterval = 20.0
     static let numberOfTracks = 5
 
     let icosahedron = Icosahedron()
@@ -33,7 +33,8 @@ class World {
     let blueCount = Variable<Int64>(0)
 
     let turn = Variable<Int>(0)
-    let time = Variable<Double>(World.defaultTimeLeft)
+    let phase = Variable<Int>(1)
+    let time = Variable<Double>(World.phaseInterval)
     let score = Variable<Int64>(0)
 
     typealias ChainedItem = (kind: Item.Kind, count: Int)
@@ -131,8 +132,13 @@ class World {
             self.prevPoint = point
         }.addDisposableTo(disposeBag)
 
+        phase.asObservable().subscribeNext { value in
+            self.eventLog.onNext(.PhaseChanged(phase: value))
+            self.time.value = World.phaseInterval
+        }.addDisposableTo(disposeBag)
+
         time.asObservable().filter { $0 == 0 }.subscribeNext { _ in
-            self.eventLog.onNext(.GameOver)
+            self.phase.value += 1
         }.addDisposableTo(disposeBag)
     }
 
