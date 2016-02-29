@@ -39,14 +39,14 @@ struct Screen {
 }
 
 extension World.Color {
-    func modelColor() -> GLKVector4 {
+    func modelColor(alpha: CGFloat = 1.0) -> GLKVector4 {
         switch self {
         case .Red:
-            return UIColor.flatRedColor().glColor
+            return UIColor.flatRedColor().colorWithAlphaComponent(alpha).glColor
         case .Green:
-            return UIColor.flatGreenColor().glColor
+            return UIColor.flatGreenColor().colorWithAlphaComponent(alpha).glColor
         case .Blue:
-            return UIColor.flatBlueColor().glColor
+            return UIColor.flatBlueColor().colorWithAlphaComponent(alpha).glColor
         }
     }
 

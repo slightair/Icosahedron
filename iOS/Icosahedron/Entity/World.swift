@@ -19,7 +19,7 @@ class World {
     }
 
     static let phaseInterval = 20.0
-    static let numberOfTracks = 5
+    static let numberOfTracks = 9
 
     let icosahedron = Icosahedron()
     var markerStatus: MarkerStatus

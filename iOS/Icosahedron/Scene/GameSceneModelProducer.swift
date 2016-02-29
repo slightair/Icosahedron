@@ -164,10 +164,13 @@ class GameSceneModelProducer {
             return model
         }
 
+        let trackAlphaStep = 1.0 / Float(World.numberOfTracks + 1)
         let trackModels: [Renderable] = world.compactTracks.map { track in
             let startPosition = icosahedronModel.coordinateOfPoint(track.start)
             let endPosition = icosahedronModel.coordinateOfPoint(track.end)
-            let model = TrackModel(leftPosition: startPosition, rightPosition: endPosition, color: track.color)
+
+            let alpha = 1.0 - Float(world.turn.value - track.turn) * trackAlphaStep
+            let model = TrackModel(leftPosition: startPosition, rightPosition: endPosition, color: track.color, alpha: CGFloat(alpha))
 
             return model
         }

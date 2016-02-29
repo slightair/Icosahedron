@@ -11,7 +11,7 @@ class TrackModel: Renderable {
 
     let topCoordinate: GLKVector3
 
-    init(leftPosition: GLKVector3, rightPosition: GLKVector3, color: World.Color) {
+    init(leftPosition: GLKVector3, rightPosition: GLKVector3, color: World.Color, alpha: CGFloat) {
         let coordA = GLKVector3MultiplyScalar(GLKVector3Make(-1, -0.02, 0), self.dynamicType.scale)
         let coordB = GLKVector3MultiplyScalar(GLKVector3Make(-1,  0.02, 0), self.dynamicType.scale)
         let coordC = GLKVector3MultiplyScalar(GLKVector3Make( 1, -0.02, 0), self.dynamicType.scale)
@@ -20,7 +20,7 @@ class TrackModel: Renderable {
         let normalACB = createFaceNormal(coordA, y: coordC, z: coordB)
         let normalCDB = createFaceNormal(coordC, y: coordD, z: coordB)
 
-        let colorVector = color.modelColor()
+        let colorVector = color.modelColor(alpha)
 
         let texCoordA = GLKVector2Make(0, 0)
         let texCoordB = GLKVector2Make(0, 1)
