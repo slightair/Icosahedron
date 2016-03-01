@@ -15,7 +15,7 @@ class GameSceneModelProducer {
     let redGaugeModel = GaugeModel(color: UIColor.flatRedColor().glColor)
     let greenGaugeModel = GaugeModel(color: UIColor.flatGreenColor().glColor)
     let blueGaugeModel = GaugeModel(color: UIColor.flatBlueColor().glColor)
-    let timeGaugeModel = GaugeModel(color: UIColor.flatWhiteColor().colorWithAlphaComponent(0.6).glColor, bgColor:UIColor.flatWhiteColor().colorWithAlphaComponent(0.2).glColor)
+    let timeGaugeModel = GaugeModel(color: UIColor.flatWhiteColor().colorWithAlphaComponent(0.7).glColor, bgColor:UIColor.flatWhiteColor().colorWithAlphaComponent(0.2).glColor)
 
     let phaseLabelModel = LabelModel(text: "Phase 0")
     let scoreLabelModel = LabelModel(text: "Score 0")
@@ -85,11 +85,11 @@ class GameSceneModelProducer {
         timeLabelModel.horizontalAlign = .Right
         timeLabelModel.verticalAlign = .Top
 
-        timeGaugeModel.position = GLKVector3Make(0, topEdge + timeLabelModel.glyphHeight * 1.4, 0)
+        timeGaugeModel.position = GLKVector3Make(0, bottomEdge - timeLabelModel.glyphHeight * 1.4, 0)
         timeGaugeModel.width = 0.98
         timeGaugeModel.direction = .RightToLeft
         timeGaugeModel.horizontalAlign = .Center
-        timeGaugeModel.verticalAlign = .Top
+        timeGaugeModel.verticalAlign = .Bottom
 
         comboLabelModelGroup.position = GLKVector3Make(0, -maxHeightRatio / 4 - 0.03, 0)
         comboLabelModelGroup.size = 0.3
