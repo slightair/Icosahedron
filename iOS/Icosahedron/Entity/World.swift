@@ -13,7 +13,7 @@ class World {
 
     enum Event {
         case Move(track: Track)
-        case ObtainedColorStone(point: Icosahedron.Point, color: Color, combo: Int)
+        case ObtainedColorStone(point: Icosahedron.Point, color: Color)
         case PhaseChanged(phase: Int)
         case GameOver
     }
@@ -28,17 +28,14 @@ class World {
     var prevPoint: Icosahedron.Point? = nil
     var currentPoint = Variable<Icosahedron.Point>(.C)
 
-    let redCount = Variable<Int64>(0)
-    let greenCount = Variable<Int64>(0)
-    let blueCount = Variable<Int64>(0)
+    let redCount = Variable<Int>(0)
+    let greenCount = Variable<Int>(0)
+    let blueCount = Variable<Int>(0)
 
     let turn = Variable<Int>(0)
     let phase = Variable<Int>(1)
     let time = Variable<Double>(World.phaseInterval)
     let score = Variable<Int64>(0)
-
-    typealias ChainedItem = (kind: Item.Kind, count: Int)
-    var chainedItem: Variable<ChainedItem>
 
     var tracks: [Track] = [] {
         didSet {
@@ -82,7 +79,6 @@ class World {
 
         let firstColor: Color = .Blue
         markerStatus = .Marked(color: firstColor)
-        chainedItem = Variable<ChainedItem>(ChainedItem(.Stone(color: firstColor), 1))
 
         setUpSubscriptions()
     }
@@ -100,24 +96,16 @@ class World {
                 case .Stone(let color):
                     self.markerStatus = .Marked(color: color)
 
-                    if self.chainedItem.value.kind == catchedItem.kind {
-                        self.chainedItem.value = ChainedItem(catchedItem.kind, self.chainedItem.value.count + 1)
-                    } else {
-                        self.chainedItem.value = ChainedItem(catchedItem.kind, 1)
-                    }
-
-                    let colorPoint = Int64(2 ** (self.chainedItem.value.count - 1))
-
                     switch color {
                     case .Red:
-                        self.redCount.value += colorPoint
+                        self.redCount.value++
                     case .Green:
-                        self.greenCount.value += colorPoint
+                        self.greenCount.value++
                     case .Blue:
-                        self.blueCount.value += colorPoint
+                        self.blueCount.value++
                     }
 
-                    let event: Event = .ObtainedColorStone(point: point, color: color, combo: self.chainedItem.value.count)
+                    let event: Event = .ObtainedColorStone(point: point, color: color)
                     self.eventLog.onNext(event)
                 }
             }

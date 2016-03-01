@@ -17,7 +17,7 @@ class GameSceneModelProducer {
     let phaseLabelModel = LabelModel(text: "Phase 0")
     let scoreLabelModel = LabelModel(text: "Score 0")
     let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.phaseInterval]))
-    let comboLabelModelGroup = SequenceLabelModelGroup()
+    let infoLabelModelGroup = SequenceLabelModelGroup()
 
     var icosahedronPointParticleEmitters: [Icosahedron.Point: ParticleEmitter] = [:]
 
@@ -81,12 +81,12 @@ class GameSceneModelProducer {
         timeGaugeModel.horizontalAlign = .Center
         timeGaugeModel.verticalAlign = .Bottom
 
-        comboLabelModelGroup.position = GLKVector3Make(0, -maxHeightRatio / 4 - 0.03, 0)
-        comboLabelModelGroup.size = 0.3
-        comboLabelModelGroup.verticalAlign = .Top
-        comboLabelModelGroup.direction = .Up
-        comboLabelModelGroup.duration = 2.0
-        comboLabelModelGroup.showBackground = true
+        infoLabelModelGroup.position = GLKVector3Make(0, -maxHeightRatio / 4 - 0.03, 0)
+        infoLabelModelGroup.size = 0.3
+        infoLabelModelGroup.verticalAlign = .Top
+        infoLabelModelGroup.direction = .Up
+        infoLabelModelGroup.duration = 2.0
+        infoLabelModelGroup.showBackground = true
     }
 
     func setUpPoints() {
@@ -111,21 +111,17 @@ class GameSceneModelProducer {
 
         world.eventLog.subscribeNext { event in
             switch event {
-            case .ObtainedColorStone(let point, let color, let combo):
+            case .ObtainedColorStone(let point, let color):
                 if let particleEmitter = self.icosahedronPointParticleEmitters[point] {
                     particleEmitter.colorFunction = { color.modelColor() }
                     particleEmitter.emit()
                 }
 
-                if combo > 1 {
-                    let comboText = String(format: "Combo \(combo)")
-                    self.comboLabelModelGroup.appendNewLabel(comboText, color: color.modelColor())
-                } else {
-                    self.noiseFactor = 0.3
-                }
-
                 self.effectColor = color.modelColor()
                 self.effectColorFactor = 0.5
+
+            case .PhaseChanged(let phase):
+                self.infoLabelModelGroup.appendNewLabel("Phase \(phase)", color: UIColor.flatWhiteColor().glColor)
 
             default:
                 break
@@ -185,7 +181,7 @@ class GameSceneModelProducer {
             timeLabelModel,
         ]
 
-        labels.appendContentsOf(comboLabelModelGroup.activeLabels.map { $0 as Renderable })
+        labels.appendContentsOf(infoLabelModelGroup.activeLabels.map { $0 as Renderable })
 
         return labels
     }
@@ -204,7 +200,7 @@ class GameSceneModelProducer {
             label.update(timeSinceLastUpdate)
         }
 
-        comboLabelModelGroup.update(timeSinceLastUpdate)
+        infoLabelModelGroup.update(timeSinceLastUpdate)
 
         for particleEmitter in icosahedronPointParticleEmitters.values {
             particleEmitter.update(timeSinceLastUpdate)
@@ -212,10 +208,6 @@ class GameSceneModelProducer {
 
         let markerScale = Float(1.0 + 0.2 * cos(2 * M_PI * Double(animationLoopValue)))
         markerModel.scale = GLKVector3Make(markerScale, 1.0, markerScale)
-
-        if noiseFactor > 0.0 {
-            noiseFactor = max(0.0, noiseFactor - Float(timeSinceLastUpdate))
-        }
 
         if effectColorFactor > 0.0 {
             effectColorFactor = max(0.0, effectColorFactor - Float(timeSinceLastUpdate))
