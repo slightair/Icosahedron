@@ -12,9 +12,6 @@ class GameSceneModelProducer {
 
     var floatingScoreLabels: [Icosahedron.Point: FloatingLabelModel] = [:]
 
-    let redGaugeModel = GaugeModel(color: UIColor.flatRedColor().glColor)
-    let greenGaugeModel = GaugeModel(color: UIColor.flatGreenColor().glColor)
-    let blueGaugeModel = GaugeModel(color: UIColor.flatBlueColor().glColor)
     let timeGaugeModel = GaugeModel(color: UIColor.flatWhiteColor().colorWithAlphaComponent(0.7).glColor, bgColor:UIColor.flatWhiteColor().colorWithAlphaComponent(0.2).glColor)
 
     let phaseLabelModel = LabelModel(text: "Phase 0")
@@ -52,13 +49,6 @@ class GameSceneModelProducer {
             }
 
             floatingScoreLabels[point] = scoreLabel
-        }
-
-        let itemGaugeModels = [redGaugeModel, greenGaugeModel, blueGaugeModel]
-        for (index, gauge) in itemGaugeModels.enumerate() {
-            gauge.position = GLKVector3Add(GLKVector3Make(0, 0.075, 0), GLKVector3Make(0, 0.025 * Float(index + 1), 0))
-            gauge.width = 0.15
-            gauge.height = 0.01
         }
 
         let maxWidthRatio: Float = 1.0
@@ -184,9 +174,6 @@ class GameSceneModelProducer {
 
     func uiObjects() -> [Renderable] {
         return [
-            redGaugeModel,
-            greenGaugeModel,
-            blueGaugeModel,
             timeGaugeModel,
         ]
     }
