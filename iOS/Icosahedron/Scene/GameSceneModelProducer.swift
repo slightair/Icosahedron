@@ -12,7 +12,7 @@ class GameSceneModelProducer {
 
     var floatingScoreLabels: [Icosahedron.Point: FloatingLabelModel] = [:]
 
-    let timeGaugeModel = GaugeModel(color: UIColor.flatWhiteColor().colorWithAlphaComponent(0.7).glColor, bgColor:UIColor.flatWhiteColor().colorWithAlphaComponent(0.2).glColor)
+    let timeGaugeModel = GaugeModel(color: UIColor.flatWhiteColor().colorWithAlphaComponent(0.8).glColor, bgColor:UIColor.flatWhiteColor().colorWithAlphaComponent(0.3).glColor)
 
     let phaseLabelModel = LabelModel(text: "Phase 0")
     let scoreLabelModel = LabelModel(text: "Score 0")
@@ -75,8 +75,8 @@ class GameSceneModelProducer {
         timeLabelModel.horizontalAlign = .Right
         timeLabelModel.verticalAlign = .Top
 
-        timeGaugeModel.position = GLKVector3Make(0, bottomEdge - timeLabelModel.glyphHeight * 1.4, 0)
-        timeGaugeModel.width = 0.98
+        timeGaugeModel.position = GLKVector3Make(0, maxHeightRatio / 2, 0)
+        timeGaugeModel.width = 1.0
         timeGaugeModel.direction = .RightToLeft
         timeGaugeModel.horizontalAlign = .Center
         timeGaugeModel.verticalAlign = .Bottom
