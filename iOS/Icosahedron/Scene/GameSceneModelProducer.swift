@@ -24,7 +24,7 @@ class GameSceneModelProducer {
     var animationLoopValue: Float = 0.0
     var noiseFactor: Float = 0.0
     var effectColor: GLKVector4 = GLKVector4Make(1, 1, 1, 1)
-    var effectColorFactor: Float = 0.0
+    var effectColorFactor: Float = 0.3
 
     let disposeBag = DisposeBag()
 
@@ -118,7 +118,6 @@ class GameSceneModelProducer {
                 }
 
                 self.effectColor = color.modelColor()
-                self.effectColorFactor = 0.5
 
             case .PhaseChanged(let phase):
                 self.infoLabelModelGroup.appendNewLabel("Phase \(phase)", color: UIColor.flatWhiteColor().glColor)
@@ -208,9 +207,5 @@ class GameSceneModelProducer {
 
         let markerScale = Float(1.0 + 0.2 * cos(2 * M_PI * Double(animationLoopValue)))
         markerModel.scale = GLKVector3Make(markerScale, 1.0, markerScale)
-
-        if effectColorFactor > 0.0 {
-            effectColorFactor = max(0.0, effectColorFactor - Float(timeSinceLastUpdate))
-        }
     }
 }
