@@ -24,7 +24,7 @@ class GameSceneModelProducer {
     var animationLoopValue: Float = 0.0
     var noiseFactor: Float = 0.0
     var effectColor: GLKVector4 = GLKVector4Make(1, 1, 1, 1)
-    var effectColorFactor: Float = 0.3
+    var effectColorFactor: Float = 0.0
 
     let disposeBag = DisposeBag()
 
@@ -116,9 +116,6 @@ class GameSceneModelProducer {
                     particleEmitter.colorFunction = { color.modelColor() }
                     particleEmitter.emit()
                 }
-
-                self.effectColor = color.modelColor()
-
             case .PhaseChanged(let phase):
                 self.infoLabelModelGroup.appendNewLabel("Phase \(phase)", color: UIColor.flatWhiteColor().glColor)
 
