@@ -12,29 +12,54 @@ class TrackModel: Renderable {
     let topCoordinate: GLKVector3
 
     init(leftPosition: GLKVector3, rightPosition: GLKVector3, color: World.Color, alpha: CGFloat) {
-        let coordA = GLKVector3MultiplyScalar(GLKVector3Make(-1, -0.02, 0), self.dynamicType.scale)
-        let coordB = GLKVector3MultiplyScalar(GLKVector3Make(-1,  0.02, 0), self.dynamicType.scale)
-        let coordC = GLKVector3MultiplyScalar(GLKVector3Make( 1, -0.02, 0), self.dynamicType.scale)
-        let coordD = GLKVector3MultiplyScalar(GLKVector3Make( 1,  0.02, 0), self.dynamicType.scale)
+        let width: Float = 0.05
 
-        let normalACB = createFaceNormal(coordA, y: coordC, z: coordB)
-        let normalCDB = createFaceNormal(coordC, y: coordD, z: coordB)
+        let coordA = GLKVector3MultiplyScalar(GLKVector3Make(-1, -width, 0), self.dynamicType.scale)
+        let coordB = GLKVector3MultiplyScalar(GLKVector3Make(-1,  width, 0), self.dynamicType.scale)
+        let coordC = GLKVector3MultiplyScalar(GLKVector3Make(-1 + width, -width, 0), self.dynamicType.scale)
+        let coordD = GLKVector3MultiplyScalar(GLKVector3Make(-1 + width,  width, 0), self.dynamicType.scale)
+        let coordE = GLKVector3MultiplyScalar(GLKVector3Make( 1 - width, -width, 0), self.dynamicType.scale)
+        let coordF = GLKVector3MultiplyScalar(GLKVector3Make( 1 - width,  width, 0), self.dynamicType.scale)
+        let coordG = GLKVector3MultiplyScalar(GLKVector3Make( 1, -width, 0), self.dynamicType.scale)
+        let coordH = GLKVector3MultiplyScalar(GLKVector3Make( 1,  width, 0), self.dynamicType.scale)
+
+        let normal = createFaceNormal(coordA, y: coordC, z: coordB)
 
         let colorVector = color.modelColor(alpha)
 
         let texCoordA = GLKVector2Make(0, 0)
         let texCoordB = GLKVector2Make(0, 1)
-        let texCoordC = GLKVector2Make(1, 0)
-        let texCoordD = GLKVector2Make(1, 1)
+        let texCoordC = GLKVector2Make(0.5, 0)
+        let texCoordD = GLKVector2Make(0.5, 1)
+        let texCoordE = GLKVector2Make(0.5, 0)
+        let texCoordF = GLKVector2Make(0.5, 1)
+        let texCoordG = GLKVector2Make(1, 0)
+        let texCoordH = GLKVector2Make(1, 1)
 
         localModelVertices = [
-            ModelVertex(position: coordA, normal: normalACB, color: colorVector, texCoord: texCoordA),
-            ModelVertex(position: coordC, normal: normalACB, color: colorVector, texCoord: texCoordC),
-            ModelVertex(position: coordB, normal: normalACB, color: colorVector, texCoord: texCoordB),
+            ModelVertex(position: coordA, normal: normal, color: colorVector, texCoord: texCoordA),
+            ModelVertex(position: coordC, normal: normal, color: colorVector, texCoord: texCoordC),
+            ModelVertex(position: coordB, normal: normal, color: colorVector, texCoord: texCoordB),
 
-            ModelVertex(position: coordC, normal: normalCDB, color: colorVector, texCoord: texCoordC),
-            ModelVertex(position: coordD, normal: normalCDB, color: colorVector, texCoord: texCoordD),
-            ModelVertex(position: coordB, normal: normalCDB, color: colorVector, texCoord: texCoordB),
+            ModelVertex(position: coordC, normal: normal, color: colorVector, texCoord: texCoordC),
+            ModelVertex(position: coordD, normal: normal, color: colorVector, texCoord: texCoordD),
+            ModelVertex(position: coordB, normal: normal, color: colorVector, texCoord: texCoordB),
+
+            ModelVertex(position: coordC, normal: normal, color: colorVector, texCoord: texCoordC),
+            ModelVertex(position: coordE, normal: normal, color: colorVector, texCoord: texCoordE),
+            ModelVertex(position: coordD, normal: normal, color: colorVector, texCoord: texCoordD),
+
+            ModelVertex(position: coordE, normal: normal, color: colorVector, texCoord: texCoordE),
+            ModelVertex(position: coordF, normal: normal, color: colorVector, texCoord: texCoordF),
+            ModelVertex(position: coordD, normal: normal, color: colorVector, texCoord: texCoordD),
+
+            ModelVertex(position: coordE, normal: normal, color: colorVector, texCoord: texCoordE),
+            ModelVertex(position: coordG, normal: normal, color: colorVector, texCoord: texCoordG),
+            ModelVertex(position: coordF, normal: normal, color: colorVector, texCoord: texCoordF),
+
+            ModelVertex(position: coordG, normal: normal, color: colorVector, texCoord: texCoordG),
+            ModelVertex(position: coordH, normal: normal, color: colorVector, texCoord: texCoordH),
+            ModelVertex(position: coordF, normal: normal, color: colorVector, texCoord: texCoordF),
         ]
 
         topCoordinate = GLKVector3Make(0, 0, 1)

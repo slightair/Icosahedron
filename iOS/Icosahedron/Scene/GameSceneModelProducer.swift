@@ -149,6 +149,10 @@ class GameSceneModelProducer {
             return model
         }
 
+        return requiredModels + itemModels
+    }
+
+    func trackObjects() -> [Renderable] {
         let trackAlphaStep = 1.0 / Float(World.numberOfTracks + 1)
         let trackModels: [Renderable] = world.compactTracks.map { track in
             let startPosition = icosahedronModel.coordinateOfPoint(track.start)
@@ -160,7 +164,7 @@ class GameSceneModelProducer {
             return model
         }
 
-        return requiredModels + itemModels + trackModels
+        return trackModels
     }
 
     func labelObjects() -> [LabelModel] {

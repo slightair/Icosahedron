@@ -89,6 +89,12 @@ class GameSceneRenderer: BaseRenderer {
 
         glBindTexture(GLenum(GL_TEXTURE_2D), FontData.defaultData.textureInfo.name)
         drawModels(modelProducer.labelObjects().map { $0 as Renderable})
+
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE))
+
+        let pointTextureInfo = TextureSet.sharedSet[.Point]
+        glBindTexture(GLenum(GL_TEXTURE_2D), pointTextureInfo.name)
+        drawModels(modelProducer.trackObjects())
     }
 
     private func renderParticles() {
