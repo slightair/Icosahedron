@@ -5,7 +5,6 @@ class SphereModel: Renderable {
     var quaternion = GLKQuaternionIdentity
     var localModelVertices: [ModelVertex]
     let scale: GLKVector3 = GLKVector3Make(1.0, 1.0, 1.0)
-    let customColor: GLKVector4? = nil
     let r: Float = 3
 
     init() {
