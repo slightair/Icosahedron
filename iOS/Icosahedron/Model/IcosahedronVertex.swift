@@ -21,12 +21,8 @@ class IcosahedronVertex: CustomStringConvertible {
         ]
     }
 
-    var nextVertexNames: [String] {
-        return nextVertices.map { $0.point.rawValue }
-    }
-
     var description: String {
-        return "\(point.rawValue) \(NSStringFromGLKVector3(coordinate))"
+        return "\(point) \(NSStringFromGLKVector3(coordinate))"
     }
 
     init(point: Icosahedron.Point, coordinate: GLKVector3) {
