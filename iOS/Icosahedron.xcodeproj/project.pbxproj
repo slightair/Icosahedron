@@ -32,6 +32,7 @@
 		572FCA611C4A59D400778913 /* Particle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA601C4A59D400778913 /* Particle.swift */; };
 		573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132331BDCBF5200824EA5 /* ModelShader.fsh */; };
 		573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132341BDCBF5200824EA5 /* ModelShader.vsh */; };
+		5746E60C1C8DB30400D60C3F /* IcosahedronTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5746E60B1C8DB30400D60C3F /* IcosahedronTests.swift */; };
 		5756BE7E1C5908AB007F163B /* CanvasShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756BE7D1C5908AB007F163B /* CanvasShaderProgram.swift */; };
 		5756BE801C5908C8007F163B /* CanvasShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5756BE7F1C5908C8007F163B /* CanvasShader.vsh */; };
 		5756BE821C5908D4007F163B /* CanvasShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5756BE811C5908D4007F163B /* CanvasShader.fsh */; };
@@ -80,6 +81,16 @@
 		57F5FB771C36702700817824 /* LevelLabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5FB761C36702600817824 /* LevelLabelModel.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		5746E60E1C8DB30400D60C3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 579013971BC1083400ADAE3E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5790139E1BC1083400ADAE3E;
+			remoteInfo = Icosahedron;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		57F5FB671C33BD9000817824 /* Carthage Copy dSYMs */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -123,6 +134,9 @@
 		572FCA601C4A59D400778913 /* Particle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Particle.swift; sourceTree = "<group>"; };
 		573132331BDCBF5200824EA5 /* ModelShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.fsh; sourceTree = "<group>"; };
 		573132341BDCBF5200824EA5 /* ModelShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.vsh; sourceTree = "<group>"; };
+		5746E6091C8DB30400D60C3F /* IcosahedronTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IcosahedronTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5746E60B1C8DB30400D60C3F /* IcosahedronTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IcosahedronTests.swift; sourceTree = "<group>"; };
+		5746E60D1C8DB30400D60C3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5756BE7D1C5908AB007F163B /* CanvasShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasShaderProgram.swift; sourceTree = "<group>"; };
 		5756BE7F1C5908C8007F163B /* CanvasShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CanvasShader.vsh; sourceTree = "<group>"; };
 		5756BE811C5908D4007F163B /* CanvasShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CanvasShader.fsh; sourceTree = "<group>"; };
@@ -174,6 +188,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5746E6061C8DB30400D60C3F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5790139C1BC1083400ADAE3E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -222,10 +243,20 @@
 			path = Shader;
 			sourceTree = "<group>";
 		};
+		5746E60A1C8DB30400D60C3F /* IcosahedronTests */ = {
+			isa = PBXGroup;
+			children = (
+				5746E60B1C8DB30400D60C3F /* IcosahedronTests.swift */,
+				5746E60D1C8DB30400D60C3F /* Info.plist */,
+			);
+			path = IcosahedronTests;
+			sourceTree = "<group>";
+		};
 		579013961BC1083400ADAE3E = {
 			isa = PBXGroup;
 			children = (
 				579013A11BC1083400ADAE3E /* Icosahedron */,
+				5746E60A1C8DB30400D60C3F /* IcosahedronTests */,
 				579013A01BC1083400ADAE3E /* Products */,
 				F753C31B6DC8F86ABE5A2331 /* Frameworks */,
 			);
@@ -235,6 +266,7 @@
 			isa = PBXGroup;
 			children = (
 				5790139F1BC1083400ADAE3E /* Icosahedron.app */,
+				5746E6091C8DB30400D60C3F /* IcosahedronTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -359,6 +391,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5746E6081C8DB30400D60C3F /* IcosahedronTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5746E6121C8DB30400D60C3F /* Build configuration list for PBXNativeTarget "IcosahedronTests" */;
+			buildPhases = (
+				5746E6051C8DB30400D60C3F /* Sources */,
+				5746E6061C8DB30400D60C3F /* Frameworks */,
+				5746E6071C8DB30400D60C3F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5746E60F1C8DB30400D60C3F /* PBXTargetDependency */,
+			);
+			name = IcosahedronTests;
+			productName = IcosahedronTests;
+			productReference = 5746E6091C8DB30400D60C3F /* IcosahedronTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		5790139E1BC1083400ADAE3E /* Icosahedron */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 579013B51BC1083400ADAE3E /* Build configuration list for PBXNativeTarget "Icosahedron" */;
@@ -385,10 +435,14 @@
 		579013971BC1083400ADAE3E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = slightair;
 				TargetAttributes = {
+					5746E6081C8DB30400D60C3F = {
+						CreatedOnToolsVersion = 7.2;
+						TestTargetID = 5790139E1BC1083400ADAE3E;
+					};
 					5790139E1BC1083400ADAE3E = {
 						CreatedOnToolsVersion = 7.0.1;
 					};
@@ -408,11 +462,19 @@
 			projectRoot = "";
 			targets = (
 				5790139E1BC1083400ADAE3E /* Icosahedron */,
+				5746E6081C8DB30400D60C3F /* IcosahedronTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5746E6071C8DB30400D60C3F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5790139D1BC1083400ADAE3E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -471,6 +533,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5746E6051C8DB30400D60C3F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5746E60C1C8DB30400D60C3F /* IcosahedronTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5790139B1BC1083400ADAE3E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -529,6 +599,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		5746E60F1C8DB30400D60C3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5790139E1BC1083400ADAE3E /* Icosahedron */;
+			targetProxy = 5746E60E1C8DB30400D60C3F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		579013AA1BC1083400ADAE3E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -549,6 +627,33 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		5746E6101C8DB30400D60C3F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = IcosahedronTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = cc.clv.IcosahedronTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Icosahedron.app/Icosahedron";
+			};
+			name = Debug;
+		};
+		5746E6111C8DB30400D60C3F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = IcosahedronTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = cc.clv.IcosahedronTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Icosahedron.app/Icosahedron";
+			};
+			name = Release;
+		};
 		579013B31BC1083400ADAE3E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -672,6 +777,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5746E6121C8DB30400D60C3F /* Build configuration list for PBXNativeTarget "IcosahedronTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5746E6101C8DB30400D60C3F /* Debug */,
+				5746E6111C8DB30400D60C3F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		5790139A1BC1083400ADAE3E /* Build configuration list for PBXProject "Icosahedron" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
