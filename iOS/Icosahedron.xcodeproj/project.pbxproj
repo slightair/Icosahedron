@@ -32,7 +32,14 @@
 		572FCA611C4A59D400778913 /* Particle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572FCA601C4A59D400778913 /* Particle.swift */; };
 		573132351BDCBF5200824EA5 /* ModelShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132331BDCBF5200824EA5 /* ModelShader.fsh */; };
 		573132361BDCBF5200824EA5 /* ModelShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 573132341BDCBF5200824EA5 /* ModelShader.vsh */; };
-		5746E60C1C8DB30400D60C3F /* IcosahedronTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5746E60B1C8DB30400D60C3F /* IcosahedronTests.swift */; };
+		5746E6141C8DB42700D60C3F /* SymbolDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5746E6131C8DB42700D60C3F /* SymbolDetector.swift */; };
+		5746E6151C8DB42700D60C3F /* SymbolDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5746E6131C8DB42700D60C3F /* SymbolDetector.swift */; };
+		5746E6181C8DB55300D60C3F /* SymbolDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5746E6161C8DB55300D60C3F /* SymbolDetectorTests.swift */; };
+		5746E6191C8DB5A200D60C3F /* Icosahedron.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AD5F51C01EE0500218D38 /* Icosahedron.swift */; };
+		5746E61A1C8DB5AF00D60C3F /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B92BD1C6EF6B300FF9DA3 /* Track.swift */; };
+		5746E61B1C8DB5B700D60C3F /* World.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AD5F31C01ECA100218D38 /* World.swift */; };
+		5746E61C1C8DB61800D60C3F /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB441C33BC2B00817824 /* RxSwift.framework */; };
+		5746E61D1C8DB62C00D60C3F /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AD6081C01F35300218D38 /* Item.swift */; };
 		5756BE7E1C5908AB007F163B /* CanvasShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756BE7D1C5908AB007F163B /* CanvasShaderProgram.swift */; };
 		5756BE801C5908C8007F163B /* CanvasShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5756BE7F1C5908C8007F163B /* CanvasShader.vsh */; };
 		5756BE821C5908D4007F163B /* CanvasShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5756BE811C5908D4007F163B /* CanvasShader.fsh */; };
@@ -135,8 +142,9 @@
 		573132331BDCBF5200824EA5 /* ModelShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.fsh; sourceTree = "<group>"; };
 		573132341BDCBF5200824EA5 /* ModelShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ModelShader.vsh; sourceTree = "<group>"; };
 		5746E6091C8DB30400D60C3F /* IcosahedronTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IcosahedronTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5746E60B1C8DB30400D60C3F /* IcosahedronTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IcosahedronTests.swift; sourceTree = "<group>"; };
 		5746E60D1C8DB30400D60C3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5746E6131C8DB42700D60C3F /* SymbolDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymbolDetector.swift; sourceTree = "<group>"; };
+		5746E6161C8DB55300D60C3F /* SymbolDetectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymbolDetectorTests.swift; sourceTree = "<group>"; };
 		5756BE7D1C5908AB007F163B /* CanvasShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasShaderProgram.swift; sourceTree = "<group>"; };
 		5756BE7F1C5908C8007F163B /* CanvasShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CanvasShader.vsh; sourceTree = "<group>"; };
 		5756BE811C5908D4007F163B /* CanvasShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CanvasShader.fsh; sourceTree = "<group>"; };
@@ -192,6 +200,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5746E61C1C8DB61800D60C3F /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,8 +255,8 @@
 		5746E60A1C8DB30400D60C3F /* IcosahedronTests */ = {
 			isa = PBXGroup;
 			children = (
-				5746E60B1C8DB30400D60C3F /* IcosahedronTests.swift */,
 				5746E60D1C8DB30400D60C3F /* Info.plist */,
+				5746E6161C8DB55300D60C3F /* SymbolDetectorTests.swift */,
 			);
 			path = IcosahedronTests;
 			sourceTree = "<group>";
@@ -349,6 +358,7 @@
 				579AD6081C01F35300218D38 /* Item.swift */,
 				579AD5F51C01EE0500218D38 /* Icosahedron.swift */,
 				571B92BD1C6EF6B300FF9DA3 /* Track.swift */,
+				5746E6131C8DB42700D60C3F /* SymbolDetector.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -537,7 +547,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5746E60C1C8DB30400D60C3F /* IcosahedronTests.swift in Sources */,
+				5746E6181C8DB55300D60C3F /* SymbolDetectorTests.swift in Sources */,
+				5746E6151C8DB42700D60C3F /* SymbolDetector.swift in Sources */,
+				5746E6191C8DB5A200D60C3F /* Icosahedron.swift in Sources */,
+				5746E61A1C8DB5AF00D60C3F /* Track.swift in Sources */,
+				5746E61D1C8DB62C00D60C3F /* Item.swift in Sources */,
+				5746E61B1C8DB5B700D60C3F /* World.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -548,6 +563,7 @@
 				5771700D1C4D1886008C35A2 /* SphereModel.swift in Sources */,
 				5708F42B1C5DE50D00ECDE0E /* BackgroundShaderProgram.swift in Sources */,
 				571B92BC1C6E487300FF9DA3 /* TitleSceneModelProducer.swift in Sources */,
+				5746E6141C8DB42700D60C3F /* SymbolDetector.swift in Sources */,
 				572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */,
 				572FCA611C4A59D400778913 /* Particle.swift in Sources */,
 				572FCA5F1C4A442700778913 /* ParticleVertex.swift in Sources */,
@@ -630,8 +646,11 @@
 		5746E6101C8DB30400D60C3F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = IcosahedronTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -644,7 +663,10 @@
 		5746E6111C8DB30400D60C3F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = IcosahedronTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -784,6 +806,7 @@
 				5746E6111C8DB30400D60C3F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5790139A1BC1083400ADAE3E /* Build configuration list for PBXProject "Icosahedron" */ = {
 			isa = XCConfigurationList;
