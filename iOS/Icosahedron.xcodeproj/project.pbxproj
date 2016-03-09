@@ -46,6 +46,7 @@
 		5756BE841C590ACB007F163B /* CanvasModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756BE831C590ACB007F163B /* CanvasModel.swift */; };
 		5771700D1C4D1886008C35A2 /* SphereModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771700C1C4D1886008C35A2 /* SphereModel.swift */; };
 		5771700F1C4E7F50008C35A2 /* RenderablePolygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771700E1C4E7F50008C35A2 /* RenderablePolygon.swift */; };
+		577600571C90650300A0E830 /* TrackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577600561C90650300A0E830 /* TrackTests.swift */; };
 		5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778A5471C25382B0019FF99 /* UIShaderProgram.swift */; };
 		5778A54A1C25384F0019FF99 /* UIShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5778A5491C25384F0019FF99 /* UIShader.fsh */; };
 		5778A54C1C25385B0019FF99 /* UIShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 5778A54B1C25385B0019FF99 /* UIShader.vsh */; };
@@ -151,6 +152,7 @@
 		5756BE831C590ACB007F163B /* CanvasModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasModel.swift; sourceTree = "<group>"; };
 		5771700C1C4D1886008C35A2 /* SphereModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SphereModel.swift; sourceTree = "<group>"; };
 		5771700E1C4E7F50008C35A2 /* RenderablePolygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderablePolygon.swift; sourceTree = "<group>"; };
+		577600561C90650300A0E830 /* TrackTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackTests.swift; sourceTree = "<group>"; };
 		5778A5471C25382B0019FF99 /* UIShaderProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIShaderProgram.swift; sourceTree = "<group>"; };
 		5778A5491C25384F0019FF99 /* UIShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UIShader.fsh; sourceTree = "<group>"; };
 		5778A54B1C25385B0019FF99 /* UIShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UIShader.vsh; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 			children = (
 				5746E60D1C8DB30400D60C3F /* Info.plist */,
 				5746E6161C8DB55300D60C3F /* SymbolDetectorTests.swift */,
+				577600561C90650300A0E830 /* TrackTests.swift */,
 			);
 			path = IcosahedronTests;
 			sourceTree = "<group>";
@@ -553,6 +556,7 @@
 				5746E61A1C8DB5AF00D60C3F /* Track.swift in Sources */,
 				5746E61D1C8DB62C00D60C3F /* Item.swift in Sources */,
 				5746E61B1C8DB5B700D60C3F /* World.swift in Sources */,
+				577600571C90650300A0E830 /* TrackTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
