@@ -39,8 +39,8 @@ class SymbolDetectorTests: XCTestCase {
     func testFacesFromTracksHasNotFacesColorDifferent() {
         let tracks: [Track] = [
             Track(start: .A, end: .C, color: .Red, turn:1),
-            Track(start: .C, end: .B, color: .Red, turn:2),
-            Track(start: .B, end: .A, color: .Red, turn:3),
+            Track(start: .C, end: .B, color: .Green, turn:2),
+            Track(start: .B, end: .A, color: .Blue, turn:3),
         ]
         let faces = SymbolDetector.facesFromTracks(tracks)
 

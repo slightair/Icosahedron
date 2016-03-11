@@ -25,13 +25,13 @@ class SymbolDetector {
     ]
 
     static func facesFromTracks(tracks: [Track]) -> Set<Icosahedron.Face> {
-        let sides = Set<Icosahedron.Side>(tracks.map { $0.side })
         var faces: Set<Icosahedron.Face> = []
 
         for (materials, face) in SymbolDetector.faceMaterials {
-            let targetSides = sides.intersect(materials)
+            let targetTracks = tracks.filter { materials.contains($0.side) }
+            let targetColors = Set<World.Color>(targetTracks.map { $0.color })
 
-            if targetSides.count == 3 {
+            if targetTracks.count == 3 && targetColors.count == 1 {
                 faces.insert(face)
             }
         }
