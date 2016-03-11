@@ -208,5 +208,18 @@ class GameSceneModelProducer {
 
         let markerScale = Float(1.0 + 0.2 * cos(2 * M_PI * Double(animationLoopValue)))
         markerModel.scale = GLKVector3Make(markerScale, 1.0, markerScale)
+
+        let coloredFaces = SymbolDetector.facesFromTracks(world.compactTracks)
+        for face in Icosahedron.Face.values {
+            let color: GLKVector4
+
+            if let coloredFace = (coloredFaces.filter { $0.face == face }).first {
+                color = coloredFace.color.modelColor()
+            } else {
+                color = UIColor.whiteColor().glColor
+            }
+
+            icosahedronModel.updateFaceColor(face, color: color)
+        }
     }
 }

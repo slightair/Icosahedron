@@ -33,7 +33,9 @@ class SymbolDetectorTests: XCTestCase {
         ]
         let faces = SymbolDetector.facesFromTracks(tracks)
 
-        XCTAssertEqual(faces, [.ACB])
+        XCTAssertEqual(faces, [
+            SymbolDetector.Face(face: .ACB, color: .Red),
+        ])
     }
 
     func testFacesFromTracksHasNotFacesColorDifferent() {
@@ -58,7 +60,10 @@ class SymbolDetectorTests: XCTestCase {
         ]
         let faces = SymbolDetector.facesFromTracks(tracks)
 
-        XCTAssertEqual(faces, [.ACB, .AFG])
+        XCTAssertEqual(faces, [
+            SymbolDetector.Face(face: .ACB, color: .Red),
+            SymbolDetector.Face(face: .AFG, color: .Green),
+        ])
     }
 
     func testFacesFromTracksHasOneFaceReverse() {
@@ -69,7 +74,9 @@ class SymbolDetectorTests: XCTestCase {
         ]
         let faces = SymbolDetector.facesFromTracks(tracks)
 
-        XCTAssertEqual(faces, [.ACB])
+        XCTAssertEqual(faces, [
+            SymbolDetector.Face(face: .ACB, color: .Red),
+        ])
     }
 
     func testFacesFromTracksHasTwoFacesRhombus() {
@@ -82,7 +89,10 @@ class SymbolDetectorTests: XCTestCase {
         ]
         let faces = SymbolDetector.facesFromTracks(tracks)
 
-        XCTAssertEqual(faces, [.ACB, .BCD])
+        XCTAssertEqual(faces, [
+            SymbolDetector.Face(face: .ACB, color: .Red),
+            SymbolDetector.Face(face: .BCD, color: .Red),
+        ])
     }
 
     func testFacesFromTracksHasFourFacesSuperTriangle() {
@@ -99,7 +109,12 @@ class SymbolDetectorTests: XCTestCase {
         ]
         let faces = SymbolDetector.facesFromTracks(tracks)
 
-        XCTAssertEqual(faces, [.ACB, .BCD, .CID, .BDH])
+        XCTAssertEqual(faces, [
+            SymbolDetector.Face(face: .ACB, color: .Red),
+            SymbolDetector.Face(face: .BCD, color: .Red),
+            SymbolDetector.Face(face: .CID, color: .Red),
+            SymbolDetector.Face(face: .BDH, color: .Red),
+        ])
     }
 
     func testFacesFromTracksHasThreeFacesSuperTriangleFullColor() {
@@ -116,6 +131,10 @@ class SymbolDetectorTests: XCTestCase {
         ]
         let faces = SymbolDetector.facesFromTracks(tracks)
 
-        XCTAssertEqual(faces, [.ACB, .CID, .BDH])
+        XCTAssertEqual(faces, [
+            SymbolDetector.Face(face: .ACB, color: .Red),
+            SymbolDetector.Face(face: .CID, color: .Green),
+            SymbolDetector.Face(face: .BDH, color: .Blue),
+        ])
     }
 }

@@ -1,6 +1,19 @@
 import Foundation
 
+func == (lhs: SymbolDetector.Face, rhs: SymbolDetector.Face) -> Bool {
+    return lhs.hashValue == rhs.hashValue
+}
+
 class SymbolDetector {
+    struct Face: Hashable {
+        let face: Icosahedron.Face
+        let color: World.Color
+
+        var hashValue: Int {
+            return "\(face)/\(color)".hashValue
+        }
+    }
+
     static let faceMaterials: [Set<Icosahedron.Side>: Icosahedron.Face] = [
         [.AB, .AF, .BF]: .ABF,
         [.AB, .AC, .BC]: .ACB,
@@ -24,15 +37,15 @@ class SymbolDetector {
         [.JK, .JL, .KL]: .JKL,
     ]
 
-    static func facesFromTracks(tracks: [Track]) -> Set<Icosahedron.Face> {
-        var faces: Set<Icosahedron.Face> = []
+    static func facesFromTracks(tracks: [Track]) -> Set<Face> {
+        var faces: Set<Face> = []
 
         for (materials, face) in SymbolDetector.faceMaterials {
             let targetTracks = tracks.filter { materials.contains($0.side) }
             let targetColors = Set<World.Color>(targetTracks.map { $0.color })
 
             if targetTracks.count == 3 && targetColors.count == 1 {
-                faces.insert(face)
+                faces.insert(Face(face: face, color: targetColors.first!))
             }
         }
 
