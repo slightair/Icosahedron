@@ -214,7 +214,7 @@ class GameSceneModelProducer {
             let color: GLKVector4
 
             if let coloredFace = (coloredFaces.filter { $0.face == face }).first {
-                color = coloredFace.color.modelColor()
+                color = coloredFace.color.faceColor()
             } else {
                 color = UIColor.whiteColor().glColor
             }

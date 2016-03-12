@@ -9,6 +9,13 @@ class World {
 
     enum Color {
         case Red, Green, Blue
+
+        static let values: [Color] = [.Red, .Green, .Blue]
+
+        static func random() -> Color {
+            let needle = Int(arc4random_uniform(UInt32(values.count)))
+            return values[needle]
+        }
     }
 
     enum Event {

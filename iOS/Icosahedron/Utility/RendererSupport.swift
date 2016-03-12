@@ -39,24 +39,24 @@ struct Screen {
 }
 
 extension World.Color {
-    func modelColor(alpha: CGFloat = 1.0) -> GLKVector4 {
-        switch self {
+    static func hueForColor(color: World.Color) -> CGFloat {
+        switch color {
         case .Red:
-            return UIColor.flatRedColor().colorWithAlphaComponent(alpha).glColor
+            return 0.0
         case .Green:
-            return UIColor.flatGreenColor().colorWithAlphaComponent(alpha).glColor
+            return 0.4
         case .Blue:
-            return UIColor.flatBlueColor().colorWithAlphaComponent(alpha).glColor
+            return 0.6
         }
     }
 
-    static func randomColor() -> GLKVector4 {
-        let colors = [
-            UIColor.flatRedColor().glColor,
-            UIColor.flatGreenColor().glColor,
-            UIColor.flatBlueColor().glColor,
-        ]
-        let needle = Int(arc4random_uniform(UInt32(colors.count)))
-        return colors[needle]
+    func modelColor(alpha: CGFloat = 1.0) -> GLKVector4 {
+        let hue: CGFloat = World.Color.hueForColor(self)
+        return UIColor(hue: hue, saturation: 0.6, brightness: 0.85, alpha: alpha).glColor
+    }
+
+    func faceColor(alpha: CGFloat = 1.0) -> GLKVector4 {
+        let hue: CGFloat = World.Color.hueForColor(self)
+        return UIColor(hue: hue, saturation: 0.24, brightness: 1.0, alpha: alpha).glColor
     }
 }
