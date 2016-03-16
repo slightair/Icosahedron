@@ -76,11 +76,9 @@
 		57DC980E1C141A350004B107 /* LabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DC980D1C141A350004B107 /* LabelModel.swift */; };
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
 		57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */; };
-		57F5FB611C33BCD600817824 /* Chameleon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB401C33BC2B00817824 /* Chameleon.framework */; };
 		57F5FB621C33BCD600817824 /* Himotoki.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB411C33BC2B00817824 /* Himotoki.framework */; };
 		57F5FB641C33BCD600817824 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB431C33BC2B00817824 /* RxCocoa.framework */; };
 		57F5FB651C33BCD600817824 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB441C33BC2B00817824 /* RxSwift.framework */; };
-		57F5FB6D1C33BDE300817824 /* Chameleon.framework.dSYM in Carthage Copy dSYMs */ = {isa = PBXBuildFile; fileRef = 57F5FB681C33BDE300817824 /* Chameleon.framework.dSYM */; };
 		57F5FB6E1C33BDE300817824 /* Himotoki.framework.dSYM in Carthage Copy dSYMs */ = {isa = PBXBuildFile; fileRef = 57F5FB691C33BDE300817824 /* Himotoki.framework.dSYM */; };
 		57F5FB701C33BDE300817824 /* RxCocoa.framework.dSYM in Carthage Copy dSYMs */ = {isa = PBXBuildFile; fileRef = 57F5FB6B1C33BDE300817824 /* RxCocoa.framework.dSYM */; };
 		57F5FB711C33BDE300817824 /* RxSwift.framework.dSYM in Carthage Copy dSYMs */ = {isa = PBXBuildFile; fileRef = 57F5FB6C1C33BDE300817824 /* RxSwift.framework.dSYM */; };
@@ -106,7 +104,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				57F5FB6D1C33BDE300817824 /* Chameleon.framework.dSYM in Carthage Copy dSYMs */,
 				57F5FB6E1C33BDE300817824 /* Himotoki.framework.dSYM in Carthage Copy dSYMs */,
 				57F5FB701C33BDE300817824 /* RxCocoa.framework.dSYM in Carthage Copy dSYMs */,
 				57F5FB711C33BDE300817824 /* RxSwift.framework.dSYM in Carthage Copy dSYMs */,
@@ -184,11 +181,9 @@
 		57DC980D1C141A350004B107 /* LabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelModel.swift; sourceTree = "<group>"; };
 		57DDC94F1BD7D173009423EA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
-		57F5FB401C33BC2B00817824 /* Chameleon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Chameleon.framework; path = Carthage/Build/iOS/Chameleon.framework; sourceTree = "<group>"; };
 		57F5FB411C33BC2B00817824 /* Himotoki.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Himotoki.framework; path = Carthage/Build/iOS/Himotoki.framework; sourceTree = "<group>"; };
 		57F5FB431C33BC2B00817824 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		57F5FB441C33BC2B00817824 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
-		57F5FB681C33BDE300817824 /* Chameleon.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Chameleon.framework.dSYM; path = Carthage/Build/iOS/Chameleon.framework.dSYM; sourceTree = "<group>"; };
 		57F5FB691C33BDE300817824 /* Himotoki.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Himotoki.framework.dSYM; path = Carthage/Build/iOS/Himotoki.framework.dSYM; sourceTree = "<group>"; };
 		57F5FB6B1C33BDE300817824 /* RxCocoa.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxCocoa.framework.dSYM; path = Carthage/Build/iOS/RxCocoa.framework.dSYM; sourceTree = "<group>"; };
 		57F5FB6C1C33BDE300817824 /* RxSwift.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxSwift.framework.dSYM; path = Carthage/Build/iOS/RxSwift.framework.dSYM; sourceTree = "<group>"; };
@@ -210,7 +205,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57F5FB611C33BCD600817824 /* Chameleon.framework in Frameworks */,
 				57F5FB621C33BCD600817824 /* Himotoki.framework in Frameworks */,
 				57F5FB641C33BCD600817824 /* RxCocoa.framework in Frameworks */,
 				57F5FB651C33BCD600817824 /* RxSwift.framework in Frameworks */,
@@ -380,7 +374,6 @@
 		57F5FB601C33BC8C00817824 /* dSYMs */ = {
 			isa = PBXGroup;
 			children = (
-				57F5FB681C33BDE300817824 /* Chameleon.framework.dSYM */,
 				57F5FB691C33BDE300817824 /* Himotoki.framework.dSYM */,
 				57F5FB6B1C33BDE300817824 /* RxCocoa.framework.dSYM */,
 				57F5FB6C1C33BDE300817824 /* RxSwift.framework.dSYM */,
@@ -392,7 +385,6 @@
 			isa = PBXGroup;
 			children = (
 				57F5FB601C33BC8C00817824 /* dSYMs */,
-				57F5FB401C33BC2B00817824 /* Chameleon.framework */,
 				57F5FB411C33BC2B00817824 /* Himotoki.framework */,
 				57F5FB431C33BC2B00817824 /* RxCocoa.framework */,
 				57F5FB441C33BC2B00817824 /* RxSwift.framework */,
@@ -531,7 +523,6 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Chameleon.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Himotoki.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",

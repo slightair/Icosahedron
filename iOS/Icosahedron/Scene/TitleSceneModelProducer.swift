@@ -1,5 +1,4 @@
 import GLKit
-import Chameleon
 
 class TitleSceneModelProducer {
     let sphereModel = SphereModel()
@@ -9,7 +8,7 @@ class TitleSceneModelProducer {
 
     init() {
         titleLabel.size = 0.5
-        titleLabel.textColor = UIColor.flatGrayColorDark().glColor
+        titleLabel.textColor = UIColor.grayColor().glColor
         titleLabel.updateLocalModelVertices()
     }
 

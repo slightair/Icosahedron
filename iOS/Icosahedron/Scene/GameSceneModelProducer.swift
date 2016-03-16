@@ -1,7 +1,6 @@
 import GLKit
 import RxSwift
 import RxCocoa
-import Chameleon
 
 class GameSceneModelProducer {
     let world: World
@@ -12,7 +11,7 @@ class GameSceneModelProducer {
 
     var floatingScoreLabels: [Icosahedron.Point: FloatingLabelModel] = [:]
 
-    let timeGaugeModel = GaugeModel(color: UIColor.flatWhiteColor().colorWithAlphaComponent(0.8).glColor, bgColor:UIColor.flatWhiteColor().colorWithAlphaComponent(0.3).glColor)
+    let timeGaugeModel = GaugeModel(color: UIColor.whiteColor().colorWithAlphaComponent(0.8).glColor, bgColor:UIColor.whiteColor().colorWithAlphaComponent(0.3).glColor)
 
     let phaseLabelModel = LabelModel(text: "Phase 0")
     let scoreLabelModel = LabelModel(text: "Score 0")
@@ -40,7 +39,7 @@ class GameSceneModelProducer {
     func setUpModels() {
         for point in Icosahedron.Point.values {
             let scoreLabel = FloatingLabelModel(text: "")
-            scoreLabel.baseTextColor = UIColor.flatWhiteColor().glColor
+            scoreLabel.baseTextColor = UIColor.whiteColor().glColor
 
             if let vertex = icosahedronModel.pointDict[point] {
                 scoreLabel.position = GLKVector3MultiplyScalar(vertex.coordinate, 1.1)
@@ -117,7 +116,7 @@ class GameSceneModelProducer {
                     particleEmitter.emit()
                 }
             case .PhaseChanged(let phase):
-                self.infoLabelModelGroup.appendNewLabel("Phase \(phase)", color: UIColor.flatWhiteColor().glColor)
+                self.infoLabelModelGroup.appendNewLabel("Phase \(phase)", color: UIColor.whiteColor().glColor)
 
             default:
                 break

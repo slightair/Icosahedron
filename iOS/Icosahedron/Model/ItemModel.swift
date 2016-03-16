@@ -1,5 +1,4 @@
 import GLKit
-import Chameleon
 
 class ItemModel: OctahedronModel {
     override class var scale: Float {
