@@ -51,4 +51,28 @@ class SymbolDetector {
 
         return faces
     }
+
+    static func symbolsFromTracks(tracks: [Track]) -> Set<Symbol> {
+        var symbols: Set<Symbol> = []
+
+        for (materials, _) in SymbolDetector.faceMaterials {
+            let targetTracks = tracks.filter { materials.contains($0.side) }
+            let targetColors = Set<World.Color>(targetTracks.map { $0.color })
+
+            if targetTracks.count == 3 && targetColors.count == 1 {
+                let triangle: Symbol
+                switch targetColors.first! {
+                case .Red:
+                    triangle = .RedTriangle
+                case .Green:
+                    triangle = .GreenTriangle
+                case .Blue:
+                    triangle = .BlueTriangle
+                }
+                symbols.insert(triangle)
+            }
+        }
+
+        return symbols
+    }
 }

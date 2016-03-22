@@ -137,4 +137,33 @@ class SymbolDetectorTests: XCTestCase {
             SymbolDetector.Face(face: .BDH, color: .Blue),
         ])
     }
+
+    func testSymbolsFromTracksEmpty() {
+        let tracks: [Track] = []
+        let symbols = SymbolDetector.symbolsFromTracks(tracks)
+
+        XCTAssertEqual(symbols, [])
+    }
+
+    func testSymbolsFromTracksHasNotFace() {
+        let tracks: [Track] = [
+            Track(start: .A, end: .B, color: .Red, turn:1),
+        ]
+        let symbols = SymbolDetector.symbolsFromTracks(tracks)
+
+        XCTAssertEqual(symbols, [])
+    }
+
+    func testSymbolsFromTracksHasRedTriangle() {
+        let tracks: [Track] = [
+            Track(start: .A, end: .C, color: .Red, turn:1),
+            Track(start: .C, end: .B, color: .Red, turn:2),
+            Track(start: .B, end: .A, color: .Red, turn:3),
+        ]
+        let symbols = SymbolDetector.symbolsFromTracks(tracks)
+
+        XCTAssertEqual(symbols, [
+            .RedTriangle,
+        ])
+    }
 }

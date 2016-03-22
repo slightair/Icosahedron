@@ -76,6 +76,9 @@
 		57DC980E1C141A350004B107 /* LabelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DC980D1C141A350004B107 /* LabelModel.swift */; };
 		57DDC9501BD7D173009423EA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DDC94F1BD7D173009423EA /* GLKit.framework */; };
 		57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */; };
+		57EBB8D81CA178E500FC2E65 /* Phase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EBB8D71CA178E500FC2E65 /* Phase.swift */; };
+		57EBB8DA1CA1796C00FC2E65 /* Symbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EBB8D91CA1796C00FC2E65 /* Symbol.swift */; };
+		57EBB8DB1CA1818E00FC2E65 /* Symbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EBB8D91CA1796C00FC2E65 /* Symbol.swift */; };
 		57F5FB621C33BCD600817824 /* Himotoki.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB411C33BC2B00817824 /* Himotoki.framework */; };
 		57F5FB641C33BCD600817824 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB431C33BC2B00817824 /* RxCocoa.framework */; };
 		57F5FB651C33BCD600817824 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F5FB441C33BC2B00817824 /* RxSwift.framework */; };
@@ -181,6 +184,8 @@
 		57DC980D1C141A350004B107 /* LabelModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelModel.swift; sourceTree = "<group>"; };
 		57DDC94F1BD7D173009423EA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		57E2FA141C0AB8A900DF1796 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
+		57EBB8D71CA178E500FC2E65 /* Phase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Phase.swift; sourceTree = "<group>"; };
+		57EBB8D91CA1796C00FC2E65 /* Symbol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Symbol.swift; sourceTree = "<group>"; };
 		57F5FB411C33BC2B00817824 /* Himotoki.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Himotoki.framework; path = Carthage/Build/iOS/Himotoki.framework; sourceTree = "<group>"; };
 		57F5FB431C33BC2B00817824 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		57F5FB441C33BC2B00817824 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
@@ -356,6 +361,8 @@
 				579AD5F51C01EE0500218D38 /* Icosahedron.swift */,
 				571B92BD1C6EF6B300FF9DA3 /* Track.swift */,
 				5746E6131C8DB42700D60C3F /* SymbolDetector.swift */,
+				57EBB8D71CA178E500FC2E65 /* Phase.swift */,
+				57EBB8D91CA1796C00FC2E65 /* Symbol.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -546,6 +553,7 @@
 				5746E6191C8DB5A200D60C3F /* Icosahedron.swift in Sources */,
 				5746E61A1C8DB5AF00D60C3F /* Track.swift in Sources */,
 				5746E61D1C8DB62C00D60C3F /* Item.swift in Sources */,
+				57EBB8DB1CA1818E00FC2E65 /* Symbol.swift in Sources */,
 				5746E61B1C8DB5B700D60C3F /* World.swift in Sources */,
 				577600571C90650300A0E830 /* TrackTests.swift in Sources */,
 			);
@@ -560,6 +568,7 @@
 				571B92BC1C6E487300FF9DA3 /* TitleSceneModelProducer.swift in Sources */,
 				5746E6141C8DB42700D60C3F /* SymbolDetector.swift in Sources */,
 				572FCA4E1C3EB3FC00778913 /* FloatingLabelModel.swift in Sources */,
+				57EBB8DA1CA1796C00FC2E65 /* Symbol.swift in Sources */,
 				572FCA611C4A59D400778913 /* Particle.swift in Sources */,
 				572FCA5F1C4A442700778913 /* ParticleVertex.swift in Sources */,
 				57D866C51BEF66F90034DEDE /* GameSceneRenderer.swift in Sources */,
@@ -578,6 +587,7 @@
 				5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */,
 				572FCA5B1C4A2D6E00778913 /* ParticleEmitter.swift in Sources */,
 				57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */,
+				57EBB8D81CA178E500FC2E65 /* Phase.swift in Sources */,
 				57F5FB751C34DC1E00817824 /* OctahedronModel.swift in Sources */,
 				57F5FB731C34150A00817824 /* VectorExtensions.swift in Sources */,
 				579AD5F61C01EE0500218D38 /* Icosahedron.swift in Sources */,
