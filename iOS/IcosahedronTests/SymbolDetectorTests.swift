@@ -184,7 +184,7 @@ class SymbolDetectorTests: XCTestCase {
         ])
     }
 
-    func testSymbolsFromTracksHasRhombus() {
+    func testSymbolsFromTracksHasRedRhombus() {
         let tracks: [Track] = [
             Track(start: .B, end: .A, color: .Red, turn:1),
             Track(start: .A, end: .C, color: .Red, turn:2),
@@ -198,6 +198,32 @@ class SymbolDetectorTests: XCTestCase {
             .RedTriangle,
             .RedRhombus,
         ])
+    }
+
+    func testSymbolsFromTracksHasRedAndGreenRhombus() {
+        let tracks: [Track] = [
+            Track(start: .B, end: .A, color: .Red, turn:1),
+            Track(start: .A, end: .C, color: .Red, turn:2),
+            Track(start: .C, end: .B, color: .Red, turn:3),
+            Track(start: .B, end: .D, color: .Red, turn:4),
+            Track(start: .D, end: .C, color: .Red, turn:5),
+
+            Track(start: .C, end: .I, color: .Green, turn:6),
+            Track(start: .I, end: .E, color: .Green, turn:7),
+            Track(start: .E, end: .K, color: .Green, turn:8),
+            Track(start: .K, end: .I, color: .Green, turn:9),
+            Track(start: .I, end: .E, color: .Green, turn:10),
+            Track(start: .E, end: .C, color: .Green, turn:11),
+        ]
+
+        let symbols = SymbolDetector.symbolsFromTracks(tracks)
+
+        XCTAssertEqual(symbols, [
+            .RedTriangle,
+            .GreenTriangle,
+            .RedRhombus,
+            .GreenRhombus,
+            ])
     }
 
     func testSymbolsFromTracksHasSuperTriangle() {
