@@ -80,7 +80,7 @@ class ParticleEmitter {
                 nextParticle.start()
                 newParticles.append(nextParticle)
 
-                nextParticleIndex++
+                nextParticleIndex += 1
                 emissionClock -= emissionInterval
             }
         }

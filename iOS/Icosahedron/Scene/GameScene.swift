@@ -26,11 +26,11 @@ class GameScene: NSObject, SceneType {
 
     func setUp() {
         let panGestureRecognizer = UIPanGestureRecognizer()
-        panGestureRecognizer.addTarget(self, action: "panAction:")
+        panGestureRecognizer.addTarget(self, action: #selector(GameScene.panAction(_:)))
         panGestureRecognizer.maximumNumberOfTouches = 1
 
         let tapGestureRecognizer = UITapGestureRecognizer()
-        tapGestureRecognizer.addTarget(self, action: "tapAction:")
+        tapGestureRecognizer.addTarget(self, action: #selector(GameScene.tapAction(_:)))
 
         glkView.addGestureRecognizer(panGestureRecognizer)
         glkView.addGestureRecognizer(tapGestureRecognizer)

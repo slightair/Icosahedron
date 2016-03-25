@@ -13,7 +13,7 @@ class TitleScene: NSObject, SceneType {
 
     func setUp() {
         let tapGestureRecognizer = UITapGestureRecognizer()
-        tapGestureRecognizer.addTarget(self, action: "tapAction:")
+        tapGestureRecognizer.addTarget(self, action: #selector(TitleScene.tapAction(_:)))
 
         glkView.addGestureRecognizer(tapGestureRecognizer)
     }

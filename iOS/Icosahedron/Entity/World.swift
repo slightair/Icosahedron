@@ -105,11 +105,11 @@ class World {
 
                     switch color {
                     case .Red:
-                        self.redCount.value++
+                        self.redCount.value += 1
                     case .Green:
-                        self.greenCount.value++
+                        self.greenCount.value += 1
                     case .Blue:
-                        self.blueCount.value++
+                        self.blueCount.value += 1
                     }
 
                     let event: Event = .ObtainedColorStone(point: point, color: color)
