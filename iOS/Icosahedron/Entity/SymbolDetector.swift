@@ -81,7 +81,7 @@ class SymbolDetector {
 
         for (face, materials) in SymbolDetector.faceMaterials {
             let targetTracks = tracks.filter { materials.contains($0.side) }
-            let targetColors = Set<World.Color>(targetTracks.map { $0.color })
+            let targetColors = Set(targetTracks.map { $0.color })
 
             if targetTracks.count == 3 && targetColors.count == 1 {
                 faces.insert(ColoredFace(face: face, color: targetColors.first!))
@@ -133,11 +133,19 @@ class SymbolDetector {
                     }
                 }
             }
+        }
 
-            let triangleSet = Set(triangles.map { $0.face })
-            for material in superTriangleMaterials {
-                if triangleSet.intersect(material).count == 3 {
+        let triangleSet = Set(faces.map { $0.face })
+        for material in superTriangleMaterials {
+            if triangleSet.intersect(material).count == 3 {
+                let superTriangleFaces = faces.filter { material.contains($0.face) }
+                let superTriangleColors = Set(superTriangleFaces.map { $0.color })
+
+                if superTriangleColors.count == 1 {
+                    let color = superTriangleColors.first!
                     symbols.insert(superTriangleForColor(color))
+                } else if superTriangleColors.count == 3 {
+                    symbols.insert(.FullColorSuperTriangle)
                 }
             }
         }
