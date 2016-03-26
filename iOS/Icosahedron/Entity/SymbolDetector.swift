@@ -1,11 +1,11 @@
 import Foundation
 
-func == (lhs: SymbolDetector.Face, rhs: SymbolDetector.Face) -> Bool {
+func == (lhs: SymbolDetector.ColoredFace, rhs: SymbolDetector.ColoredFace) -> Bool {
     return lhs.hashValue == rhs.hashValue
 }
 
 class SymbolDetector {
-    struct Face: Hashable {
+    struct ColoredFace: Hashable {
         let face: Icosahedron.Face
         let color: World.Color
 
@@ -60,15 +60,15 @@ class SymbolDetector {
         [.GLK, .HJL, .IKJ],
     ]
 
-    static func facesFromTracks(tracks: [Track]) -> Set<Face> {
-        var faces: Set<Face> = []
+    static func facesFromTracks(tracks: [Track]) -> Set<ColoredFace> {
+        var faces: Set<ColoredFace> = []
 
         for (face, materials) in SymbolDetector.faceMaterials {
             let targetTracks = tracks.filter { materials.contains($0.side) }
             let targetColors = Set<World.Color>(targetTracks.map { $0.color })
 
             if targetTracks.count == 3 && targetColors.count == 1 {
-                faces.insert(Face(face: face, color: targetColors.first!))
+                faces.insert(ColoredFace(face: face, color: targetColors.first!))
             }
         }
 
@@ -77,14 +77,14 @@ class SymbolDetector {
 
     static func symbolsFromTracks(tracks: [Track]) -> Set<Symbol> {
         var symbols: Set<Symbol> = []
-        var faces: Set<Face> = []
+        var faces: Set<ColoredFace> = []
 
         for (face, materials) in SymbolDetector.faceMaterials {
             let targetTracks = tracks.filter { materials.contains($0.side) }
             let targetColors = Set<World.Color>(targetTracks.map { $0.color })
 
             if targetTracks.count == 3 && targetColors.count == 1 {
-                faces.insert(Face(face: face, color: targetColors.first!))
+                faces.insert(ColoredFace(face: face, color: targetColors.first!))
 
                 let triangle: Symbol
                 switch targetColors.first! {

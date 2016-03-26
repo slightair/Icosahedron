@@ -26,7 +26,7 @@ class SymbolDetectorDetectFacesTests: XCTestCase {
         let faces = SymbolDetector.facesFromTracks(tracks)
 
         XCTAssertEqual(faces, [
-            SymbolDetector.Face(face: .ACB, color: .Red),
+            SymbolDetector.ColoredFace(face: .ACB, color: .Red),
         ])
     }
 
@@ -53,8 +53,8 @@ class SymbolDetectorDetectFacesTests: XCTestCase {
         let faces = SymbolDetector.facesFromTracks(tracks)
 
         XCTAssertEqual(faces, [
-            SymbolDetector.Face(face: .ACB, color: .Red),
-            SymbolDetector.Face(face: .AFG, color: .Green),
+            SymbolDetector.ColoredFace(face: .ACB, color: .Red),
+            SymbolDetector.ColoredFace(face: .AFG, color: .Green),
         ])
     }
 
@@ -67,7 +67,7 @@ class SymbolDetectorDetectFacesTests: XCTestCase {
         let faces = SymbolDetector.facesFromTracks(tracks)
 
         XCTAssertEqual(faces, [
-            SymbolDetector.Face(face: .ACB, color: .Red),
+            SymbolDetector.ColoredFace(face: .ACB, color: .Red),
         ])
     }
 
@@ -82,8 +82,8 @@ class SymbolDetectorDetectFacesTests: XCTestCase {
         let faces = SymbolDetector.facesFromTracks(tracks)
 
         XCTAssertEqual(faces, [
-            SymbolDetector.Face(face: .ACB, color: .Red),
-            SymbolDetector.Face(face: .BCD, color: .Red),
+            SymbolDetector.ColoredFace(face: .ACB, color: .Red),
+            SymbolDetector.ColoredFace(face: .BCD, color: .Red),
         ])
     }
 
@@ -98,8 +98,8 @@ class SymbolDetectorDetectFacesTests: XCTestCase {
         let faces = SymbolDetector.facesFromTracks(tracks)
 
         XCTAssertEqual(faces, [
-            SymbolDetector.Face(face: .CEI, color: .Green),
-            SymbolDetector.Face(face: .EKI, color: .Green),
+            SymbolDetector.ColoredFace(face: .CEI, color: .Green),
+            SymbolDetector.ColoredFace(face: .EKI, color: .Green),
         ])
     }
 
@@ -118,10 +118,10 @@ class SymbolDetectorDetectFacesTests: XCTestCase {
         let faces = SymbolDetector.facesFromTracks(tracks)
 
         XCTAssertEqual(faces, [
-            SymbolDetector.Face(face: .ACB, color: .Red),
-            SymbolDetector.Face(face: .BCD, color: .Red),
-            SymbolDetector.Face(face: .CID, color: .Red),
-            SymbolDetector.Face(face: .BDH, color: .Red),
+            SymbolDetector.ColoredFace(face: .ACB, color: .Red),
+            SymbolDetector.ColoredFace(face: .BCD, color: .Red),
+            SymbolDetector.ColoredFace(face: .CID, color: .Red),
+            SymbolDetector.ColoredFace(face: .BDH, color: .Red),
         ])
     }
 
@@ -140,9 +140,9 @@ class SymbolDetectorDetectFacesTests: XCTestCase {
         let faces = SymbolDetector.facesFromTracks(tracks)
 
         XCTAssertEqual(faces, [
-            SymbolDetector.Face(face: .ACB, color: .Red),
-            SymbolDetector.Face(face: .CID, color: .Green),
-            SymbolDetector.Face(face: .BDH, color: .Blue),
+            SymbolDetector.ColoredFace(face: .ACB, color: .Red),
+            SymbolDetector.ColoredFace(face: .CID, color: .Green),
+            SymbolDetector.ColoredFace(face: .BDH, color: .Blue),
         ])
     }
 }
