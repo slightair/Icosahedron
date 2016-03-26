@@ -37,6 +37,29 @@ class SymbolDetector {
         .JKL: [.JK, .JL, .KL],
     ]
 
+    static let superTriangleMaterials: [Set<Icosahedron.Face>] = [
+        [.ABF, .AEC, .BCD],
+        [.ABF, .AGE, .FLG],
+        [.ABF, .BDH, .FHL],
+        [.ACB, .AFG, .BHF],
+        [.ACB, .AGE, .CEI],
+        [.ACB, .BDH, .CID],
+        [.AEC, .AFG, .EGK],
+        [.AEC, .CID, .EKI],
+        [.AFG, .FHL, .GLK],
+        [.AGE, .EKI, .GLK],
+        [.BCD, .BHF, .DJH],
+        [.BCD, .CEI, .DIJ],
+        [.BDH, .DIJ, .HJL],
+        [.BHF, .FLG, .HJL],
+        [.CEI, .EGK, .IKJ],
+        [.CID, .DJH, .IKJ],
+        [.DIJ, .EKI, .JKL],
+        [.DJH, .FHL, .JKL],
+        [.EGK, .FLG, .JKL],
+        [.GLK, .HJL, .IKJ],
+    ]
+
     static func facesFromTracks(tracks: [Track]) -> Set<Face> {
         var faces: Set<Face> = []
 
@@ -87,6 +110,17 @@ class SymbolDetector {
             }
         }
 
+        func superTriangleForColor(color: World.Color) -> Symbol {
+            switch color {
+            case .Red:
+                return .RedSuperTriangle
+            case .Green:
+                return .GreenSuperTriangle
+            case .Blue:
+                return .BlueSuperTriangle
+            }
+        }
+
         for color in World.Color.values {
             let triangles = faces.filter { $0.color == color }
             for triangle in triangles {
@@ -97,6 +131,13 @@ class SymbolDetector {
                     if sides.count == 5 {
                         symbols.insert(rhombusForColor(color))
                     }
+                }
+            }
+
+            let triangleSet = Set(triangles.map { $0.face })
+            for material in superTriangleMaterials {
+                if triangleSet.intersect(material).count == 3 {
+                    symbols.insert(superTriangleForColor(color))
                 }
             }
         }
