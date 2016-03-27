@@ -142,6 +142,10 @@ class GameSceneRenderer: BaseRenderer {
         glUseProgram(uiShaderProgram.programID)
         uiShaderProgram.projectionMatrix = modelProjectionMatrix
 
+        let symbolTextureInfo = TextureSet.sharedSet[.SymbolIcon]
+        glBindTexture(GLenum(GL_TEXTURE_2D), symbolTextureInfo.name)
+        drawModels(modelProducer.uiSymbolObjects())
+
         let whiteTextureInfo = TextureSet.sharedSet[.White]
         glBindTexture(GLenum(GL_TEXTURE_2D), whiteTextureInfo.name)
         drawModels(modelProducer.uiObjects())

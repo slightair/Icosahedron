@@ -11,4 +11,17 @@ enum Symbol {
     case GreenSuperTriangle
     case BlueSuperTriangle
     case FullColorSuperTriangle
+
+    static let values: [Symbol] = [
+        .RedTriangle,
+        .GreenTriangle,
+        .BlueTriangle,
+        .RedRhombus,
+        .GreenRhombus,
+        .BlueRhombus,
+        .RedSuperTriangle,
+        .GreenSuperTriangle,
+        .BlueSuperTriangle,
+        .FullColorSuperTriangle,
+    ]
 }

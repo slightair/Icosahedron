@@ -13,10 +13,11 @@ class GameSceneModelProducer {
 
     let timeGaugeModel = GaugeModel(color: UIColor.whiteColor().colorWithAlphaComponent(0.8).glColor, bgColor:UIColor.whiteColor().colorWithAlphaComponent(0.3).glColor)
 
-    let phaseLabelModel = LabelModel(text: "Phase 0")
+    let phaseLabelModel = LabelModel(text: "Phase 0:")
     let scoreLabelModel = LabelModel(text: "Score 0")
     let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.phaseInterval]))
     let infoLabelModelGroup = SequenceLabelModelGroup()
+    let problemModelGroup = ProblemModelGroup(problem: Symbol.values)
 
     var icosahedronPointParticleEmitters: [Icosahedron.Point: ParticleEmitter] = [:]
 
@@ -59,9 +60,9 @@ class GameSceneModelProducer {
         let bottomEdge = maxHeightRatio / 2 * 0.98
 
         let infoLabelSize: Float = 0.25
-        phaseLabelModel.position = GLKVector3Make(0, bottomEdge, 0)
+        phaseLabelModel.position = GLKVector3Make(leftEdge, bottomEdge, 0)
         phaseLabelModel.size = infoLabelSize
-        phaseLabelModel.horizontalAlign = .Center
+        phaseLabelModel.horizontalAlign = .Left
         phaseLabelModel.verticalAlign = .Bottom
 
         scoreLabelModel.position = GLKVector3Make(leftEdge, topEdge, 0)
@@ -86,6 +87,8 @@ class GameSceneModelProducer {
         infoLabelModelGroup.direction = .Up
         infoLabelModelGroup.duration = 2.0
         infoLabelModelGroup.showBackground = true
+
+        problemModelGroup.position = GLKVector3Make(phaseLabelModel.position.x + phaseLabelModel.width, bottomEdge - SymbolModel.size / 2, 0)
     }
 
     func setUpPoints() {
@@ -101,7 +104,7 @@ class GameSceneModelProducer {
     }
 
     func setUpSubscriptions() {
-        world.phase.asObservable().map { "Phase \($0)" }.bindTo(phaseLabelModel.rx_text).addDisposableTo(disposeBag)
+        world.phase.asObservable().map { "Phase \($0):" }.bindTo(phaseLabelModel.rx_text).addDisposableTo(disposeBag)
         world.time.asObservable().map { String(format: "Time %.3f", arguments: [$0]) }.bindTo(timeLabelModel.rx_text).addDisposableTo(disposeBag)
         world.score.asObservable().map { "Score \($0)" }.bindTo(scoreLabelModel.rx_text).addDisposableTo(disposeBag)
 
@@ -171,6 +174,10 @@ class GameSceneModelProducer {
         return [
             timeGaugeModel,
         ]
+    }
+
+    func uiSymbolObjects() -> [Renderable] {
+        return problemModelGroup.symbolModels.map { $0 as Renderable }
     }
 
     func uiLabelObjects() -> [Renderable] {

@@ -45,6 +45,8 @@
 		5756BE821C5908D4007F163B /* CanvasShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 5756BE811C5908D4007F163B /* CanvasShader.fsh */; };
 		5756BE841C590ACB007F163B /* CanvasModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756BE831C590ACB007F163B /* CanvasModel.swift */; };
 		575991F51CA6C65300A82668 /* SymbolDetectorDetectSymbolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575991F41CA6C65300A82668 /* SymbolDetectorDetectSymbolsTests.swift */; };
+		575991F71CA7D10300A82668 /* SymbolModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575991F61CA7D10300A82668 /* SymbolModel.swift */; };
+		575991F91CA7D90B00A82668 /* ProblemModelGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575991F81CA7D90B00A82668 /* ProblemModelGroup.swift */; };
 		5771700D1C4D1886008C35A2 /* SphereModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771700C1C4D1886008C35A2 /* SphereModel.swift */; };
 		5771700F1C4E7F50008C35A2 /* RenderablePolygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771700E1C4E7F50008C35A2 /* RenderablePolygon.swift */; };
 		577600571C90650300A0E830 /* TrackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577600561C90650300A0E830 /* TrackTests.swift */; };
@@ -152,6 +154,8 @@
 		5756BE811C5908D4007F163B /* CanvasShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CanvasShader.fsh; sourceTree = "<group>"; };
 		5756BE831C590ACB007F163B /* CanvasModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasModel.swift; sourceTree = "<group>"; };
 		575991F41CA6C65300A82668 /* SymbolDetectorDetectSymbolsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymbolDetectorDetectSymbolsTests.swift; sourceTree = "<group>"; };
+		575991F61CA7D10300A82668 /* SymbolModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymbolModel.swift; sourceTree = "<group>"; };
+		575991F81CA7D90B00A82668 /* ProblemModelGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProblemModelGroup.swift; sourceTree = "<group>"; };
 		5771700C1C4D1886008C35A2 /* SphereModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SphereModel.swift; sourceTree = "<group>"; };
 		5771700E1C4E7F50008C35A2 /* RenderablePolygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderablePolygon.swift; sourceTree = "<group>"; };
 		577600561C90650300A0E830 /* TrackTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackTests.swift; sourceTree = "<group>"; };
@@ -322,6 +326,7 @@
 				5771700C1C4D1886008C35A2 /* SphereModel.swift */,
 				5756BE831C590ACB007F163B /* CanvasModel.swift */,
 				571B92BF1C70494100FF9DA3 /* TrackModel.swift */,
+				575991F81CA7D90B00A82668 /* ProblemModelGroup.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -335,6 +340,7 @@
 				57C58F061C1F18B600840B56 /* GaugeModel.swift */,
 				57F5FB741C34DC1E00817824 /* OctahedronModel.swift */,
 				572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */,
+				575991F61CA7D10300A82668 /* SymbolModel.swift */,
 			);
 			name = BaseModel;
 			sourceTree = "<group>";
@@ -591,6 +597,7 @@
 				5778A5481C25382B0019FF99 /* UIShaderProgram.swift in Sources */,
 				572FCA5B1C4A2D6E00778913 /* ParticleEmitter.swift in Sources */,
 				57E2FA151C0AB8A900DF1796 /* UIColorExtensions.swift in Sources */,
+				575991F71CA7D10300A82668 /* SymbolModel.swift in Sources */,
 				57EBB8D81CA178E500FC2E65 /* Phase.swift in Sources */,
 				57F5FB751C34DC1E00817824 /* OctahedronModel.swift in Sources */,
 				57F5FB731C34150A00817824 /* VectorExtensions.swift in Sources */,
@@ -617,6 +624,7 @@
 				579AD6021C01EEB900218D38 /* IcosahedronVertex.swift in Sources */,
 				579AD6061C01EEB900218D38 /* Renderable.swift in Sources */,
 				579AD6071C01EEB900218D38 /* TetrahedronModel.swift in Sources */,
+				575991F91CA7D90B00A82668 /* ProblemModelGroup.swift in Sources */,
 				5756BE7E1C5908AB007F163B /* CanvasShaderProgram.swift in Sources */,
 				571B92B61C6A2F0900FF9DA3 /* TitleScene.swift in Sources */,
 			);

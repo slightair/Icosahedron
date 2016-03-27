@@ -50,6 +50,10 @@ class LabelModel: Renderable {
     var backgroundMarginHorizontal: Float = 0.01
     var backgroundMarginVertical: Float = 0.001
 
+    var width: Float {
+        return glyphWidth * Float(self.chars.count) + backgroundMarginHorizontal * 2
+    }
+
     let topCoordinate = GLKVector3Make(0.0, 1.0, 0.0)
 
     init(text: String) {
@@ -85,7 +89,6 @@ class LabelModel: Renderable {
         }
 
         if showBackground {
-            let width = glyphWidth * Float(self.chars.count) + backgroundMarginHorizontal * 2
             let height = glyphHeight + backgroundMarginVertical * 2
 
             let posA = GLKVector3Make(baseX - backgroundMarginHorizontal, baseY - backgroundMarginVertical, 0)
