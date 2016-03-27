@@ -70,10 +70,10 @@ class GameSceneModelProducer {
         scoreLabelModel.horizontalAlign = .Left
         scoreLabelModel.verticalAlign = .Top
 
-        timeLabelModel.position = GLKVector3Make(rightEdge, topEdge, 0)
+        timeLabelModel.position = GLKVector3Make(rightEdge, bottomEdge, 0)
         timeLabelModel.size = infoLabelSize
         timeLabelModel.horizontalAlign = .Right
-        timeLabelModel.verticalAlign = .Top
+        timeLabelModel.verticalAlign = .Bottom
 
         timeGaugeModel.position = GLKVector3Make(0, maxHeightRatio / 2, 0)
         timeGaugeModel.width = 1.0
