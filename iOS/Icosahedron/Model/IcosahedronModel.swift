@@ -52,7 +52,7 @@ class IcosahedronModel: Renderable {
         let normalIKJ = createFaceNormal(coordI, y: coordK, z: coordJ)
         let normalJKL = createFaceNormal(coordJ, y: coordK, z: coordL)
 
-        let texCoordA = GLKVector2Make(0, 0)
+        let texCoordA = GLKVector2Make(0.5, 0)
         let texCoordB = GLKVector2Make(0, 1)
         let texCoordC = GLKVector2Make(1, 1)
 

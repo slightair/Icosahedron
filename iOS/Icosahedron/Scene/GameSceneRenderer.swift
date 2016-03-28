@@ -90,8 +90,8 @@ class GameSceneRenderer: BaseRenderer {
         glBindTexture(GLenum(GL_TEXTURE_2D), FontData.defaultData.textureInfo.name)
         drawModels(modelProducer.labelObjects().map { $0 as Renderable})
 
-        let meshTextureInfo = TextureSet.sharedSet[.Mesh]
-        glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
+        let icosahedronMeshTextureInfo = TextureSet.sharedSet[.IcosahedronMesh]
+        glBindTexture(GLenum(GL_TEXTURE_2D), icosahedronMeshTextureInfo.name)
         drawModels([modelProducer.icosahedronModel])
 
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE))

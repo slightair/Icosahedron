@@ -9,8 +9,9 @@ class TextureSet {
         case Mesh = "Mesh"
         case Point = "Point"
         case SymbolIcon = "SymbolIcon"
+        case IcosahedronMesh = "IcosahedronMesh"
 
-        static let values: [TextureName] = [.Debug, .White, .Mesh, .Point, .SymbolIcon]
+        static let values: [TextureName] = [.Debug, .White, .Mesh, .Point, .SymbolIcon, .IcosahedronMesh]
     }
 
     private var textures: [String: GLKTextureInfo] = [:]
