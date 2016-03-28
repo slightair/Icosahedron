@@ -137,7 +137,7 @@ class GameSceneModelProducer {
         }
 
         markerModel.status = world.markerStatus
-        let requiredModels: [Renderable] = [icosahedronModel, markerModel]
+        let requiredModels: [Renderable] = [markerModel]
         let angle = Float(2 * M_PI) * animationLoopValue / 4
         let itemModels: [Renderable] = world.items.map { item in
             let coord = coord(item.point)
@@ -214,18 +214,5 @@ class GameSceneModelProducer {
 
         let markerScale = Float(1.0 + 0.2 * cos(2 * M_PI * Double(animationLoopValue)))
         markerModel.scale = GLKVector3Make(markerScale, 1.0, markerScale)
-
-        let coloredFaces = SymbolDetector.facesFromTracks(world.compactTracks)
-        for face in Icosahedron.Face.values {
-            let color: GLKVector4
-
-            if let coloredFace = (coloredFaces.filter { $0.face == face }).first {
-                color = coloredFace.color.faceColor()
-            } else {
-                color = UIColor.whiteColor().glColor
-            }
-
-            icosahedronModel.updateFaceColor(face, color: color)
-        }
     }
 }

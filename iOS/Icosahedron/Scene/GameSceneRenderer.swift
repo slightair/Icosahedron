@@ -90,6 +90,10 @@ class GameSceneRenderer: BaseRenderer {
         glBindTexture(GLenum(GL_TEXTURE_2D), FontData.defaultData.textureInfo.name)
         drawModels(modelProducer.labelObjects().map { $0 as Renderable})
 
+        let meshTextureInfo = TextureSet.sharedSet[.Mesh]
+        glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
+        drawModels([modelProducer.icosahedronModel])
+
         glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE))
 
         let pointTextureInfo = TextureSet.sharedSet[.Point]
@@ -177,7 +181,7 @@ class GameSceneRenderer: BaseRenderer {
 
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), GLuint(defaultFrameBufferObject))
 
-        glClearColor(1.0, 1.0, 1.0, 1.0)
+        glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT))
 
         renderCanvas()
