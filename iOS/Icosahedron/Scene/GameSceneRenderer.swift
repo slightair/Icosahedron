@@ -69,8 +69,12 @@ class GameSceneRenderer: BaseRenderer {
         backgroundShaderProgram.worldMatrix = backgroundWorldMatrix
         backgroundShaderProgram.normalMatrix = backgroundNormalMatrix
 
-        let meshTextureInfo = TextureSet.sharedSet[.Mesh]
-        glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
+        var time = CFAbsoluteTimeGetCurrent()
+        time -= floor(time)
+
+        let backgroundMeshTextureInfo = TextureSet.sharedSet[.BackgroundMesh]
+        glBindTexture(GLenum(GL_TEXTURE_2D), backgroundMeshTextureInfo.name)
+        backgroundShaderProgram.time = GLfloat(time)
         drawModels(modelProducer.backgroundModelObjects())
     }
 

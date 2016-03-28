@@ -22,7 +22,7 @@ class TitleSceneRenderer: BaseRenderer {
         backgroundShaderProgram.worldMatrix = backgroundWorldMatrix
         backgroundShaderProgram.normalMatrix = backgroundNormalMatrix
 
-        let meshTextureInfo = TextureSet.sharedSet[.Mesh]
+        let meshTextureInfo = TextureSet.sharedSet[.BackgroundMesh]
         glBindTexture(GLenum(GL_TEXTURE_2D), meshTextureInfo.name)
         drawModels(modelProducer.backgroundModelObjects())
     }

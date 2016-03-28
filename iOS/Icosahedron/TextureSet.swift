@@ -6,12 +6,12 @@ class TextureSet {
     enum TextureName: String {
         case Debug = "Debug"
         case White = "White"
-        case Mesh = "Mesh"
+        case BackgroundMesh = "BackgroundMesh"
         case Point = "Point"
         case SymbolIcon = "SymbolIcon"
         case IcosahedronMesh = "IcosahedronMesh"
 
-        static let values: [TextureName] = [.Debug, .White, .Mesh, .Point, .SymbolIcon, .IcosahedronMesh]
+        static let values: [TextureName] = [.Debug, .White, .BackgroundMesh, .Point, .SymbolIcon, .IcosahedronMesh]
     }
 
     private var textures: [String: GLKTextureInfo] = [:]
