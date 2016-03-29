@@ -18,6 +18,7 @@ class GameSceneModelProducer {
     let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.phaseInterval]))
     let infoLabelModelGroup = SequenceLabelModelGroup()
     let problemModelGroup = ProblemModelGroup(problem: Symbol.values)
+    var coloredFaceModels: [IcosahedronFaceModel] = []
 
     var icosahedronPointParticleEmitters: [Icosahedron.Point: ParticleEmitter] = [:]
 
@@ -125,6 +126,10 @@ class GameSceneModelProducer {
                 break
             }
         }.addDisposableTo(disposeBag)
+
+        world.currentPoint.asObservable().subscribeNext { _ in
+            self.updateColoredFaceModels()
+        }.addDisposableTo(disposeBag)
     }
 
     func backgroundModelObjects() -> [Renderable] {
@@ -148,7 +153,7 @@ class GameSceneModelProducer {
             return model
         }
 
-        return requiredModels + itemModels
+        return requiredModels + itemModels + coloredFaceModels.map { $0 as Renderable }
     }
 
     func trackObjects() -> [Renderable] {
@@ -194,6 +199,15 @@ class GameSceneModelProducer {
 
     func particlePoints() -> [ParticleVertex] {
         return icosahedronPointParticleEmitters.values.flatMap { $0.activeParticles.map { $0.vertex } }
+    }
+
+    func updateColoredFaceModels() {
+        let coloredFaces = SymbolDetector.facesFromTracks(world.compactTracks)
+
+        coloredFaceModels = coloredFaces.map { coloredFace in
+            let vertices = icosahedronModel.faceModelVertices[coloredFace.face]!
+            return IcosahedronFaceModel(baseModelVertices: vertices, color: coloredFace.color)
+        }
     }
 
     func update(timeSinceLastUpdate: NSTimeInterval) {

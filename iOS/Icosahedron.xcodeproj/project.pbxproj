@@ -47,6 +47,7 @@
 		575991F51CA6C65300A82668 /* SymbolDetectorDetectSymbolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575991F41CA6C65300A82668 /* SymbolDetectorDetectSymbolsTests.swift */; };
 		575991F71CA7D10300A82668 /* SymbolModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575991F61CA7D10300A82668 /* SymbolModel.swift */; };
 		575991F91CA7D90B00A82668 /* ProblemModelGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575991F81CA7D90B00A82668 /* ProblemModelGroup.swift */; };
+		575991FB1CAABD6900A82668 /* IcosahedronFaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575991FA1CAABD6900A82668 /* IcosahedronFaceModel.swift */; };
 		5771700D1C4D1886008C35A2 /* SphereModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771700C1C4D1886008C35A2 /* SphereModel.swift */; };
 		5771700F1C4E7F50008C35A2 /* RenderablePolygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5771700E1C4E7F50008C35A2 /* RenderablePolygon.swift */; };
 		577600571C90650300A0E830 /* TrackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577600561C90650300A0E830 /* TrackTests.swift */; };
@@ -156,6 +157,7 @@
 		575991F41CA6C65300A82668 /* SymbolDetectorDetectSymbolsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymbolDetectorDetectSymbolsTests.swift; sourceTree = "<group>"; };
 		575991F61CA7D10300A82668 /* SymbolModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymbolModel.swift; sourceTree = "<group>"; };
 		575991F81CA7D90B00A82668 /* ProblemModelGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProblemModelGroup.swift; sourceTree = "<group>"; };
+		575991FA1CAABD6900A82668 /* IcosahedronFaceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IcosahedronFaceModel.swift; sourceTree = "<group>"; };
 		5771700C1C4D1886008C35A2 /* SphereModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SphereModel.swift; sourceTree = "<group>"; };
 		5771700E1C4E7F50008C35A2 /* RenderablePolygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderablePolygon.swift; sourceTree = "<group>"; };
 		577600561C90650300A0E830 /* TrackTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackTests.swift; sourceTree = "<group>"; };
@@ -341,6 +343,7 @@
 				57F5FB741C34DC1E00817824 /* OctahedronModel.swift */,
 				572FCA4D1C3EB3FC00778913 /* FloatingLabelModel.swift */,
 				575991F61CA7D10300A82668 /* SymbolModel.swift */,
+				575991FA1CAABD6900A82668 /* IcosahedronFaceModel.swift */,
 			);
 			name = BaseModel;
 			sourceTree = "<group>";
@@ -589,6 +592,7 @@
 				571B92BE1C6EF6B300FF9DA3 /* Track.swift in Sources */,
 				571B92B21C68CB4500FF9DA3 /* SceneSwitcher.swift in Sources */,
 				571B92AE1C68C60400FF9DA3 /* GameScene.swift in Sources */,
+				575991FB1CAABD6900A82668 /* IcosahedronFaceModel.swift in Sources */,
 				579AD6031C01EEB900218D38 /* ItemModel.swift in Sources */,
 				571B92B41C6A1EC800FF9DA3 /* BaseRenderer.swift in Sources */,
 				571B92C01C70494100FF9DA3 /* TrackModel.swift in Sources */,
