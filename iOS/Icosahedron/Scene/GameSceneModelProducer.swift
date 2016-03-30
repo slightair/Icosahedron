@@ -13,11 +13,11 @@ class GameSceneModelProducer {
 
     let timeGaugeModel = GaugeModel(color: UIColor.whiteColor().colorWithAlphaComponent(0.8).glColor, bgColor:UIColor.whiteColor().colorWithAlphaComponent(0.3).glColor)
 
-    let phaseLabelModel = LabelModel(text: "Phase 0:")
+    let phaseLabelModel = LabelModel(text: "Phase 00:")
     let scoreLabelModel = LabelModel(text: "Score 0")
     let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.phaseInterval]))
     let infoLabelModelGroup = SequenceLabelModelGroup()
-    let problemModelGroup = ProblemModelGroup(problem: Symbol.values)
+    var problemModelGroup = ProblemModelGroup()
     var coloredFaceModels: [IcosahedronFaceModel] = []
 
     var icosahedronPointParticleEmitters: [Icosahedron.Point: ParticleEmitter] = [:]
@@ -105,7 +105,10 @@ class GameSceneModelProducer {
     }
 
     func setUpSubscriptions() {
-        world.phase.asObservable().map { "Phase \($0):" }.bindTo(phaseLabelModel.rx_text).addDisposableTo(disposeBag)
+        world.phase.asObservable().map { "Phase \($0.number):" }.bindTo(phaseLabelModel.rx_text).addDisposableTo(disposeBag)
+        world.phase.asObservable().subscribeNext { phase in
+            self.problemModelGroup.problems = phase.problems
+        }.addDisposableTo(disposeBag)
         world.time.asObservable().map { String(format: "Time %.3f", arguments: [$0]) }.bindTo(timeLabelModel.rx_text).addDisposableTo(disposeBag)
         world.score.asObservable().map { "Score \($0)" }.bindTo(scoreLabelModel.rx_text).addDisposableTo(disposeBag)
 
@@ -120,7 +123,7 @@ class GameSceneModelProducer {
                     particleEmitter.emit()
                 }
             case .PhaseChanged(let phase):
-                self.infoLabelModelGroup.appendNewLabel("Phase \(phase)", color: UIColor.whiteColor().glColor)
+                self.infoLabelModelGroup.appendNewLabel("Phase \(phase.number)", color: UIColor.whiteColor().glColor)
 
             default:
                 break

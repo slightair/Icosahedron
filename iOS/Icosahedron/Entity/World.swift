@@ -21,7 +21,7 @@ class World {
     enum Event {
         case Move(track: Track)
         case ObtainedColorStone(point: Icosahedron.Point, color: Color)
-        case PhaseChanged(phase: Int)
+        case PhaseChanged(phase: Phase)
         case GameOver
     }
 
@@ -40,7 +40,7 @@ class World {
     let blueCount = Variable<Int>(0)
 
     let turn = Variable<Int>(0)
-    let phase = Variable<Int>(1)
+    let phase = Variable<Phase>(Phase(number: 1))
     let time = Variable<Double>(World.phaseInterval)
     let score = Variable<Int64>(0)
 
@@ -133,7 +133,8 @@ class World {
         }.addDisposableTo(disposeBag)
 
         time.asObservable().filter { $0 == 0 }.subscribeNext { _ in
-            self.phase.value += 1
+            let nextPhaseNumber = self.phase.value.number + 1
+            self.phase.value = Phase(number: nextPhaseNumber)
         }.addDisposableTo(disposeBag)
     }
 
