@@ -13,7 +13,7 @@ class GameSceneModelProducer {
 
     let timeGaugeModel = GaugeModel(color: UIColor.whiteColor().colorWithAlphaComponent(0.8).glColor, bgColor:UIColor.whiteColor().colorWithAlphaComponent(0.3).glColor)
 
-    let phaseLabelModel = LabelModel(text: "Phase 00:")
+    let phaseLabelModel = LabelModel(text: "Phase 000")
     let scoreLabelModel = LabelModel(text: "Score 0")
     let timeLabelModel = LabelModel(text: String(format: "Time %.3f", arguments: [World.phaseInterval]))
     let infoLabelModelGroup = SequenceLabelModelGroup()
@@ -105,7 +105,7 @@ class GameSceneModelProducer {
     }
 
     func setUpSubscriptions() {
-        world.phase.asObservable().map { "Phase \($0.number):" }.bindTo(phaseLabelModel.rx_text).addDisposableTo(disposeBag)
+        world.phase.asObservable().map { "Phase \($0.number)" }.bindTo(phaseLabelModel.rx_text).addDisposableTo(disposeBag)
         world.phase.asObservable().subscribeNext { phase in
             self.problemModelGroup.problems = phase.problems
         }.addDisposableTo(disposeBag)

@@ -25,7 +25,7 @@ class World {
         case GameOver
     }
 
-    static let phaseInterval = 20.0
+    static let phaseInterval = 10.0
     static let numberOfTracks = 9
 
     let icosahedron = Icosahedron()
