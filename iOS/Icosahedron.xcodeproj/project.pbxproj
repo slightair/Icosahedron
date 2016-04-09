@@ -534,7 +534,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = /opt/brew/bin/swiftlint;
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelif [ -e /opt/brew/bin/swiftlint ]; then\n    /opt/brew/bin/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
 		};
 		57F5FB661C33BCF200817824 /* Carthage copy-framework */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -551,7 +551,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/opt/brew/bin/carthage copy-frameworks";
+			shellScript = "if which carthage >/dev/null; then\n    carthage copy-frameworks\nelif [ -e /opt/brew/bin/carthage ]; then\n    /opt/brew/bin/carthage copy-frameworks\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
